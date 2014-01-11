@@ -1,0 +1,13 @@
+Edit 'quad.py' and choose either the python or bash wrapper script.
+
+~/puq/src/puq/examples/wrappers/basic> puq start quad
+Saving run to sweep_267992097.hdf5
+
+Processing <HDF5 dataset "z": shape (5,), type "<f8">
+    Surface   = 0.9999999999984*x**2 + 1.99999999999424*x + 2.999999999992
+    RMSE      = 3.65e-11 (1.04e-10 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    6.0355e+01    6.5328e+01

@@ -1,0 +1,14 @@
+You can use either 'sim_file_wrap.sh' or 'sim_file_wrap.py' as a wrapper.
+Edit 'quad_file.py' to select the one to try.  Both work the same.
+
+~/puq/src/puq/examples/wrappers/newdir> puq start quad_file.py
+Saving run to sweep_267997367.hdf5
+
+Processing <HDF5 dataset "z": shape (5,), type "<f8">
+    Surface   = 1.00000004*x**2 + 2.00000026884416*x + 3.0000002
+    RMSE      = 1.17e-06 (3.34e-06 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    6.0355e+01    6.5328e+01

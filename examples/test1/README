@@ -1,0 +1,12 @@
+test1.py creates two normally-distributed parameters and
+uses them with a level-3 Smolyak method.
+
+The test program, test1_prog.py simply returns
+0.5*m*v**2
+
+You run this by doing
+>puq start test1
+
+You can reuse the same response surface with adjusted PDFs by doing
+> puq analyze --using new_pdfs.py 
+

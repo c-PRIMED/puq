@@ -1,0 +1,16 @@
+Example of Using SimpleSweep
+
+SimpleSweep sweeps a list of values.  The values may be lists or arrays.
+See the examples.
+
+# a simple 1D example
+poly_1.py
+
+# a simple 2D example
+rosen_1.py
+
+# a more complicated example using a grid of points
+rosen.py
+
+# example of using the callback option
+rosen_cb.py

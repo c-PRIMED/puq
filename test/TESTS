@@ -1,0 +1,12 @@
+smolyak nosetests smolyak_test.py
+add_dist nosetests add_dist.py
+custom_parameter nosetests CustomParameter.py
+uniform_parameter nosetests UniformParameter.py
+uniform_pdf nosetests UniformPDF.py
+normal_parameter nosetests NormalParameter.py
+normal_pdf nosetests NormalPDF.py
+pdf_math nosetests pdf_test.py
+hpdf nosetests hpdf.py
+pickle nosetests jpickle_tests.py
+response nosetests response_tests.py
+hdf nosetests hdf_tests.py

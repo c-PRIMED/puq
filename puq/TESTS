@@ -1,0 +1,3 @@
+smolyak_funcs nosetests smolyak_funcs.py
+hosts nosetests hosts.py
+meshgrid nosetests meshgridn.py
