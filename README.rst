@@ -34,24 +34,37 @@ Features
 
 * Can use PyMC to perform Bayesian calibration on input parameters.
 
-What's new in version 2.2
-=========================
+Dependencies
+============
 
-* Improved variable substitution for TestProgram().
+PUQ is tested to work under Python 2.6+. Python 3 is not yet supported.
 
-* Add DParameter class.
+To build, you will need a working C/C++ compiler.
+PUQ requires the following Python modules:
 
-* Add SimpleSweep() examples.
+- numpy >= 1.6
+- scipy >= 0.8
+- matplotlib >= 1.1
+- sympy >= 0.7.1
+- h5py >= 1.3
+- jsonpickle
+- poster
+- nose
 
-* Add SubmitHost(), support for hub's submit command.
 
-What's new in version 2.1
-=========================
+Install
+=======
 
-* When experimental data is available, can perform Bayesian Calibration on input
-  parameters.
+This package uses distutils, which is the default way of installing
+python modules. To install in your home directory, use::
 
-* Added better scripting examples.
+  python setup.py install --user
+
+To install for all users on Unix/Linux::
+
+  python setup.py build
+  sudo python setup.py install
+
 
 History
 =======
