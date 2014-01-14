@@ -15,6 +15,8 @@ def check_dep(mv):
         try:
             if p == 'poster':
                 ver = str(__import__(p, [], [], ['version']).version)
+            elif p == 'h5py':
+                ver = str(__import__(p, [], [], ['version']).version.version)
             else:
                 ver = __import__(p, [], [], ['__version__']).__version__
             vern = map(int, re.findall(r'([\d]+)', ver))
@@ -46,10 +48,10 @@ if __name__ == "__main__":
     'numpy' : '1.6',
     'scipy' : '0.8',
     'h5py' : '1.3',
-    'jsonpickle' : '0.6',
+    'jsonpickle' : '0.4',
     'matplotlib' : '1.1',
     'sympy' : '0.7.1',
-    'nose' : '1.1',
+    'nose' : '0.11',
     'poster' : '0.8'
     }
     if not check_dep(mvers):
