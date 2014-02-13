@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Monte Carlo Sampling &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Latin Hypercube Sampling" href="lhs.html" />
+    <link rel="prev" title="Getting Started" href="started.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lhs.html" title="Latin Hypercube Sampling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="started.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Monte Carlo Sampling</a><ul>
+<li><a class="reference internal" href="#extending-the-sample-size">Extending the Sample Size</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="started.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lhs.html"
+                        title="next chapter">Latin Hypercube Sampling</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/mc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="monte-carlo-sampling">
+<h1>Monte Carlo Sampling<a class="headerlink" href="#monte-carlo-sampling" title="Permalink to this headline">¶</a></h1>
+<p>This is a simple example of using PUQ with a test program written in Python.</p>
+<p>Rather than use a complex simulation as a test program, we will use the <em>Rosenbrock</em> function.
+This function is well understood and widely used as an example for optimization and UQ.
+Because it can be solved analytically, it is useful as a test case for our software.</p>
+<p>The <em>Rosenbrock</em> function is <span class="math">\(f(x,y) = 100(y-x^2)^2 + (1-x)^2\)</span></p>
+<p>And here is our python test program implementing it.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">optparse</span>
+<span class="kn">from</span> <span class="nn">puqutil</span> <span class="kn">import</span> <span class="n">dump_hdf5</span>
+
+<span class="n">usage</span> <span class="o">=</span> <span class="s">&quot;usage: %prog --x x --y y&quot;</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">x</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">y</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">dump_hdf5</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Most of the lines are concerned with parsing the command line.  By default, PUQ expects
+test programs to take command line parameters in the format <em>&#8211;varname=value</em>.
+This is convenient for Python programs (using the optparse module) and C/C++ (using getopt).
+For existing test programs, you can easily instruct PUQ to pass parameters in another format.
+See <a class="reference internal" href="simulations.html"><em>Making PUQ Work With Your Code</em></a> and puq/examples/matlab.</p>
+<p>Line 16 calls <tt class="xref py py-func docutils literal"><span class="pre">dump_hdf5()</span></tt> with our output. <tt class="xref py py-func docutils literal"><span class="pre">dump_hdf5()</span></tt> takes three arguments, a name, a value, and an optional description.
+It formats the data so that PUQ can easily recognize it in standard output. It is placed in the HDF5 output file under
+&#8216;output/data/varname&#8217; (&#8216;output/data/z&#8217; for our example).  If we run our test program, we get:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; ./rosen_prog.py --x=0 --y=1
+HDF5:{&#39;name&#39;: &#39;z&#39;, &#39;value&#39;: 101.0, &#39;desc&#39;: &#39;&#39;}:5FDH
+</pre></div>
+</div>
+<p>So we have a working test program.  We will limit x and y
+to [-2,2] and try to calculate an output PDF.</p>
+<p>The next step is to write a control script to set up the sweep.</p>
+<p>Here is what we will use</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+    <span class="c"># Declare our parameters here. Both are uniform on [-2, 2]</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c"># Create a host</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+
+    <span class="c"># Declare a UQ method.</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">MonteCarlo</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
+
+    <span class="c"># Our test program</span>
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="n">exe</span><span class="o">=</span><span class="s">&#39;./rosen_prog.py --x=$x --y=$y&#39;</span><span class="p">,</span>
+        <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Rosenbrock Function&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Every control script should look basically like this.  There needs to be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>to import all the required PUQ code.  There must be a function <tt class="xref py py-func docutils literal"><span class="pre">run()</span></tt> defined
+that returns a <tt class="xref py py-class docutils literal"><span class="pre">Sweep</span></tt> object. And the <tt class="xref py py-class docutils literal"><span class="pre">Sweep</span></tt> object is made up of a UQ method,
+a host, and a test program.</p>
+<p>The UQ method is selected in the line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">uq</span> <span class="o">=</span> <span class="n">MonteCarlo</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This tells PUQ to use the Monte Carlo method, with two parameters &#8216;x&#8217;, and
+&#8216;y&#8217;. It will generate <em>num</em> random numbers each for &#8216;x&#8217; and &#8216;y&#8217;, using a
+uniform distribution over [-2,2].</p>
+<p>Now we are ready to run.  We do this with &#8216;puq start rosen_mc&#8217;.
+Because control scripts are python scripts, the &#8216;.py&#8217; is optional.
+Here are three runs, all doing 20 samples.</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq start rosen_mc
+Saving run to sweep_52410436.hdf5
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (20,), type &quot;&lt;f8&quot;&gt;
+Mean   = 463.467551273
+StdDev = 499.225504146
+
+~/puq/examples/rosen&gt; puq start rosen_mc 20
+Saving run to sweep_52410475.hdf5
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (20,), type &quot;&lt;f8&quot;&gt;
+Mean   = 266.371029691
+StdDev = 362.362400696
+
+~/puq/examples/rosen&gt; puq start -f mc.hdf5 rosen_mc 20
+Saving run to mc.hdf5
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (20,), type &quot;&lt;f8&quot;&gt;
+Mean   = 322.364238869
+StdDev = 246.016024931
+</pre></div>
+</div>
+<p>As you can see, 20 samples is not enough to get an accurate mean. To get Monte Carlo Sampling to converge
+on a more accurate value, you would need to run thousands of samples. That is fine in a simple case
+like the Rosenbrock function, but a complex simulation might take days or
+weeks per sample.</p>
+<p>To plot the response surface:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq plot -r mc.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-mc-surface.png"><img alt="../_images/z-mc-surface.png" src="../_images/z-mc-surface.png" style="width: 500px;" /></a>
+<p class="caption">Scatter plot for Rosenbrock function using Monte Carlo with 20 samples.</p>
+</div>
+<div class="section" id="extending-the-sample-size">
+<h2>Extending the Sample Size<a class="headerlink" href="#extending-the-sample-size" title="Permalink to this headline">¶</a></h2>
+<p>In the example above, only 20 samples were used. If you wish to use more
+samples, you can modify your control script and rerun it from the start.
+However, if you do it this way, you are wasting the work that has already
+been done running the 20 jobs. That might be fine for a trivial example like this,
+but not for a complex simulation that ran for days to complete 20 jobs.</p>
+<p>Fortunately you can easily add more samples to an existing Monte Carlo run:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq extend --num 80 mc.hdf5
+    Extending mc.hdf5 using MonteCarlo
+
+    Processing &lt;HDF5 dataset &quot;z&quot;: shape (100,), type &quot;&lt;f8&quot;&gt;
+    Mean   = 377.988520682
+    StdDev = 599.985509368
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-mc-surface100.png"><img alt="../_images/z-mc-surface100.png" src="../_images/z-mc-surface100.png" style="width: 500px;" /></a>
+<p class="caption">Scatter plot for Rosenbrock function using Monte Carlo with 100 samples.</p>
+</div>
+<p>The response surface now looks more accurate although the mean is still not close to the real mean.  To plot the PDF of z, you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq plot mc.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-mc-pdf.png"><img alt="../_images/z-mc-pdf.png" src="../_images/z-mc-pdf.png" style="width: 500px;" /></a>
+<p class="caption">PDF for Rosenbrock function using Monte Carlo with 100 samples.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lhs.html" title="Latin Hypercube Sampling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="started.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Scripting PUQ &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Handling Correlated PDFs" href="correlated.html" />
+    <link rel="prev" title="Using Output PDFs as Inputs" href="out2in.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="correlated.html" title="Handling Correlated PDFs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="out2in.html" title="Using Output PDFs as Inputs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Scripting PUQ</a><ul>
+<li><a class="reference internal" href="#running-sweeps">Running Sweeps</a></li>
+<li><a class="reference internal" href="#reading-results">Reading Results</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="out2in.html"
+                        title="previous chapter">Using Output PDFs as Inputs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="correlated.html"
+                        title="next chapter">Handling Correlated PDFs</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/scripting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="scripting-puq">
+<h1>Scripting PUQ<a class="headerlink" href="#scripting-puq" title="Permalink to this headline">¶</a></h1>
+<p>All the examples so far have involved using the &#8216;puq&#8217; command
+to start a sweep and again to analyze it.  For more complicated
+jobs, you can script the whole process in Python.</p>
+<div class="section" id="running-sweeps">
+<h2>Running Sweeps<a class="headerlink" href="#running-sweeps" title="Permalink to this headline">¶</a></h2>
+<p>Example scripts are in puq/examples/scripting. test1.py
+runs a level-1 Smolyak sweep, reads the response surface from
+the HDF5 file, plots the PDF, then extends the level to 2 and repeats.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Example of scripting a PUQ run, extending it, and plotting PDFs</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">puq</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;tkagg&#39;</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c"># save to this filename</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="s">&#39;script_test.hdf5&#39;</span>
+
+<span class="c"># our input parameters</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">puq</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;velocity1&#39;</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dev</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">puq</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;velocity2&#39;</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">dev</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c"># run a level 1 Smolyak</span>
+<span class="n">uq</span> <span class="o">=</span> <span class="n">puq</span><span class="o">.</span><span class="n">Smolyak</span><span class="p">([</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">sw</span> <span class="o">=</span> <span class="n">puq</span><span class="o">.</span><span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">puq</span><span class="o">.</span><span class="n">InteractiveHost</span><span class="p">(),</span> <span class="s">&#39;./basic_prog.py&#39;</span><span class="p">)</span>
+<span class="n">sw</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+<span class="c"># get the response surface for output variable &#39;h&#39;</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">puq</span><span class="o">.</span><span class="n">hdf</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">)</span>
+<span class="c"># sample the response surface to get a PDF</span>
+<span class="n">val</span><span class="p">,</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">fit</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">return_samples</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c"># plot it in blue</span>
+<span class="n">val</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;Run 1: mean=</span><span class="si">%s</span><span class="s">   dev=</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+
+<span class="c"># not extend the run to a level 2</span>
+<span class="n">sw</span><span class="o">.</span><span class="n">extend</span><span class="p">()</span>
+<span class="n">sw</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c"># plot the PDF like before, but in green</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">puq</span><span class="o">.</span><span class="n">hdf</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">)</span>
+<span class="n">val</span><span class="p">,</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">fit</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">return_samples</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">val</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;Run 2: mean=</span><span class="si">%s</span><span class="s">   dev=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">samples</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>To run it, simply do:</p>
+<div class="highlight-python"><div class="highlight"><pre>./test1.py
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-python"><div class="highlight"><pre>python test1.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="reading-results">
+<h2>Reading Results<a class="headerlink" href="#reading-results" title="Permalink to this headline">¶</a></h2>
+<p>The previous example showed how to read a response surface and
+sample it to produce a pdf. The full list of python functions
+for reading and writing the HDF5 file is
+<a class="reference internal" href="../reference/hdf.html"><em>hdf - Functions for Accessing HDF5 Files</em></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="correlated.html" title="Handling Correlated PDFs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="out2in.html" title="Using Output PDFs as Inputs"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

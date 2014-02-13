@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Handling Correlated PDFs &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Reference" href="../reference.html" />
+    <link rel="prev" title="Scripting PUQ" href="scripting.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../reference.html" title="Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="scripting.html" title="Scripting PUQ"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="scripting.html"
+                        title="previous chapter">Scripting PUQ</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../reference.html"
+                        title="next chapter">Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/correlated.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="handling-correlated-pdfs">
+<h1>Handling Correlated PDFs<a class="headerlink" href="#handling-correlated-pdfs" title="Permalink to this headline">¶</a></h1>
+<p>PUQ assumes input parameters are independent, but sometimes this is not true.  In that case, you need to have either a
+Joint PDF, or a large number of samples drawn from that Joint PDF.  In this section we&#8217;ll show how to take two correlated output
+PDFs from one PUQ run and use them as inputs to another PUQ run.</p>
+<p>These examples are from puq/examples/correlated.  The first simulation, which creates obviously correlated outputs is c1_prog.py.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre></div></td><td class="code"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">optparse</span>
+<span class="kn">from</span> <span class="nn">puqutil</span> <span class="kn">import</span> <span class="n">dump_hdf5</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">usage</span> <span class="o">=</span> <span class="s">&quot;usage: %prog --x x --y y&quot;</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;--y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">x</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">y</span>
+
+<span class="c"># need to produce two correlated output variables, f and g</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">x</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">f</span> <span class="o">*</span> <span class="n">g</span>
+
+<span class="n">dump_hdf5</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="s">&quot;$f(x,y)=x+y$&quot;</span><span class="p">)</span>
+<span class="n">dump_hdf5</span><span class="p">(</span><span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="s">&quot;$g(x,y)=x+y$&quot;</span><span class="p">)</span>
+<span class="n">dump_hdf5</span><span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s">&quot;$z(x,y)=x(x+y)$&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>This has three outputs, <strong>f</strong>, <strong>g</strong>, and <strong>z</strong>, which will be created as PDFs by <em>PUQ</em>.</p>
+<p>The input script is</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="s">&#39;./c1_prog.py&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Lets run <em>PUQ</em> and create the PDFs:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq start -f c1.hdf5 c1.py
+Saving run to c1.hdf5
+
+Processing &lt;HDF5 dataset &quot;f&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+        Surface   = 1.0*x
+        RMSE      = 1.07e-12 (1.07e-11 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    1.0000e+01    9.7391e-12
+y    0.0000e+00    0.0000e+00
+
+Processing &lt;HDF5 dataset &quot;g&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+        Surface   = x + y
+        RMSE      = 1.52e-12 (7.59e-12 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+y    1.0000e+01    9.7391e-12
+x    1.0000e+01    9.7391e-12
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+        Surface   = x*(x + y)
+        RMSE      = 7.59e-12 (1.52e-11 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    5.5178e+01    6.8073e+01
+y    2.5000e+01    3.5355e+01
+</pre></div>
+</div>
+<p>As you can see, PUQ correctly generated each response surface.  Let&#8217;s look at <strong>z</strong>.</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq plot -v z c1.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/correlated_z.png"><img alt="../_images/correlated_z.png" src="../_images/correlated_z.png" style="width: 500px;" /></a>
+</div>
+<p>OK.  So far things look good.  The second simulation takes <strong>f</strong> and <strong>g</strong> as input PDFs and
+outputs <strong>f*g</strong>.  So it should look the same as <strong>z</strong>.  However, <strong>f</strong> and <strong>g</strong> are very correlated
+so it won&#8217;t work as we expect.  But before we try that, we need to save <strong>f</strong> and <strong>g</strong> to files.</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq analyze c1.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/correlated_save.png"><img alt="../_images/correlated_save.png" src="../_images/correlated_save.png" style="width: 500px;" /></a>
+</div>
+<p>Save <strong>f</strong> and <strong>g</strong> to f.json and g.json.</p>
+<p>You can look at c2_prog.py and verify it simply multiplies the two input parameters.  Then take
+a look at c2.py.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="n">LoadObj</span><span class="p">(</span><span class="s">&#39;f.json&#39;</span><span class="p">),</span> <span class="n">use_samples</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="n">LoadObj</span><span class="p">(</span><span class="s">&#39;g.json&#39;</span><span class="p">),</span> <span class="n">use_samples</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="s">&#39;./c2_prog.py&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>For the first run, change lines 4 and 5 so use_samples is False. This is the default and
+will cause the input parameters to be treated as independent.  Then run <strong>puq</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq start -f c2_indep.hdf5 c2.py
+Saving run to c2_indep.hdf5
+
+Processing &lt;HDF5 dataset &quot;k&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+        Surface   = 1.0*f*g
+        RMSE      = 7.92e-14 (7.96e-14 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+f    4.9775e+01    7.0000e+01
+g    4.9498e+01    7.0000e+01
+</pre></div>
+</div>
+<p>The response surface is correct (f*g). Looking at the output, <strong>k</strong>,</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq plot -v k c2_indep.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/correlated_k1.png"><img alt="../_images/correlated_k1.png" src="../_images/correlated_k1.png" style="width: 500px;" /></a>
+</div>
+<p>This looks nothing like the plot for <strong>z</strong>.  Now let&#8217;s try it with correlated input parameters.  Change c2.py back so
+lines 4 and 5 have the use_samples arg set to True.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="n">LoadObj</span><span class="p">(</span><span class="s">&#39;f.json&#39;</span><span class="p">),</span> <span class="n">use_samples</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="n">pdf</span><span class="o">=</span><span class="n">LoadObj</span><span class="p">(</span><span class="s">&#39;g.json&#39;</span><span class="p">),</span> <span class="n">use_samples</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">f</span><span class="p">,</span><span class="n">g</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="s">&#39;./c2_prog.py&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq start -f c2.hdf5 c2.py
+     Saving run to c2.hdf5
+
+     Processing &lt;HDF5 dataset &quot;k&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+             Surface   = 1.0*f*g
+             RMSE      = 7.92e-14 (7.96e-14 %)
+
+     SENSITIVITY:
+     Var      u*            dev
+     -----------------------------
+     f    4.9775e+01    7.0000e+01
+     g    4.9498e+01    7.0000e+01
+
+     ~/puq/examples/correlated&gt; puq plot -v k c2.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/correlated_k2.png"><img alt="../_images/correlated_k2.png" src="../_images/correlated_k2.png" style="width: 500px;" /></a>
+</div>
+<p>This looks very much like the plot for <strong>z</strong> we got in the first section.  For a better comparison, you can use <em>puq analyze</em> to save <strong>z</strong> and <strong>k</strong> to files, then do</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/correlated&gt; puq read -c z.json k.json
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/correlated-compare.png"><img alt="../_images/correlated-compare.png" src="../_images/correlated-compare.png" style="width: 500px;" /></a>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../reference.html" title="Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="scripting.html" title="Scripting PUQ"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

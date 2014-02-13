@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Making PUQ Work With Your Code &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Handling Output" href="handling_output.html" />
+    <link rel="prev" title="Using PUQ Read" href="read.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="handling_output.html" title="Handling Output"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="read.html" title="Using PUQ Read"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Making PUQ Work With Your Code</a><ul>
+<li><a class="reference internal" href="#c-programs">C Programs</a></li>
+<li><a class="reference internal" href="#matlab-programs">Matlab Programs</a></li>
+<li><a class="reference internal" href="#fortran-programs">Fortran Programs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="read.html"
+                        title="previous chapter">Using PUQ Read</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="handling_output.html"
+                        title="next chapter">Handling Output</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/simulations.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="making-puq-work-with-your-code">
+<h1>Making PUQ Work With Your Code<a class="headerlink" href="#making-puq-work-with-your-code" title="Permalink to this headline">¶</a></h1>
+<p>PUQ makes no assumptions about how your test program (or simulation) code
+works.  However it does need a way to pass parameter values into the test program
+and read results.</p>
+<div class="section" id="c-programs">
+<h2>C Programs<a class="headerlink" href="#c-programs" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we use a test program compiled in C. The point of
+this is to show how to pass parameters to test programs that do
+not use the &#8220;&#8211;varname=value&#8221; pattern we have been using.</p>
+<p>The test program is  puq/examples/rosen/rosen_cprog.c</p>
+<div class="highlight-c"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span class="cp">#include &lt;stdio.h&gt;</span>
+<span class="cp">#include &lt;unistd.h&gt;</span>
+<span class="cp">#include &lt;stdlib.h&gt;</span>
+
+<span class="cp">#include &quot;dump_hdf5.h&quot;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+	<span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">;</span>
+	<span class="k">while</span> <span class="p">((</span><span class="n">c</span> <span class="o">=</span> <span class="n">getopt</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">&quot;x:y:&quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">switch</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="sc">&#39;x&#39;</span>:
+			<span class="n">x</span> <span class="o">=</span> <span class="n">atof</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="k">case</span> <span class="sc">&#39;y&#39;</span>:
+			<span class="n">y</span> <span class="o">=</span> <span class="n">atof</span><span class="p">(</span><span class="n">optarg</span><span class="p">);</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="nl">default:</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: %s -x val -y val</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+			<span class="k">return</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+		<span class="p">}</span>
+
+	<span class="cm">/* compute rosenbrock function */</span>
+	<span class="n">z</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">x</span><span class="p">);</span>
+
+	<span class="n">dump_hdf5_d</span><span class="p">(</span><span class="s">&quot;z&quot;</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="s">&quot;f(x,y)&quot;</span><span class="p">);</span>
+
+	<span class="cm">/* important! return code of 0 indicates success */</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>dump_hdf5_d() dumps a double in our output format.  It is included in dump_hdf5.h.</p>
+<div class="last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../reference/puqutil.html"><em>puqutil - Output Functions for PUQ</em></a></p>
+</div>
+</div>
+<p>You can compile it and test it out:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; gcc -o rosen_cprog rosen_cprog.c
+~/puq/examples/rosen&gt; ./rosen_cprog -x 0 -y 1
+HDF5:{&#39;name&#39;:&#39;z&#39;,&#39;value&#39;:1.0100000000000000e+02,&#39;desc&#39;:&#39;f(x,y)&#39;}:5FDH
+</pre></div>
+</div>
+<p>It works the same as the python version.  To use it, we need to make a
+simple change to our control script.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">lev</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="c"># Declare our parameters here</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c"># Create a host</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+
+    <span class="c"># Declare a UQ method.</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="n">lev</span><span class="p">)</span>
+
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="n">desc</span><span class="o">=</span><span class="s">&#39;Rosenbrock Function (C)&#39;</span><span class="p">,</span>
+        <span class="n">exe</span><span class="o">=</span><span class="s">&quot;./rosen_cprog -x $x -y $y&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The important line is where it says:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">exe</span><span class="o">=</span><span class="s">&quot;./rosen_cprog -x $x -y $y&quot;</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../reference/testprogram.html"><em>TestProgram</em></a></p>
+</div>
+<p>Finally, do &#8216;puq start rosen_c&#8217; and try it out.</p>
+</div>
+<div class="section" id="matlab-programs">
+<h2>Matlab Programs<a class="headerlink" href="#matlab-programs" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we use a test program written in Matlab and executed either by Matab or Octave.
+The example is very much like the previous one using C.</p>
+<p>The test program is  puq/examples/rosen/rosen.m</p>
+<div class="highlight-matlab"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">function</span>[]<span class="p">=</span><span class="nf">rosen</span><span class="p">(</span>x,y<span class="p">)</span><span class="w"></span>
+
+<span class="n">z</span> <span class="p">=</span> <span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">x</span>^<span class="mi">2</span><span class="p">)</span>^<span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>^<span class="mi">2</span><span class="p">;</span>
+
+<span class="n">fprintf</span><span class="p">(</span><span class="s">&#39;HDF5:{&quot;name&quot;: &quot;z&quot;, &quot;value&quot;: %.16g, &quot;desc&quot;: &quot;&quot;}:5FDH\n&#39;</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+</pre></div>
+</td></tr></table></div>
+<p>The biggest difference between this and our other example is that we do not (yet)
+have a dump_hdf5() function for Matlab. Instead we must write out output variable(s)
+in carefully formatted fprintfs. This puts our data in a tagged format such that PUQ can
+recognize it.</p>
+<p>You should test the test program:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; octave -q --eval &#39;rosen(1,.5)&#39;
+HDF5:{&quot;name&quot;: &quot;z&quot;, &quot;value&quot;: 25, &quot;desc&quot;: &quot;&quot;}:5FDH
+</pre></div>
+</div>
+<p>It works the same as the python version.  To use it, we need to make a
+simple change to our control script.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">lev</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+    <span class="c"># Declare our parameters here. Both are uniform on [-2, 2]</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c"># Create a host</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+
+    <span class="c"># Declare a UQ method.</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="n">lev</span><span class="p">)</span>
+
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span>
+      <span class="n">exe</span><span class="o">=</span><span class="s">&quot;octave -q --eval &#39;rosen($x, $y)&#39;&quot;</span><span class="p">,</span>
+      <span class="c"># exe=&quot;matlab -nodisplay -r &#39;rosen($x, $y);quit()&#39;&quot;,</span>
+      <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Rosenbrock Function (octave)&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>The syntax to execute a function from the command line differs between Octave and Matlab.
+If you have Matlab, you can comment the Octave line out and uncomment the Matlab line.</p>
+<p>Finally, do &#8216;puq start rosen_ml&#8217; and try it out.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../reference/testprogram.html"><em>TestProgram</em></a></p>
+</div>
+</div>
+<div class="section" id="fortran-programs">
+<h2>Fortran Programs<a class="headerlink" href="#fortran-programs" title="Permalink to this headline">¶</a></h2>
+<p>There is a Fortran version of the Rosenbrock test in
+examples/fortran.  It works very much like the C version.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="handling_output.html" title="Handling Output"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="read.html" title="Using PUQ Read"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

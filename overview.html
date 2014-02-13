@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="index.html" />
+    <link rel="next" title="User’s Guide and Tutorial" href="users_guide.html" />
+    <link rel="prev" title="PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="users_guide.html" title="User’s Guide and Tutorial"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+       <li><a href="index.html">documentation </a> &raquo;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Overview</a><ul>
+<li><a class="reference internal" href="#goals">Goals</a></li>
+<li><a class="reference internal" href="#in-progress">In Progress</a></li>
+<li><a class="reference internal" href="#future-plans">Future Plans</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="users_guide.html"
+                        title="next chapter">User&#8217;s Guide and Tutorial</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/overview.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p>PUQ is a general purpose parameter sweep framework, which can perform uncertainty quantification (UQ),
+do sensitivity analysis, and build response surfaces.</p>
+<p>You provide a program that takes parameters as arguments. This is called the <em>Test Program</em>
+or simulation.
+It can be written in any language as long as it can take command line arguments. PUQ treats
+the test program like a &#8220;black box&#8221;. It need not know anything about it except how to send it
+inputs and how to get the outputs.</p>
+<p>Then you tell the framework details about the input parameters (name, mean, deviation, PDF, etc).
+You also need to either have the test program write data in a standard format readable by PUQ,
+or you need to supply a bit of code to PUQ that can process the output of the test program.</p>
+<p>Finally you must tell PUQ what kind of sweep to perform (Smolyak Sparse Grid, Monte Carlo, etc) and what host to run it on.
+This might change in the future as a more intelligent UQ framework should be able to automatically
+select the correct method and find a host to run the sweep.</p>
+<p>The framework then launches all the required jobs, providing the proper parameters to your test program.</p>
+<p>If there are any problems as the jobs run (such as exceeding the allocated walltime), individual jobs can be modified and restarted.</p>
+<p>The framework keeps track of the outputs and, once all jobs have completed, collects the outputs into a single HDF5 file. Then analysis can be performed on the collected data.
+That analysis can be repeated as necessary, without rerunning the jobs.  If more data is required, a new sweep can be performed, adding to the existing data.</p>
+<div class="section" id="goals">
+<h2>Goals<a class="headerlink" href="#goals" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Easy to use. Tools that are hard to use don&#8217;t get used, or get used improperly.</li>
+<li>Expandable. Should be able to handle any necessary UQ or optimization methods.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="in-progress">
+<h2>In Progress<a class="headerlink" href="#in-progress" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Integration with HUBzero and nanoHUB platforms.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="future-plans">
+<h2>Future Plans<a class="headerlink" href="#future-plans" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Adaptive response surface builder. Chooses the best method without
+user intervention.  Can refine until it meets a specific accuracy goal.</li>
+<li>Better job control.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="users_guide.html" title="User’s Guide and Tutorial"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+       <li><a href="index.html">documentation </a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

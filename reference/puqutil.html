@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>puqutil - Output Functions for PUQ &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="Smolyak UQ Method" href="smolyak.html" />
+    <link rel="prev" title="PDF" href="pdf.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smolyak.html" title="Smolyak UQ Method"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pdf.html" title="PDF"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">puqutil - Output Functions for PUQ</a><ul>
+<li><a class="reference internal" href="#output-format">Output Format</a></li>
+<li><a class="reference internal" href="#python-functions">Python Functions</a></li>
+<li><a class="reference internal" href="#functions-for-c-c">Functions for C/C++</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pdf.html"
+                        title="previous chapter">PDF</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="smolyak.html"
+                        title="next chapter">Smolyak UQ Method</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/puqutil.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="puqutil-output-functions-for-puq">
+<h1>puqutil - Output Functions for PUQ<a class="headerlink" href="#puqutil-output-functions-for-puq" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="output-format">
+<h2>Output Format<a class="headerlink" href="#output-format" title="Permalink to this headline">¶</a></h2>
+<p>The purpose of these functions is to provide a simple way to output in the
+format PUQ expects.</p>
+<p>PUQ expects to see output values written to standard output.  It captures all standard output,
+and scans it looking for a pattern at the beginning of every line. Lines which
+don&#8217;t match this pattern are ignored.</p>
+<p><strong>HDF5:{&#8216;name&#8217;: n, &#8216;desc&#8217;: d, &#8216;value&#8217;:v}:5FDH</strong></p>
+<p>where</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">n:</th><td class="field-body">Name of the variable</td>
+</tr>
+<tr class="field-even field"><th class="field-name">d:</th><td class="field-body">Description of the variable</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">v:</th><td class="field-body">Value of the variable</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="python-functions">
+<h2>Python Functions<a class="headerlink" href="#python-functions" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puqutil</span> <span class="kn">import</span> <span class="n">dump_hdf5</span>
+
+<span class="n">dump_hdf5</span><span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="s">&#39;velocity of the swallow&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="puqutil.dump_hdf5">
+<tt class="descclassname">puqutil.</tt><tt class="descname">dump_hdf5</tt><big>(</big><em>name</em>, <em>val</em><span class="optional">[</span>, <em>desc=''</em><span class="optional">]</span><big>)</big><a class="reference internal" href="../_modules/puqutil.html#dump_hdf5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puqutil.dump_hdf5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes data to stdout with formatting so PUQ can automatically
+recognize it and save it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; Name of the variable</li>
+<li><strong>val</strong> (<em>integer, float, or array</em>) &#8211; Value of the variable</li>
+<li><strong>desc</strong> &#8211; A description of the variable. Saved as an attribute for the variable in the HDF file. Used as labels in plots. Default is an empty string.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="functions-for-c-c">
+<h2>Functions for C/C++<a class="headerlink" href="#functions-for-c-c" title="Permalink to this headline">¶</a></h2>
+<p>These are included in &#8220;dump_hdf5.h&#8221;</p>
+<dl class="function">
+<dt id="c.dump_hdf5_d">
+void <tt class="descname">dump_hdf5_d</tt><big>(</big>char *<em>&nbsp;name</em>, double<em>&nbsp;val</em>, char<em>&nbsp;*desc</em><big>)</big><a class="headerlink" href="#c.dump_hdf5_d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes data to stdout with formatting so PUQ can automatically
+recognize it and save it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>C string</em>) &#8211; Name of the variable</li>
+<li><strong>val</strong> (<em>double</em>) &#8211; The value of the variable</li>
+<li><strong>desc</strong> (<em>C string</em>) &#8211; A description of the variable. Saved as an attribute for the variable in the HDF file. Used as labels in plots. Default is an empty string.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.dump_hdf5_l">
+void <tt class="descname">dump_hdf5_l</tt><big>(</big>char *<em>&nbsp;name</em>, long<em>&nbsp;val</em>, char<em>&nbsp;*desc</em><big>)</big><a class="headerlink" href="#c.dump_hdf5_l" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes data to stdout with formatting so PUQ can automatically
+recognize it and save it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>C string</em>) &#8211; Name of the variable</li>
+<li><strong>val</strong> (<em>long integer</em>) &#8211; The value of the variable</li>
+<li><strong>desc</strong> (<em>C string</em>) &#8211; A description of the variable. Saved as an attribute for the variable in the HDF file. Used as labels in plots. Default is an empty string.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smolyak.html" title="Smolyak UQ Method"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pdf.html" title="PDF"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

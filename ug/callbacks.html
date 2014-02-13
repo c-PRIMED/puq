@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Callbacks &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Calibration of Input Variables" href="calibration.html" />
+    <link rel="prev" title="Modifying Smolyak Sweeps" href="smolyak_mod.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="calibration.html" title="Calibration of Input Variables"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="smolyak_mod.html" title="Modifying Smolyak Sweeps"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="smolyak_mod.html"
+                        title="previous chapter">Modifying Smolyak Sweeps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="calibration.html"
+                        title="next chapter">Calibration of Input Variables</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/callbacks.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="callbacks">
+<h1>Callbacks<a class="headerlink" href="#callbacks" title="Permalink to this headline">¶</a></h1>
+<p>Each UQ method can call a function after a sweep. This
+callback function returns a boolean.  If it returns True,
+the sweep is over.  Otherwise, sweep parameters can be changed and
+the sweep continued.  The same thing could be done with a script, but
+the callback function makes it more convenient.</p>
+<p>A good example of this is examples/iter/rosen_sm.py</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">puq</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># Example callback that causes the sweep</span>
+<span class="c"># to repeat until a specific condition is met.</span>
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">sw</span><span class="p">,</span> <span class="n">hf</span><span class="p">):</span>
+    <span class="n">rmsep</span> <span class="o">=</span> <span class="n">hdf</span><span class="o">.</span><span class="n">get_response</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rmse</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;callback: rmse=</span><span class="si">%s%%</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">rmsep</span>
+
+    <span class="c"># iterate until error &lt; 1%</span>
+    <span class="k">if</span> <span class="n">rmsep</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">psweep</span><span class="o">.</span><span class="n">extend</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">True</span>
+
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="c"># Declare our parameters here. Both are uniform on [-2, 2]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c"># Create a host</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+
+    <span class="c"># Declare a UQ method.</span>
+    <span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iteration_cb</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="c"># Our test program</span>
+    <span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="s">&#39;./rosen_prog.py&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Rosenbrock Function&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Sweep</span><span class="p">(</span><span class="n">uq</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">prog</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/iter&gt; puq start rosen_sm
+Saving run to sweep_46691621.hdf5
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (5,), type &quot;&lt;f8&quot;&gt;
+    Surface   = -1.99999999999997*x + 669.0
+    RMSE      = 6.84e+02 (4.26e+01 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    3.2080e+03    3.2080e+03
+y    8.0000e+02    8.0000e+02
+callback: rmse=42.5626179426%
+Extending Smolyak to level 2
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+    Surface   = 300.99999999956*x**2 - 1.59872115546023e-14*x*y ...
+    RMSE      = 7.40e+02 (2.05e+01 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    3.9402e+03    5.2374e+03
+y    2.0828e+03    1.8510e+03
+callback: rmse=20.4983861252%
+Extending Smolyak to level 3
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (29,), type &quot;&lt;f8&quot;&gt;
+    Surface   = 3.10862446895043e-13*x**3 - 199.999999998686*x**2*y ...
+    RMSE      = 2.40e+02 (6.66e+00 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    4.8307e+03    6.5106e+03
+y    2.0022e+03    1.7623e+03
+callback: rmse=6.66126889943%
+Extending Smolyak to level 4
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (65,), type &quot;&lt;f8&quot;&gt;
+    Surface   = 100.000000001004*x**4 - 8.16013923099492e-14*x**3*y ...
+    RMSE      = 9.29e-09 (2.57e-10 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    5.0835e+03    6.9637e+03
+y    1.9661e+03    1.7441e+03
+callback: rmse=2.57395820254e-10%
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="calibration.html" title="Calibration of Input Variables"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="smolyak_mod.html" title="Modifying Smolyak Sweeps"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

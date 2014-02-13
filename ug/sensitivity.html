@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sensitivity Analysis &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Using PUQ Analyze" href="analyze.html" />
+    <link rel="prev" title="Calibration of Input Variables" href="calibration.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analyze.html" title="Using PUQ Analyze"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="calibration.html" title="Calibration of Input Variables"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sensitivity Analysis</a><ul>
+<li><a class="reference internal" href="#effect-of-smolyak-level-on-sensitivity">Effect of Smolyak Level on Sensitivity</a></li>
+<li><a class="reference internal" href="#a-more-complex-example">A More Complex Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="calibration.html"
+                        title="previous chapter">Calibration of Input Variables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="analyze.html"
+                        title="next chapter">Using PUQ Analyze</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/sensitivity.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sensitivity-analysis">
+<h1>Sensitivity Analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this headline">¶</a></h1>
+<p>With any Smolyak run, sensitivity analysis is done automatically
+during the analysis phase.  The elementary effects method is used on the points
+in the sparse grid.  Because of the way sampling points are laid out in a grid
+covering the input parameter space, the elementary effects can be computed
+at no additional cost.</p>
+<p>The sensitivity measurements are <strong>u*</strong> and <strong>dev</strong> (<span class="math">\(\sigma\)</span>). u* is the mean of the distribution of the absolute values of the elementary effects of the input factors,
+<span class="math">\(\mu^* = \frac{1}{r} \sum_{j=1}^r \left| d \left( X^{(j)} \right) \right|\)</span> where <span class="math">\(d(X)\)</span> is the
+elementary effect for the input parameter.  It is the overall influence of the input parameter on the output.</p>
+<p>dev is the standard deviation of the distribution of the elementary effects for the parameter.
+<span class="math">\(\sigma = \sqrt{ \frac{1}{(r-1)} \sum_{j=1}^r \left( d \left( X^{(j)} \right) - \mu  \right)^2}\)</span>
+If dev is high then the input parameter&#8217;s influence on the output varies widely depending on the sample point.
+A linear response will have a dev of 0.</p>
+<p>An example is shown below.</p>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/test1_arrows.png"><img alt="../_images/test1_arrows.png" src="../_images/test1_arrows.png" style="width: 500px;" /></a>
+</div>
+<p>Elementary effects for input parameter <strong>a</strong> are computed along each red arrow.
+Elementary effects for input parameter <strong>b</strong> are computed along each green arrow.
+Each elementary effect  is the change in output value across the arrow scaled by the length.  For example,
+the output goes up by 10 when <strong>a</strong> changed by half its range, so that elementary effect is 20. Because the above example is linear, all the elementary effects for <strong>a</strong> are 20.</p>
+<p>Sensitivity test 1 has two input parameters with range [0 10]:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/sensitivity&gt; puq start test1
+Sweep id is 30573805
+
+Processing &lt;HDF5 dataset &quot;p&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+        Surface   = 2.0*a + 1.0*b
+        RMSE      = 2.40e-12 (8.00e-12 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+a    2.0000e+01    1.9476e-11
+b    1.0000e+01    9.7339e-12
+</pre></div>
+</div>
+<p>PUQ prints the list of input variables (parameters) in order from the
+highest u* to the lowest.</p>
+<p>For more information about this method, see <a class="reference external" href="http://en.wikipedia.org/wiki/Elementary_effects_method">Elementary_Effects</a> and <a class="reference external" href="http://publications.jrc.ec.europa.eu/repository/bitstream/111111111/8571/1/7120%20-%20eur_report_handbook_2.pdf">Sensitivity_Analysis</a>.</p>
+<div class="section" id="effect-of-smolyak-level-on-sensitivity">
+<h2>Effect of Smolyak Level on Sensitivity<a class="headerlink" href="#effect-of-smolyak-level-on-sensitivity" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>level</strong> parameter to the Smolyak method sets the polynomial degree for the response surface.
+A level 1 Smolyak run require only 2*ndim+1 (ndim = number of dimensions, or input parameters)
+calculations and the response surface will be linear.  This will usually be a poor fit for a response surface,
+bit it might be sufficient for basic sensitivity analysis.</p>
+</div>
+<div class="section" id="a-more-complex-example">
+<h2>A More Complex Example<a class="headerlink" href="#a-more-complex-example" title="Permalink to this headline">¶</a></h2>
+<p>In <a class="reference external" href="http://publications.jrc.ec.europa.eu/repository/bitstream/111111111/8571/1/7120%20-%20eur_report_handbook_2.pdf">Sensitivity_Analysis</a>, an example is worked using Sobol&#8217;s g-function,</p>
+<div class="math">
+\[y=\prod_{i=1}^{k}\frac{\left|4x_{i}-2\right|+a_{i}}{1+a_{i}}\;\;\;\; x\in\left[0,1\right]^{k}\]</div>
+<p>For the worked example, <span class="math">\(k=6\)</span> and <span class="math">\(a=\left[78, 12, 0.5, 2, 97, 33\right]\)</span>. The estimated sensitivity measures are:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="35%" />
+<col width="41%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">u*</th>
+<th class="head">dev</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>x3</td>
+<td>1.76</td>
+<td>2.05</td>
+</tr>
+<tr class="row-odd"><td>x4</td>
+<td>1.19</td>
+<td>1.37</td>
+</tr>
+<tr class="row-even"><td>x2</td>
+<td>0.28</td>
+<td>0.32</td>
+</tr>
+<tr class="row-odd"><td>x6</td>
+<td>0.10</td>
+<td>0.12</td>
+</tr>
+<tr class="row-even"><td>x1</td>
+<td>0.06</td>
+<td>0.06</td>
+</tr>
+<tr class="row-odd"><td>x5</td>
+<td>0.04</td>
+<td>0.04</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Using PUQ, level 1 Smolyak:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/sensitivity&gt; puq start sobol
+Sweep id is 30605799
+
+SENSITIVITY:
+Var       u*            dev
+------------------------------
+x3    1.5566e+00    1.5566e+00
+x4    3.8914e-01    3.8914e-01
+x2    6.4856e-02    6.4856e-02
+x6    2.3584e-02    2.3584e-02
+x1    9.9779e-03    9.9779e-03
+x5    8.0235e-03    8.0235e-03
+</pre></div>
+</div>
+<p>The estimates don&#8217;t agree exactly because they use different sample points, however they do agree
+on the order of significance for the inputs.  If would be easy to increase the accuracy by using a level 2 Smolyak grid.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="analyze.html" title="Using PUQ Analyze"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="calibration.html" title="Calibration of Input Variables"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PDF &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="puqutil - Output Functions for PUQ" href="puqutil.html" />
+    <link rel="prev" title="Parameters" href="parameters.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="puqutil.html" title="puqutil - Output Functions for PUQ"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parameters.html"
+                        title="previous chapter">Parameters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="puqutil.html"
+                        title="next chapter">puqutil - Output Functions for PUQ</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/pdf.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pdf">
+<h1>PDF<a class="headerlink" href="#pdf" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="puq.PDF">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">PDF</tt><big>(</big><em>xvals</em>, <em>yvals</em><big>)</big><a class="headerlink" href="#puq.PDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a PDF (Probability Density Function) object.</p>
+<p>Use this to create a PDF object given a list or array
+of x values the corresponding PDF values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xvals</strong> (<em>1D array or list</em>) &#8211;
+x values</li>
+<li><strong>yvals</strong> (<em>1D array or list</em>) &#8211;
+values for PDF(x)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="puq.PDF.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#puq.PDF.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add two PDFs, returning a new one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.__div__">
+<tt class="descname">__div__</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#puq.PDF.__div__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide two PDFs, returning a new PDF</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.__mul__">
+<tt class="descname">__mul__</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#puq.PDF.__mul__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply two PDFs, returning a new PDF</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.__sub__">
+<tt class="descname">__sub__</tt><big>(</big><em>b</em><big>)</big><a class="headerlink" href="#puq.PDF.__sub__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtract two PDFs, returning a new PDF</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.cdf">
+<tt class="descname">cdf</tt><big>(</big><em>arr</em><big>)</big><a class="headerlink" href="#puq.PDF.cdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Cumulative Density Function (CDF) for some values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arr</strong> &#8211;
+Array of x values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of cdf(x).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.ds">
+<tt class="descname">ds</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#puq.PDF.ds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a descriptive sample for this distribution.</p>
+<p>The order of the numbers
+in the array is random, so it can be combined with other arrays
+to form a latin hypercube.
+This method is used by <a class="reference internal" href="psweep.html#puq.LHS" title="puq.LHS"><tt class="xref py py-class docutils literal"><span class="pre">LHS</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> &#8211; Number of samples to generate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">1D array of length <em>num</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.ds1">
+<tt class="descname">ds1</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#puq.PDF.ds1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a descriptive sample in [-1,1] for this distribution.</p>
+<p>The order of the numbers
+in the array is random, so it can be combined with other arrays
+to form a latin hypercube. Note that this <em>can</em> return values
+outside the range [-1,1] for distributions with long tails.
+This method is used by <a class="reference internal" href="smolyak.html#puq.Smolyak" title="puq.Smolyak"><tt class="xref py py-mod docutils literal"><span class="pre">puq.Smolyak</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> &#8211; Number of samples to generate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">1D array of length <em>num</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.lhs">
+<tt class="descname">lhs</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#puq.PDF.lhs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Latin Hypercube Sample for this distribution.</p>
+<p>The order of the numbers in the array is random, so it can be
+combined with other arrays to form a latin hypercube.
+This method is used by <a class="reference internal" href="psweep.html#puq.LHS" title="puq.LHS"><tt class="xref py py-class docutils literal"><span class="pre">LHS</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> &#8211; Number of samples to generate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">1D array of length <em>num</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.lhs1">
+<tt class="descname">lhs1</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#puq.PDF.lhs1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Latin Hypercube Sample in [-1,1] for this distribution.</p>
+<p>The order of the numbers
+in the array is random, so it can be combined with other arrays
+to form a latin hypercube. Note that this can return values
+outside the range [-1,1] for distributions with long tails.
+This method is used by <a class="reference internal" href="smolyak.html#puq.Smolyak" title="puq.Smolyak"><tt class="xref py py-mod docutils literal"><span class="pre">puq.Smolyak</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> &#8211;
+Number of samples to generate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">1D array of length <em>num</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="puq.PDF.mode">
+<tt class="descname">mode</tt><a class="headerlink" href="#puq.PDF.mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the mode of the PDF.  The mode is the x value at which pdf(x)
+is at its maximum.  It is the peak of the PDF.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.pdf">
+<tt class="descname">pdf</tt><big>(</big><em>arr</em><big>)</big><a class="headerlink" href="#puq.PDF.pdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Probability Density Function (PDF) for some values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arr</strong> &#8211;
+Array of x values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of pdf(x).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.plot">
+<tt class="descname">plot</tt><big>(</big><em>color=''</em>, <em>fig=False</em><big>)</big><a class="headerlink" href="#puq.PDF.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a PDF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>color</strong> (<em>String.</em>) &#8211; Optional color for the plot.</li>
+<li><strong>fig</strong> (<em>Boolean.</em>) &#8211; Create a new matplotlib figure to hold the plot.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of lines that were added.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.ppf">
+<tt class="descname">ppf</tt><big>(</big><em>arr</em><big>)</big><a class="headerlink" href="#puq.PDF.ppf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Percent Point Function (inverse CDF)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arr</strong> &#8211;
+Array of x values.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Array of ppf(x).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.PDF.random">
+<tt class="descname">random</tt><big>(</big><em>num</em><big>)</big><a class="headerlink" href="#puq.PDF.random" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate random numbers fitting this parameter&#8217;s distribution.</p>
+<p>This method is used by <a class="reference internal" href="psweep.html#puq.MonteCarlo" title="puq.MonteCarlo"><tt class="xref py py-class docutils literal"><span class="pre">MonteCarlo</span></tt></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num</strong> &#8211; Number of samples to generate.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">1D array of length <em>num</em>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="puq.PDF.range">
+<tt class="descname">range</tt><a class="headerlink" href="#puq.PDF.range" title="Permalink to this definition">¶</a></dt>
+<dd><p>The range for the PDF. For PDFs with long tails,
+it is truncated to 99.99% by default.  You can
+customize this by setting options[&#8216;pdf&#8217;][&#8216;range&#8217;].</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple containing the min and max.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="puq.PDF.srange">
+<tt class="descname">srange</tt><a class="headerlink" href="#puq.PDF.srange" title="Permalink to this definition">¶</a></dt>
+<dd><p>The small range for the PDF. For PDFs with long tails,
+it is truncated to 99.8% by default.  You can
+customize this by setting options[&#8216;pdf&#8217;][&#8216;srange&#8217;].</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple containing the min and max.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.ExponPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">ExponPDF</tt><big>(</big><em>rate</em><big>)</big><a class="headerlink" href="#puq.ExponPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Exponential Probability Density Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rate</strong> &#8211; The rate parameter for the distribution. Must be &gt; 0.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A PDF object</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Exponential_distribution">http://en.wikipedia.org/wiki/Exponential_distribution</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.NormalPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">NormalPDF</tt><big>(</big><em>mean</em>, <em>dev</em>, <em>min=None</em>, <em>max=None</em><big>)</big><a class="headerlink" href="#puq.NormalPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a normal (gaussian) Probability Density Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mean</strong> &#8211; The mean.</li>
+<li><strong>dev</strong> &#8211; The standard deviation.</li>
+<li><strong>min</strong> &#8211; A minimum value for the PDF (default None).</li>
+<li><strong>max</strong> &#8211; A maximum value for the PDF (default None).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PDF object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For the normal distribution, you must specify <strong>mean</strong> and <strong>dev</strong>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">NormalPDF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">NormalPDF</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dev</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="n">NormalPDF</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dev</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.RayleighPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">RayleighPDF</tt><big>(</big><em>scale</em><big>)</big><a class="headerlink" href="#puq.RayleighPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Rayleigh Probability Density Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>scale</strong> &#8211; The scale. Must be &gt; 0.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A PDF object</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Rayleigh_distribution">http://en.wikipedia.org/wiki/Rayleigh_distribution</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.TrianglePDF">
+<tt class="descclassname">puq.</tt><tt class="descname">TrianglePDF</tt><big>(</big><em>min</em>, <em>mode</em>, <em>max</em><big>)</big><a class="headerlink" href="#puq.TrianglePDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a triangle Probability Density Function.</p>
+<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Triangular_distribution">http://en.wikipedia.org/wiki/Triangular_distribution</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min</strong> &#8211; The minimum value</li>
+<li><strong>mode</strong> &#8211; The mode</li>
+<li><strong>max</strong> &#8211; The maximum value</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PDF object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>You can enter the parameters in any order. They will be sorted so that the mode
+is the middle value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.UniformPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">UniformPDF</tt><big>(</big><em>min=None</em>, <em>max=None</em>, <em>mean=None</em><big>)</big><a class="headerlink" href="#puq.UniformPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a uniform Probability Density Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min</strong> &#8211; The minimum value</li>
+<li><strong>max</strong> &#8211; The maximum value</li>
+<li><strong>mean</strong> &#8211; The mean value</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PDF object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For the uniform distribution, you must specify two of (min, max, and mean).
+The third parameter will be calculated automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">UniformPDF</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">UniformPDF</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">UniformPDF</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.WeibullPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">WeibullPDF</tt><big>(</big><em>shape</em>, <em>scale</em><big>)</big><a class="headerlink" href="#puq.WeibullPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Weibull Probability Density Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> &#8211; The shape. Must be &gt; 0.</li>
+<li><strong>scale</strong> &#8211; The scale. Must be &gt; 0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PDF object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>See <a class="reference external" href="http://en.wikipedia.org/wiki/Weibull_distribution">http://en.wikipedia.org/wiki/Weibull_distribution</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.ExperimentalPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">ExperimentalPDF</tt><big>(</big><em>data</em>, <em>min=None</em>, <em>max=None</em>, <em>fit=False</em>, <em>bw=None</em>, <em>nbins=0</em>, <em>prior=None</em>, <em>error=None</em>, <em>force=False</em><big>)</big><a class="headerlink" href="#puq.ExperimentalPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an experimental PDF.</p>
+<p>An experimental PDF is derived from the results of an experiment or
+measurement of some parameter.  It has actual data attached to it.
+That data is then used to create a PDF by one of three different methods.</p>
+<p>The PDF can built by binning the data and linearly
+interpolating, using a Gaussian KDE, or using Bayesian Inference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>Array of scalars</em>) &#8211; Our quantity of interest.</li>
+<li><strong>nbins</strong> (<em>int</em>) &#8211; Number of bins (used if fit is false).  Default is
+2*IQR/n^(1/3) where IQR is the interquartile range
+of the data.</li>
+<li><strong>fit</strong> (<em>True or &#8220;Gaussian&#8221;</em>) &#8211; Use Gaussian KDE (default=False)</li>
+<li><strong>bw</strong> (<em>string or float. String must be &#8216;scott&#8217; or &#8216;silverman&#8217;</em>) &#8211; Bandwidth for Gaussian KDE (default=None)</li>
+<li><strong>prior</strong> (<em>PDF</em>) &#8211; Prior PDF to use for Bayesian Inference.
+[default=None (uninformative)]</li>
+<li><strong>error</strong> (<em>PDF. Typically a NormalPDF with a mean of 0.</em>) &#8211; Error in the data.  For example, the measurement error.
+Required for Bayesian.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.HPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">HPDF</tt><big>(</big><em>data</em>, <em>min=None</em>, <em>max=None</em><big>)</big><a class="headerlink" href="#puq.HPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Histogram PDF - initialized with points from a histogram.</p>
+<p>This function creates a PDF from a histogram.  This is useful when some other software has
+generated a PDF from your data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>2D numpy array</em>) &#8211; A two dimensional array. The first column is the histogram interval mean,
+and the second column is the probability.  The probability values do not need to be
+normalized.</li>
+<li><strong>min</strong> &#8211; A minimum value for the PDF range. If your histogram has values very close
+to 0, and you know values of 0 are impossible, then you should set the <strong>*min*</strong> parameter.</li>
+<li><strong>max</strong> &#8211; A maximum value for the PDF range.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A PDF object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.NetPDF">
+<tt class="descclassname">puq.</tt><tt class="descname">NetPDF</tt><big>(</big><em>addr</em><big>)</big><a class="headerlink" href="#puq.NetPDF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a PDF from a remote address.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>addr</strong> &#8211; URI. PDF must be stored in JSON format</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A PDF object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">NetPDF</span><span class="p">(</span><span class="s">&#39;http://foo.com/myproject/parameters/density&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="puqutil.html" title="puqutil - Output Functions for PUQ"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TestProgram &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="PSweep Reference" href="psweep.html" />
+    <link rel="prev" title="Sweep Reference" href="sweep.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="psweep.html" title="PSweep Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sweep.html" title="Sweep Reference"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="sweep.html"
+                        title="previous chapter">Sweep Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="psweep.html"
+                        title="next chapter">PSweep Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/testprogram.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="testprogram">
+<h1>TestProgram<a class="headerlink" href="#testprogram" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="puq.TestProgram">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">TestProgram</tt><big>(</big><em>name=''</em>, <em>exe=''</em>, <em>newdir=False</em>, <em>infiles=''</em>, <em>desc=''</em>, <em>outfiles=''</em><big>)</big><a class="headerlink" href="#puq.TestProgram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a TestProgram object representing the
+simulation to run.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>string</em>) &#8211;
+Name of the program. This is the executable if
+no <em>exe</em> is defined.</li>
+<li><strong>exe</strong> (<em>string</em>) &#8211;
+An executable command template to run. Strings of
+the form &#8216;$var&#8217; are replaced with the value of <em>var</em>.
+See python template strings
+(<a class="reference external" href="http://docs.python.org/2/library/string.html#template-strings">http://docs.python.org/2/library/string.html#template-strings</a>)</li>
+<li><strong>desc</strong> &#8211;
+Optional description of the test program.</li>
+<li><strong>newdir</strong> (<em>boolean</em>) &#8211;
+Run each job in its own directory.  Necessary
+if the simulation generates output files.  Default is False.</li>
+<li><strong>infiles</strong> (<em>list</em>) &#8211;
+If <em>newdir</em> is True, then this is an optional
+list of files that should be copied to each new directory.</li>
+<li><strong>outfiles</strong> (<em>list</em>) &#8211;
+An optional list of files that will be saved
+into the HDF5 file upon completion. The files will be in
+/output/jobs/n where &#8216;n&#8217; is the job number.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Example1:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">UniformParameter</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="s">&#39;./rosen_prog.py&#39;</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Rosenbrock Function&#39;</span><span class="p">)</span>
+
+<span class="c"># or, the equivalent using template strings</span>
+
+<span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="n">exe</span><span class="o">=</span><span class="s">&#39;./rosen_prog.py --x=$x --y=$y&#39;</span><span class="p">,</span>
+  <span class="n">desc</span><span class="o">=</span><span class="s">&#39;Rosenbrock Function&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example2:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Using newdir and infiles. Will run each job in a new directory</span>
+<span class="c"># with a copy of all the infiles.</span>
+
+<span class="n">prog</span> <span class="o">=</span> <span class="n">TestProgram</span><span class="p">(</span><span class="s">&#39;PM2&#39;</span><span class="p">,</span> <span class="n">newdir</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;MPM Scaling&#39;</span><span class="p">,</span>
+  <span class="n">infiles</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;pm2geometry&#39;</span><span class="p">,</span> <span class="s">&#39;pm2input&#39;</span><span class="p">,</span> <span class="s">&#39;pmgrid_geom.nc&#39;</span><span class="p">,</span>
+  <span class="s">&#39;pmpart_geom.nc&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="psweep.html" title="PSweep Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sweep.html" title="Sweep Reference"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

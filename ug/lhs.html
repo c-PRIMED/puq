@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Latin Hypercube Sampling &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Smolyak Sparse Grid Algorithm" href="smolyak_python.html" />
+    <link rel="prev" title="Monte Carlo Sampling" href="mc.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smolyak_python.html" title="Smolyak Sparse Grid Algorithm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mc.html" title="Monte Carlo Sampling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mc.html"
+                        title="previous chapter">Monte Carlo Sampling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="smolyak_python.html"
+                        title="next chapter">Smolyak Sparse Grid Algorithm</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/lhs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="latin-hypercube-sampling">
+<h1>Latin Hypercube Sampling<a class="headerlink" href="#latin-hypercube-sampling" title="Permalink to this headline">¶</a></h1>
+<p>Latin Hypercube Sampling is an improvement over Monte Carlo Sampling. In
+one dimension, it generates numbers that are evenly spaced in probability.
+For multiple dimensions, the numbers are randomly paired, so there is more
+randomness in the output. However it avoids clusters and generally outperforms Monte Carlo.</p>
+<p>If you looked at the previous section on <a class="reference internal" href="mc.html"><em>Monte Carlo Sampling</em></a>, you will need to make just
+a minor change to your control script to use Latin Hypercube Sampling.</p>
+<p>Change the line that says:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">uq</span> <span class="o">=</span> <span class="n">MonteCarlo</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">uq</span> <span class="o">=</span> <span class="n">LHS</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or use &#8216;rosen_lhs.py&#8217; in puq/examples/rosen.</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq start -f rosen_lhs.hdf5 rosen_lhs
+Saving run to rosen_lhs.hdf5
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (20,), type &quot;&lt;f8&quot;&gt;
+Mean   = 516.828
+StdDev = 634.386086052
+
+~/puq/examples/rosen&gt; puq plot -r rosen_lhs.hdf5
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-lhs-surface.png"><img alt="../_images/z-lhs-surface.png" src="../_images/z-lhs-surface.png" style="width: 500px;" /></a>
+<p class="caption">Scatter plot for Rosenbrock function using LHS with 20 samples.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq extend rosen_lhs.hdf5
+    Extending rosen_lhs.hdf5 using LHS
+    Extending Descriptive Sampling run to 60 samples.
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (60,), type &quot;&lt;f8&quot;&gt;
+Mean   = 495.208576132
+StdDev = 605.837656938
+~/puq/examples/rosen&gt; puq plot -r rosen_lhs.hdf5
+plotting z
+~/puq/examples/rosen&gt; puq plot rosen_lhs.hdf5
+plotting PDF for z
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-lhs-surface60.png"><img alt="../_images/z-lhs-surface60.png" src="../_images/z-lhs-surface60.png" style="width: 500px;" /></a>
+<p class="caption">Scatter plot for Rosenbrock function using LHS with 60 samples.</p>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-lhs-pdf.png"><img alt="../_images/z-lhs-pdf.png" src="../_images/z-lhs-pdf.png" style="width: 500px;" /></a>
+<p class="caption">PDF for Rosenbrock function using LHS with 60 samples.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smolyak_python.html" title="Smolyak Sparse Grid Algorithm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mc.html" title="Monte Carlo Sampling"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

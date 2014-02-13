@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User’s Guide and Tutorial &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="index.html" />
+    <link rel="next" title="Getting Started" href="ug/started.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="index.html"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ug/started.html" title="Getting Started"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+       <li><a href="index.html">documentation </a> &raquo;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="overview.html"
+                        title="previous chapter">Overview</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ug/started.html"
+                        title="next chapter">Getting Started</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/users_guide.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-s-guide-and-tutorial">
+<h1>User&#8217;s Guide and Tutorial<a class="headerlink" href="#user-s-guide-and-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ug/started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/started.html#nanohub-workspaces">nanoHUB Workspaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/started.html#installing-from-pypi">Installing from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/started.html#building-and-installing-from-sources">Building and Installing from Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/started.html#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ug/started.html#the-control-script">The Control Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ug/started.html#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ug/started.html#test-program">Test Program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ug/started.html#host">Host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/mc.html">Monte Carlo Sampling</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/mc.html#extending-the-sample-size">Extending the Sample Size</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/lhs.html">Latin Hypercube Sampling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ug/smolyak_python.html">Smolyak Sparse Grid Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ug/smolyak_mod.html">Modifying Smolyak Sweeps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/smolyak_mod.html#extending">Extending</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/smolyak_mod.html#modifying-parameters-reusing-response-surfaces">Modifying Parameters &amp; Reusing Response Surfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/callbacks.html">Callbacks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ug/calibration.html">Calibration of Input Variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/calibration.html#using-puq-for-calibration">Using PUQ for Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/calibration.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/sensitivity.html">Sensitivity Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/sensitivity.html#effect-of-smolyak-level-on-sensitivity">Effect of Smolyak Level on Sensitivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/sensitivity.html#a-more-complex-example">A More Complex Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/analyze.html">Using PUQ Analyze</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/analyze.html#response-surfaces">Response Surfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/analyze.html#probability-density-functions-pdfs">Probability Density Functions (PDFs)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/read.html">Using PUQ Read</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ug/simulations.html">Making PUQ Work With Your Code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/simulations.html#c-programs">C Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/simulations.html#matlab-programs">Matlab Programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/simulations.html#fortran-programs">Fortran Programs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/handling_output.html">Handling Output</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/handling_output.html#the-standard-way">The Standard Way</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/handling_output.html#when-the-standard-way-doesn-t-work">When the Standard Way Doesn&#8217;t Work</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/handling_output.html#wrappers">Wrappers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/pbs.html">Using The PBS Scheduler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/pbs.html#batch-scripts">Batch Scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/pbs.html#using-pbshost">Using PBSHost</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/pbs.html#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/plotting.html">Plotting</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/plotting.html#pdf-plots">PDF Plots</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ug/plotting.html#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/out2in.html">Using Output PDFs as Inputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ug/scripting.html">Scripting PUQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ug/scripting.html#running-sweeps">Running Sweeps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ug/scripting.html#reading-results">Reading Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ug/correlated.html">Handling Correlated PDFs</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ug/started.html" title="Getting Started"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+       <li><a href="index.html">documentation </a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

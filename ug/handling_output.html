@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Handling Output &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Using The PBS Scheduler" href="pbs.html" />
+    <link rel="prev" title="Making PUQ Work With Your Code" href="simulations.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pbs.html" title="Using The PBS Scheduler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="simulations.html" title="Making PUQ Work With Your Code"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Handling Output</a><ul>
+<li><a class="reference internal" href="#the-standard-way">The Standard Way</a></li>
+<li><a class="reference internal" href="#when-the-standard-way-doesn-t-work">When the Standard Way Doesn&#8217;t Work</a></li>
+<li><a class="reference internal" href="#wrappers">Wrappers</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="simulations.html"
+                        title="previous chapter">Making PUQ Work With Your Code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pbs.html"
+                        title="next chapter">Using The PBS Scheduler</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/handling_output.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="handling-output">
+<h1>Handling Output<a class="headerlink" href="#handling-output" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="the-standard-way">
+<h2>The Standard Way<a class="headerlink" href="#the-standard-way" title="Permalink to this headline">¶</a></h2>
+<p>In our previous examples, we wrote test programs that used
+the functions in <a class="reference internal" href="../reference/puqutil.html"><em>puqutil - Output Functions for PUQ</em></a> to output data.
+What these functions do is to simply format the data written to standard output
+in such a way that PUQ can automatically recognize the data it is supposed to save.
+Anything else written to stdout, as well as other files, is skipped.</p>
+<p>When looking at stdout, you will see lines like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>HDF5:{&#39;name&#39;:&#39;z&#39;,&#39;value&#39;:1.0,&#39;desc&#39;:&#39;f(x,y)&#39;}:5FDH
+</pre></div>
+</div>
+<p>This tells PUQ that it should save the value &#8220;1.0&#8221; in the HDF5 file under
+&#8216;output/data/z&#8217;. Actually it will save the results from all jobs in the sweep
+as an array of output values under &#8216;output/data/z&#8217;.</p>
+<p>If you write the same variable more than once in a job, it will confuse PUQ.
+It expects one value per variable per job. And by default it will run the UQ
+method on each output variable. So it you output three variables, you will
+get three output PDFs.</p>
+<p>However, each output variable can be an array of values. For example, you can output
+a 10x10 array (or an n-dimensional array!). In &#8216;output/data/varname&#8217; will be an array of 10x10 arrays.
+And by default, PUQ will generate a 10x10 array of output PDFs. And &#8216;puq plot&#8217; will plot all 100 PDFs.
+See puq/examples/test1 for an example of outputting arrays of data.</p>
+</div>
+<div class="section" id="when-the-standard-way-doesn-t-work">
+<h2>When the Standard Way Doesn&#8217;t Work<a class="headerlink" href="#when-the-standard-way-doesn-t-work" title="Permalink to this headline">¶</a></h2>
+<p>This is all very good, but what if your test program is some huge binary that cannot be modified to output
+data in PUQ&#8217;s format?</p>
+<p>One solution would be to write a wrapper in a scripting language like Python, Tcl, or Ruby.
+The wrapper might modify the parameters, pass them to the the big test program, capture the
+output and reformat it for PUQ.</p>
+</div>
+<div class="section" id="wrappers">
+<h2>Wrappers<a class="headerlink" href="#wrappers" title="Permalink to this headline">¶</a></h2>
+<p>What do you do when you have a complex simulation that cannot be easily modified to
+support PUQs input and output requirements?  Perhaps it is commercial simulation
+code that cannot be modified.  In these cases, you must write a <em>wrapper</em>; a small program
+that translates between PUQs I/O requirements and those of the wrapped simulation code.</p>
+<p>Example wrapper scripts are in puq/examples/wrapper.
+Examples include:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sim.py:</th><td class="field-body">Simulation. Reads parameters on the command line and
+writes the output embedded in some text.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sim_file.py:</th><td class="field-body">Like the previous, but reads parameters from a file and writes output to a file.</td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">sim_wrap.py:</th><td class="field-body">Example python wrapper for sim.py.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">sim_wrap.sh:</th><td class="field-body">Example bash wrapper for sim.py.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">sim_file_wrap.py:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Example python wrapper for sim_file.py.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">sim_file_wrap.sh:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">Example bash wrapper for sim_file.py.</td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">quad.py:</th><td class="field-body">Control script for PUQ that uses sim_wrap wrappers.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">quad_file.py:</th><td class="field-body">Control script for PUQ that uses sim_file_wrap wrappers.</td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<p><em>sim.py</em> and <em>sim_file.py</em> are treated as black box simulations.  They have particular ways they work and the wrapper
+scripts need to wrap them.</p>
+<p>The python and bash example wrappers are interchangeable.  You can write wrappers in any language.</p>
+<p>The control scripts interact with the wrappers through the <a class="reference internal" href="../reference/testprogram.html"><em>TestProgram</em></a> class.  They control how
+parameters are passed on the command line.  They also can cause every job to be run in a separate directory, and
+can have certain common datafile copied into those directories.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pbs.html" title="Using The PBS Scheduler"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="simulations.html" title="Making PUQ Work With Your Code"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

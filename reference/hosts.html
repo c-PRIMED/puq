@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hosts &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="Parameters" href="parameters.html" />
+    <link rel="prev" title="hdf - Functions for Accessing HDF5 Files" href="hdf.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hdf.html" title="hdf - Functions for Accessing HDF5 Files"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hdf.html"
+                        title="previous chapter">hdf - Functions for Accessing HDF5 Files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parameters.html"
+                        title="next chapter">Parameters</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/hosts.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="hosts">
+<h1>Hosts<a class="headerlink" href="#hosts" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="puq.InteractiveHost">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">InteractiveHost</tt><big>(</big><em>cpus=1</em>, <em>cpus_per_node=0</em><big>)</big><a class="headerlink" href="#puq.InteractiveHost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a host object that runs all jobs on the local CPU.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cpus</strong> &#8211;
+Number of cpus each process uses. Default=1.</li>
+<li><strong>cpus_per_node</strong> &#8211;
+How many cpus to use on each node.
+Default=all cpus.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.PBSHost">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">PBSHost</tt><big>(</big><em>env</em>, <em>cpus=0</em>, <em>cpus_per_node=0</em>, <em>qname='standby'</em>, <em>walltime='1:00:00'</em>, <em>modules=''</em>, <em>pack=1</em>, <em>qlimit=200</em><big>)</big><a class="headerlink" href="#puq.PBSHost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queues jobs using the PBS batch scheduler.
+Supports Torque and PBSPro.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>env</strong> (<em>str</em>) &#8211;
+Bash environment script (.sh) to be sourced.</li>
+<li><strong>cpus</strong> (<em>int</em>) &#8211;
+Number of cpus each process uses. Required.</li>
+<li><strong>cpus_per_node</strong> (<em>int</em>) &#8211;
+How many cpus to use on each node.  Required.</li>
+<li><strong>qname</strong> (<em>str</em>) &#8211;
+The name of the queue to use.</li>
+<li><strong>walltime</strong> (<em>str</em>) &#8211;
+How much time to allow for the process to complete. Format
+is HH:MM:SS.  Default is 1 hour.</li>
+<li><strong>modules</strong> (<em>list</em>) &#8211;
+Additional required modules. Default is none.</li>
+<li><strong>pack</strong> (<em>int</em>) &#8211;
+Number of sequential jobs to run in each PBS script. Default is 1.</li>
+<li><strong>qlimit</strong> (<em>int</em>) &#8211;
+Max number of PBS jobs to submit at once. Default is 200.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hdf.html" title="hdf - Functions for Accessing HDF5 Files"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Smolyak Sparse Grid Algorithm &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Modifying Smolyak Sweeps" href="smolyak_mod.html" />
+    <link rel="prev" title="Latin Hypercube Sampling" href="lhs.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smolyak_mod.html" title="Modifying Smolyak Sweeps"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lhs.html" title="Latin Hypercube Sampling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="lhs.html"
+                        title="previous chapter">Latin Hypercube Sampling</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="smolyak_mod.html"
+                        title="next chapter">Modifying Smolyak Sweeps</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/smolyak_python.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="smolyak-sparse-grid-algorithm">
+<h1>Smolyak Sparse Grid Algorithm<a class="headerlink" href="#smolyak-sparse-grid-algorithm" title="Permalink to this headline">¶</a></h1>
+<p>In the last two sections, we have used <a class="reference internal" href="mc.html"><em>Monte Carlo Sampling</em></a> and <a class="reference internal" href="lhs.html"><em>Latin Hypercube Sampling</em></a> on the Rosenbrock function. Both of those algorithms suffered from some common
+problems; they were slow to converge on a correct answer and their results
+were non-deterministic, varying from run to run due to the inherent randomness.</p>
+<p>The Smolyak algorithm is a significant improvement. It uses a smaller
+number of runs to generate a response surface.</p>
+<p>To move from Monte Carlo to Latin Hypercube sampling, we had to change
+a single line in our control script. To use Smolyak, we simply change that same
+line:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">uq</span> <span class="o">=</span> <span class="n">LHS</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">uq</span> <span class="o">=</span> <span class="n">Smolyak</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or use &#8216;rosen.py&#8217; in puq/examples/rosen.:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq start rosen
+Saving run to sweep_140682290.hdf5
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (13,), type &quot;&lt;f8&quot;&gt;
+        Surface   = 301.0*x**2 - 2.0*x + 300.0*y**2 - 266.667*y - 345.667
+        RMSE      = 7.40e+02 (2.05e+01 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    3.9402e+03    5.2374e+03
+y    2.0828e+03    1.8510e+03
+</pre></div>
+</div>
+<p>The puq program first created a file using the unique id it generated. That file is sweep_140682290.hdf5.
+All information about this run is placed in there.  The puq program next ran 13 jobs, using the parameters
+calculated by the Smolyak method. Then it calculated a response surface.</p>
+<p>For the Smolyak method, the response surface should ge a perfect fit if the polynomial degree of the function is less than or equal to
+the Smolyak level parameter.  For our example, we used a level 2 Smolyak run to approzimate a The Rosenbrock function, which is 4th degree.  Because of this, the response surface does not exactly fit the data points.  The RMSE is 20.5%.</p>
+<p>PUQ also calculates the sensitivity of the parameters using the <a class="reference external" href="http://en.wikipedia.org/wiki/Elementary_effects_method">Elementary Effects Method</a></p>
+<p>We can plot the response surface and pdf:</p>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq plot -r sweep_140682290.hdf5
+plotting PDF for z
+</pre></div>
+</div>
+<p>And if you look at the response surface, you see the actual data as blue dots. Many of them are not on the response surface, indicating a bad fit.</p>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-surface-level2.png"><img alt="../_images/z-surface-level2.png" src="../_images/z-surface-level2.png" style="width: 500px;" /></a>
+<p class="caption"><strong>This is the output from a level-2 Smolyak, which required 13 jobs.</strong></p>
+</div>
+<p>For comparison, here is the expected rosenbrock function.</p>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/rosenbrock.png"><img alt="../_images/rosenbrock.png" src="../_images/rosenbrock.png" style="width: 500px;" /></a>
+<p class="caption"><strong>This is the rosenbrock function.</strong></p>
+</div>
+<p>Next, if we bring up an editor and change the Smolyak level first to 3 then to 4, or do &#8216;puq extend&#8217; twice, we get the following.</p>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-surface-level3.png"><img alt="../_images/z-surface-level3.png" src="../_images/z-surface-level3.png" style="width: 500px;" /></a>
+<p class="caption"><strong>This is the output from a level-3 Smolyak, which required 29 jobs</strong></p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre> ~/puq/examples/rosen&gt; puq extend sweep_140682290.hdf5
+Extending sweep_140682290.hdf5 Using Smolyak
+Extending Smolyak to level 3
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (29,), type &quot;&lt;f8&quot;&gt;
+        Surface   = -200.0*x**2*y + 343.857*x**2 - 2.0*x + 100.0*y**2 - 136.143
+        RMSE      = 2.40e+02 (6.66e+00 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    4.8307e+03    6.5106e+03
+y    2.0022e+03    1.7623e+03
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-surface-level4.png"><img alt="../_images/z-surface-level4.png" src="../_images/z-surface-level4.png" style="width: 500px;" /></a>
+<p class="caption"><strong>This is the output from a level-4 Smolyak, which required 65 jobs</strong></p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>~/puq/examples/rosen&gt; puq extend sweep_140682290_A.hdf5
+Extending sweep_140682290.hdf5 using Smolyak
+Extending Smolyak to level 4
+
+Processing &lt;HDF5 dataset &quot;z&quot;: shape (65,), type &quot;&lt;f8&quot;&gt;
+        Surface   = 100.0*x**4 - 200.0*x**2*y + 1.0*x**2 - 2.0*x + 100.0*y**2 + 1.0
+        RMSE      = 3.96e-09 (1.10e-10 %)
+
+SENSITIVITY:
+Var      u*            dev
+-----------------------------
+x    5.0835e+03    6.9637e+03
+y    1.9661e+03    1.7441e+03
+</pre></div>
+</div>
+<div class="figure align-left">
+<a class="reference internal image-reference" href="../_images/z-level4.png"><img alt="../_images/z-level4.png" src="../_images/z-level4.png" style="width: 500px;" /></a>
+<p class="caption"><strong>PDF for Smolyak level 4, Rosenbrock function on [-2,2]</strong></p>
+</div>
+<p>With 65 samples Smolyak outperforms Monte Carlo with 1000 samples.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Smolyak is only suitable for cases where the response function can be approximated
+as a polynomial, at least over the input range with which we are concerned. For functions
+with abrupt changes or discontinuities, <a class="reference internal" href="lhs.html"><em>Latin Hypercube Sampling</em></a> is probably a better choice.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="smolyak_mod.html" title="Modifying Smolyak Sweeps"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lhs.html" title="Latin Hypercube Sampling"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

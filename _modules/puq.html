@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>puq &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for puq</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">hosts</span> <span class="kn">import</span> <span class="n">InteractiveHost</span>
+<span class="kn">from</span> <span class="nn">submithost</span> <span class="kn">import</span> <span class="n">SubmitHost</span>
+<span class="kn">from</span> <span class="nn">montecarlo</span> <span class="kn">import</span> <span class="n">MonteCarlo</span>
+<span class="kn">from</span> <span class="nn">lhs</span> <span class="kn">import</span> <span class="n">LHS</span>
+<span class="kn">from</span> <span class="nn">options</span> <span class="kn">import</span> <span class="n">options</span>
+<span class="kn">from</span> <span class="nn">parameter</span> <span class="kn">import</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">NormalParameter</span><span class="p">,</span> <span class="n">WeibullParameter</span><span class="p">,</span> <span class="n">RayleighParameter</span><span class="p">,</span> <span class="n">ExponParameter</span><span class="p">,</span> <span class="n">CustomParameter</span><span class="p">,</span> <span class="n">UniformParameter</span><span class="p">,</span> <span class="n">DParameter</span>
+<span class="kn">from</span> <span class="nn">smolyak</span> <span class="kn">import</span> <span class="n">Smolyak</span>
+<span class="kn">from</span> <span class="nn">scaling</span> <span class="kn">import</span> <span class="n">Scaling</span>
+<span class="kn">from</span> <span class="nn">sweep</span> <span class="kn">import</span> <span class="n">Sweep</span>
+<span class="kn">from</span> <span class="nn">simplesweep</span> <span class="kn">import</span> <span class="n">SimpleSweep</span>
+<span class="kn">from</span> <span class="nn">psweep</span> <span class="kn">import</span> <span class="n">PSweep</span>
+<span class="kn">from</span> <span class="nn">testprogram</span> <span class="kn">import</span> <span class="n">TestProgram</span>
+<span class="kn">from</span> <span class="nn">pdf</span> <span class="kn">import</span> <span class="n">PDF</span><span class="p">,</span> <span class="n">ExperimentalPDF</span><span class="p">,</span> <span class="n">NormalPDF</span><span class="p">,</span> <span class="n">WeibullPDF</span><span class="p">,</span> <span class="n">UniformPDF</span><span class="p">,</span> <span class="n">HPDF</span><span class="p">,</span> <span class="n">TrianglePDF</span><span class="p">,</span> <span class="n">posterior</span><span class="p">,</span> <span class="n">RayleighPDF</span><span class="p">,</span> <span class="n">ExponPDF</span><span class="p">,</span> <span class="n">NetPDF</span>
+<span class="kn">from</span> <span class="nn">pbshost</span> <span class="kn">import</span> <span class="n">PBSHost</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">Callback</span>
+<span class="kn">from</span> <span class="nn">response</span> <span class="kn">import</span> <span class="n">Function</span><span class="p">,</span> <span class="n">ResponseFunc</span><span class="p">,</span> <span class="n">SampledFunc</span>
+<span class="kn">from</span> <span class="nn">jpickle</span> <span class="kn">import</span> <span class="n">pickle</span><span class="p">,</span> <span class="n">unpickle</span><span class="p">,</span> <span class="n">NetObj</span><span class="p">,</span> <span class="n">LoadObj</span><span class="p">,</span> <span class="n">write_json</span>
+<span class="kn">from</span> <span class="nn">kde</span> <span class="kn">import</span> <span class="n">gaussian_kde</span>
+<span class="kn">from</span> <span class="nn">analyzer</span> <span class="kn">import</span> <span class="n">analyzer</span>
+<span class="kn">from</span> <span class="nn">calibrate</span> <span class="kn">import</span> <span class="n">calibrate</span>
+<span class="kn">from</span> <span class="nn">.version</span> <span class="kn">import</span> <span class="n">__version__</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

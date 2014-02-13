@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Parameters &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="PDF" href="pdf.html" />
+    <link rel="prev" title="Hosts" href="hosts.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdf.html" title="PDF"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="hosts.html" title="Hosts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hosts.html"
+                        title="previous chapter">Hosts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pdf.html"
+                        title="next chapter">PDF</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/parameters.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="parameters">
+<h1>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="puq.Parameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">Parameter</tt><big>(</big><em>*args</em>, <em>**kargs</em><big>)</big><a class="headerlink" href="#puq.Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Superclass for all Parameter subclasses. For backwards
+compatibility it can be called directly and will return the
+proper subclass.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#puq.NormalParameter" title="puq.NormalParameter"><tt class="xref py py-class docutils literal"><span class="pre">NormalParameter</span></tt></a> is returned if <em>dev</em> is set.</li>
+<li><a class="reference internal" href="#puq.UniformParameter" title="puq.UniformParameter"><tt class="xref py py-class docutils literal"><span class="pre">UniformParameter</span></tt></a> is returned if either <em>min</em> or <em>max</em>
+is set.</li>
+<li><a class="reference internal" href="#puq.CustomParameter" title="puq.CustomParameter"><tt class="xref py py-class docutils literal"><span class="pre">CustomParameter</span></tt></a> is returned if <em>pdf</em> or <em>caldata</em> is set.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name,
+like a variable.</li>
+<li><strong>description</strong> &#8211;
+A longer description of the parameter.</li>
+<li><strong>kargs</strong> &#8211;
+Keyword args defined by the distribution.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#puq.NormalParameter" title="puq.NormalParameter"><tt class="xref py py-class docutils literal"><span class="pre">NormalParameter</span></tt></a>, <a class="reference internal" href="#puq.UniformParameter" title="puq.UniformParameter"><tt class="xref py py-class docutils literal"><span class="pre">UniformParameter</span></tt></a>,
+<a class="reference internal" href="#puq.CustomParameter" title="puq.CustomParameter"><tt class="xref py py-class docutils literal"><span class="pre">CustomParameter</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.CustomParameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">CustomParameter</tt><big>(</big><em>name</em>, <em>description</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#puq.CustomParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a Parameter with a Custom distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name,
+like a variable.</p>
+</li>
+<li><p class="first"><strong>description</strong> &#8211;
+A longer description of the parameter.</p>
+</li>
+<li><p class="first"><strong>kwargs</strong> &#8211;
+Keyword args.  Valid args are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arg</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>pdf</td>
+<td><a class="reference internal" href="pdf.html#puq.PDF" title="puq.PDF"><tt class="xref py py-class docutils literal"><span class="pre">PDF</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td>use_samples</td>
+<td>Use data samples attached to pdf (if available)</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.ExponParameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">ExponParameter</tt><big>(</big><em>name</em>, <em>description</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#puq.ExponParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a Parameter with an Exponential distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name,
+like a variable.</p>
+</li>
+<li><p class="first"><strong>description</strong> &#8211;
+A longer description of the parameter.</p>
+</li>
+<li><p class="first"><strong>kwargs</strong> &#8211;
+Keyword args.  Valid args are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arg</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rate</td>
+<td>The rate parameter. Must be &gt; 0.</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pdf.html#puq.ExponPDF" title="puq.ExponPDF"><tt class="xref py py-class docutils literal"><span class="pre">ExponPDF</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.NormalParameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">NormalParameter</tt><big>(</big><em>name</em>, <em>description</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#puq.NormalParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a Parameter with a Normal distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name, like a variable.</p>
+</li>
+<li><p class="first"><strong>description</strong> &#8211;
+A longer description of the parameter.</p>
+</li>
+<li><p class="first"><strong>kwargs</strong> &#8211;
+Keyword args.  Valid args are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arg</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>mean</td>
+<td>The mean of the distribution</td>
+</tr>
+<tr class="row-odd"><td>dev</td>
+<td>The standard deviation</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.RayleighParameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">RayleighParameter</tt><big>(</big><em>name</em>, <em>description</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#puq.RayleighParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a Parameter with a Rayleigh distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name,
+like a variable.</p>
+</li>
+<li><p class="first"><strong>description</strong> &#8211;
+A longer description of the parameter.</p>
+</li>
+<li><p class="first"><strong>kwargs</strong> &#8211;
+Keyword args.  Valid args are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arg</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>scale</td>
+<td>The scale. Must be &gt; 0.</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pdf.html#puq.RayleighPDF" title="puq.RayleighPDF"><tt class="xref py py-class docutils literal"><span class="pre">RayleighPDF</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.UniformParameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">UniformParameter</tt><big>(</big><em>name</em>, <em>description</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#puq.UniformParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a Parameter with a Uniform distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name,
+like a variable.</p>
+</li>
+<li><p class="first"><strong>description</strong> &#8211;
+A longer description of the parameter.</p>
+</li>
+<li><p class="first"><strong>kwargs</strong> &#8211;
+Keyword args.  Valid args are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>mean</td>
+<td>The mean of the distribution</td>
+</tr>
+<tr class="row-odd"><td>max</td>
+<td>The maximum</td>
+</tr>
+<tr class="row-even"><td>min</td>
+<td>The minimum</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>You <strong>must</strong> specify two of the above properties. If you
+give all three, they will be checked for consistency.
+<span class="math">\(mean = (min + max)/2\)</span></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.WeibullParameter">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">WeibullParameter</tt><big>(</big><em>name</em>, <em>description</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#puq.WeibullParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing a Parameter with a Weibull distribution.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><strong>name</strong> &#8211;
+Name of the parameter. This should be a short name,
+like a variable.</p>
+</li>
+<li><p class="first"><strong>description</strong> &#8211;
+A longer description of the parameter.</p>
+</li>
+<li><p class="first"><strong>kwargs</strong> &#8211;
+Keyword args.  Valid args are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arg</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>shape</td>
+<td>The shape. Must be &gt; 0.</td>
+</tr>
+<tr class="row-odd"><td>scale</td>
+<td>The scale. Must be &gt; 0.</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="pdf.html#puq.WeibullPDF" title="puq.WeibullPDF"><tt class="xref py py-class docutils literal"><span class="pre">WeibullPDF</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.PSweep">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">PSweep</tt><big>(</big><em>iteration_cb=None</em><big>)</big><a class="headerlink" href="#puq.PSweep" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="puq.PSweep.run">
+<tt class="descname">run</tt><big>(</big><em>sweep</em><big>)</big><a class="headerlink" href="#puq.PSweep.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the parameters then adds the command plus parameters to
+the host object job list. Then tells the host to run.  After
+all jobs have completed, collect the data and call analyze().
+If iteration_cb is defined, call it.</p>
+<p>Returns True on success.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pdf.html" title="PDF"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="hosts.html" title="Hosts"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

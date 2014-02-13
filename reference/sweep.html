@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sweep Reference &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="TestProgram" href="testprogram.html" />
+    <link rel="prev" title="Smolyak UQ Method" href="smolyak.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="testprogram.html" title="TestProgram"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="smolyak.html" title="Smolyak UQ Method"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="smolyak.html"
+                        title="previous chapter">Smolyak UQ Method</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="testprogram.html"
+                        title="next chapter">TestProgram</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/sweep.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sweep-reference">
+<h1>Sweep Reference<a class="headerlink" href="#sweep-reference" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="puq.Sweep">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">Sweep</tt><big>(</big><em>psweep</em>, <em>host</em>, <em>prog</em>, <em>caldata=None</em>, <em>calerr=None</em>, <em>description=''</em><big>)</big><a class="headerlink" href="#puq.Sweep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an object that contains all the information about
+a parameter sweep.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>psweep</strong> &#8211;
+Parameter Sweep object. See <a class="reference internal" href="parameters.html#puq.PSweep" title="puq.PSweep"><tt class="xref py py-class docutils literal"><span class="pre">PSweep</span></tt></a>.</li>
+<li><strong>host</strong> &#8211;
+Host object.  See <tt class="xref py py-class docutils literal"><span class="pre">Host</span></tt>.</li>
+<li><strong>prog</strong> &#8211;
+TestProgram object: See <a class="reference internal" href="testprogram.html#puq.TestProgram" title="puq.TestProgram"><tt class="xref py py-class docutils literal"><span class="pre">TestProgram</span></tt></a>.</li>
+<li><strong>caldata(array</strong> &#8211;
+Experimental data for calibration. Optional.</li>
+<li><strong>calerr</strong> (<em>float</em>) &#8211;
+Measurement error in the experimental data.</li>
+<li><strong>description</strong> (<em>string</em>) &#8211;
+Optional description of this run.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="puq.Sweep.analyze">
+<tt class="descname">analyze</tt><big>(</big><em>verbose=False</em><big>)</big><a class="headerlink" href="#puq.Sweep.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects the output from all the jobs into an HDF5 file.
+Parses any tagged data in the output and puts it in
+the /data group in the HDF5 file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.Sweep.collect_data">
+<tt class="descname">collect_data</tt><big>(</big><em>hf=None</em><big>)</big><a class="headerlink" href="#puq.Sweep.collect_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects data from captured stdout files and puts it in arrays
+in &#8216;output/data&#8217;. Returns True on success.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="puq.Sweep.run">
+<tt class="descname">run</tt><big>(</big><em>fn=None</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#puq.Sweep.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls PSweep.run() to run all the jobs in the Sweep.  Collect the data
+from the outputs and call the PSweep analyze method.  If the PSweep method
+has an iterative callback defined, call it, otherwise return.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fn</strong> (<em>string</em>) &#8211;
+HDF5 filename for output. &#8216;.hdf5&#8217; will be
+appended to the filename if necessary. If fn is None,
+a filename will be generated starting with &#8220;sweep_&#8221;
+followed by a timestamp.</li>
+<li><strong>overwrite</strong> (<em>boolean</em>) &#8211;
+If True and fn is not None, will
+silently overwrite any previous files of the same name.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True on success.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="testprogram.html" title="TestProgram"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="smolyak.html" title="Smolyak UQ Method"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

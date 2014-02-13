@@ -1,4 +1,0 @@
-a=AAA
-b=BBB
-c=CCC
-x=XXX

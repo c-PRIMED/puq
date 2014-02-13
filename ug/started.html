@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Monte Carlo Sampling" href="mc.html" />
+    <link rel="prev" title="User’s Guide and Tutorial" href="../users_guide.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mc.html" title="Monte Carlo Sampling"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../users_guide.html" title="User’s Guide and Tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#nanohub-workspaces">nanoHUB Workspaces</a></li>
+<li><a class="reference internal" href="#installing-from-pypi">Installing from PyPI</a></li>
+<li><a class="reference internal" href="#building-and-installing-from-sources">Building and Installing from Sources</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li><a class="reference internal" href="#the-control-script">The Control Script</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#test-program">Test Program</a></li>
+<li><a class="reference internal" href="#host">Host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../users_guide.html"
+                        title="previous chapter">User&#8217;s Guide and Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="mc.html"
+                        title="next chapter">Monte Carlo Sampling</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/started.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>PUQ works on Linux and MacOSX.</p>
+<div class="section" id="nanohub-workspaces">
+<h2>nanoHUB Workspaces<a class="headerlink" href="#nanohub-workspaces" title="Permalink to this headline">¶</a></h2>
+<p>If you have access to a nanoHUB workspace, PUQ is already installed.
+If &#8216;puq&#8217; is not in your path, use the &#8216;use&#8217; command to load it.</p>
+<div class="highlight-python"><div class="highlight"><pre>~&gt; which puq
+~&gt; use -e puq-2.2.1
+~&gt; which puq
+/apps/share64/debian7/puq/puq-2.2.1/build-debian7/bin/puq
+</pre></div>
+</div>
+<p>Type &#8216;use&#8217; without arguments to see a list of packages.  You should use
+the latest version of PUQ.</p>
+</div>
+<div class="section" id="installing-from-pypi">
+<h2>Installing from PyPI<a class="headerlink" href="#installing-from-pypi" title="Permalink to this headline">¶</a></h2>
+<p>PUQ uses distutils, which is the default way of installing python
+modules. Simply do:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install puq
+</pre></div>
+</div>
+<p>The installer might ask you to install some other packages first.
+Just use &#8216;pip&#8217; to install them.  For the Mac, we have very
+successfully used Anaconda, a free Python distribution containing
+all the required components to install PUQ. <a class="reference external" href="https://store.continuum.io/cshop/anaconda/">https://store.continuum.io/cshop/anaconda/</a></p>
+</div>
+<div class="section" id="building-and-installing-from-sources">
+<h2>Building and Installing from Sources<a class="headerlink" href="#building-and-installing-from-sources" title="Permalink to this headline">¶</a></h2>
+<p>If you are a developer and have a local copy of the sources,</p>
+<p>To install in your home directory, use:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install --user
+</pre></div>
+</div>
+<p>To install for all users on Unix/Linux or Mac:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py build
+sudo python setup.py install
+</pre></div>
+</div>
+<p>For more information: <a class="reference external" href="https://pypi.python.org/pypi/puq/">https://pypi.python.org/pypi/puq/</a> and
+<a class="reference external" href="https://github.com/martin-hunt/puq">https://github.com/martin-hunt/puq</a></p>
+<hr class="docutils" />
+<p>To test that everything is set up properly, just try the <strong>puq</strong> command
+without any arguments. Correct output should look something like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt; puq
+
+This program does parameter sweeps for uncertainty
+quantification and optimization.
+
+Usage: puq [-q|-v] [start|stop|status|resume|analyze|plot]
+Options:
+-q                           Quiet.  Useful for scripts.
+
+-v                           Verbose. Show even more information.
+
+-k                           Keep temporary directories.
+
+start script[.py] [args]     Start PUQ using script &#39;script&#39;
+
+status [id]                  Returns the number of jobs remaining in the sweep.
+
+resume [id]                  Resumes execution of sweep &#39;id&#39;.
+
+analyze [options] [id]       Does post-processing.
+
+extend [id]                  Extend a sweep by adding additional jobs.
+
+plot [options] [id]          Plots output pdf(s) or response surface. Type
+&#39;puq plot -h&#39; for options.
+
+read                         Read a parameter or PDF from a python input script,
+                             json file, csv file, or URI.  Visualize, modify, and save it.
+
+strip                        PUQ keeps all stdout from every job.  This command
+                             removes output lines not containing data and
+                             repacks the HDF5 file, reducing its size.
+
+dump                         Dumps output data in CSV format.
+</pre></div>
+</div>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-control-script">
+<h3>The Control Script<a class="headerlink" href="#the-control-script" title="Permalink to this headline">¶</a></h3>
+<p>To get started, you will need to write a control script. This script is actually a small
+Python function.  Other parameter sweep frameworks usually use text file or
+XML for this. However by using Python,  we can have much more flexibility.  You will not have to
+know much about Python to create a simple control script.</p>
+<p>The control script must declare three objects:</p>
+<div class="highlight-python"><div class="highlight"><pre>1. At least one parameter, which will be swept by the run.
+2. A test program which takes the parameter(s) as a command line argument.
+3. A host, which right now is either the local host running interactively,
+or the PBS batch scheduler, running locally.
+</pre></div>
+</div>
+<p>These three objects are combined to form a Sweep object which the UQ system will use. Each of the above objects will be explained in detail.</p>
+<p>Good examples of control script are found in puq/examples.</p>
+</div>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<p>Parameters represent inputs to our test program. Parameters are values that will be
+changing in different runs of our test program.</p>
+<p>For scaling sweeps or optimization runs, the parameter represents values that can be
+changed for different runs.</p>
+<p>For uncertainty quantification, parameters are random variables which can be discrete or continuous.</p>
+<p>A <em>discrete</em> parameter has a finite number of values.</p>
+<p><em>Continuous</em> parameters can be <em>aleatoric</em> or <em>epistemic</em>.</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>Aleatoric</em> parameters are variables that contain inherent randomness that cannot be reduced
+by better data. They are specified by a PDF (Probability Density Function).</li>
+<li><em>Epistemic</em> parameters are values that are uncertain due to a lack of data or understanding.
+You may choose to represent this uncertainty about their value as a PDF and treat them
+as aleatoric. However, there are other ways to model uncertainty of epistemic parameters
+which will be supported in the future.</li>
+</ul>
+</div></blockquote>
+<p>Parameters are represented as PDFs. They might be approximated by a standard PDF, such as uniform,
+or gaussian (normal).  Or they can be created from the results of experiments or measurements.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="../reference/parameters.html"><em>Parameters</em></a></p>
+</div>
+</div>
+<div class="section" id="test-program">
+<h3>Test Program<a class="headerlink" href="#test-program" title="Permalink to this headline">¶</a></h3>
+<p>The test program is a function (typically a simulation) that takes inputs and generates outputs. PUQ requires that the
+test program take numerical parameters on the command line. If you have a test program that reads parameters some other way, it may
+be necessary to create a wrapper script for it.</p>
+</div>
+<div class="section" id="host">
+<h3>Host<a class="headerlink" href="#host" title="Permalink to this headline">¶</a></h3>
+<p>Jobs can be run sequentially or in parallel on an interactive scheduler.
+This would be the typical desktop or workstation.
+PBS, TORQUE, and HUBzero submit are also supported for use in cluster
+environments.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mc.html" title="Monte Carlo Sampling"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../users_guide.html" title="User’s Guide and Tutorial"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

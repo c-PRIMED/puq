@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>puq.hdf &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../../index.html" />
+    <link rel="up" title="puq" href="../puq.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../../index.html"><img src="../../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+       <li><a href="../../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../puq.html" accesskey="U">puq</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for puq.hdf</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Convenience functions that read or write to the HDF5 file</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file is part of PUQ</span>
+<span class="sd">Copyright (c) 2013 PUQ Authors</span>
+<span class="sd">See LICENSE file for terms.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">from</span> <span class="nn">puq.jpickle</span> <span class="kn">import</span> <span class="n">unpickle</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">hdf5_wrap</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="n">close</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">hf</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">close</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">close</span><span class="p">:</span>
+            <span class="n">hf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">res</span>
+    <span class="k">return</span> <span class="n">wrapped</span>
+
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="get_output_names"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.get_output_names">[docs]</a><span class="k">def</span> <span class="nf">get_output_names</span><span class="p">(</span><span class="n">hf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get_output_names(hf)</span>
+
+<span class="sd">    Returns a list of the output variables names in the HDF5 file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      A sorted list of the output variable names in the HDF5 file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/output/data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="set_result"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.set_result">[docs]</a><span class="k">def</span> <span class="nf">set_result</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    set_result(hf, var, data, desc=&#39;&#39;)</span>
+
+<span class="sd">    Sets values of the output variable in the HDF5 file.</span>
+<span class="sd">    Writes array to &#39;/output/data/**var**&#39;.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">      var : Output variable name.</span>
+<span class="sd">      data : Array of data to write.</span>
+<span class="sd">      desc : Description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/output/data/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/output/data/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/output/data/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">desc</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="get_result"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.get_result">[docs]</a><span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">var</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_result(hf, var=None)</span>
+
+<span class="sd">    Returns an array containing the values of the output variable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">      var : Output variable name. Only required if there is more than</span>
+<span class="sd">        one output variable.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">      An array</span>
+<span class="sd">    Raises:</span>
+<span class="sd">      ValueError: if **var** is not found or **var** is None and there</span>
+<span class="sd">        are multiple output variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="s">&#39;/output/data&#39;</span> <span class="ow">in</span> <span class="n">hf</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">output_variables</span> <span class="o">=</span> <span class="n">get_output_names</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_variables</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">var</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">output_variables</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Variable </span><span class="si">%s</span><span class="s"> not found in output data&quot;</span> <span class="o">%</span> <span class="n">var</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">var</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">output_variables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Output data contains multiple variables.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;You must indicate which you want.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="n">var</span> <span class="o">=</span> <span class="n">output_variables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/output/data/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="get_param_names"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.get_param_names">[docs]</a><span class="k">def</span> <span class="nf">get_param_names</span><span class="p">(</span><span class="n">hf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_param_names(hf)</span>
+
+<span class="sd">    Returns a list of the input parameter names in the HDF5 file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">get_params</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">]</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="get_params"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.get_params">[docs]</a><span class="k">def</span> <span class="nf">get_params</span><span class="p">(</span><span class="n">hf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_params(hf)</span>
+
+<span class="sd">    Returns a list of arrays of input parameter values.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">unpickle</span><span class="p">(</span><span class="n">hf</span><span class="p">[</span><span class="s">&#39;/input/params&#39;</span><span class="p">][</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/input/params&#39;</span><span class="p">]]</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="data_description"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.data_description">[docs]</a><span class="k">def</span> <span class="nf">data_description</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;data_description(hf, var)</span>
+
+<span class="sd">    Returns the description of an output variable. If the</span>
+<span class="sd">    description is empty, returns the variable name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">      var: Output variable name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">hf</span><span class="p">[</span><span class="s">&#39;/output/data/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;description&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">desc</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">desc</span>
+    <span class="k">return</span> <span class="n">var</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="param_description"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.param_description">[docs]</a><span class="k">def</span> <span class="nf">param_description</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;param_description(hf, var)</span>
+
+<span class="sd">    Returns the description of an input variable. If the</span>
+<span class="sd">    description is empty, returns the variable name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">      var: Input parameter name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">desc</span> <span class="o">=</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">hf</span><span class="p">[</span><span class="s">&#39;/input/params/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">description</span>
+    <span class="k">if</span> <span class="n">desc</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">desc</span>
+    <span class="k">return</span> <span class="n">var</span>
+</div>
+<span class="nd">@hdf5_wrap</span>
+<div class="viewcode-block" id="get_response"><a class="viewcode-back" href="../../reference/hdf.html#puq.hdf.get_response">[docs]</a><span class="k">def</span> <span class="nf">get_response</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_response(hf, var)</span>
+
+<span class="sd">    Returns the response function for an output variable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      hf: An open HDF5 filehandle or a string containing the HDF5</span>
+<span class="sd">        filename to use.</span>
+<span class="sd">      var: Output variable name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">psweep</span> <span class="o">=</span> <span class="n">hf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;UQtype&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">unpickle</span><span class="p">(</span><span class="n">hf</span><span class="p">[</span><span class="s">&#39;/</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">/response&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">psweep</span><span class="p">,</span> <span class="n">var</span><span class="p">)]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../search.html">search</a>|&nbsp;</li>
+       <li><a href="../../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../puq.html" >puq</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

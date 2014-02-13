@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using The PBS Scheduler &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide and Tutorial" href="../users_guide.html" />
+    <link rel="next" title="Plotting" href="plotting.html" />
+    <link rel="prev" title="Handling Output" href="handling_output.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Plotting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="handling_output.html" title="Handling Output"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" accesskey="U">User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Using The PBS Scheduler</a><ul>
+<li><a class="reference internal" href="#batch-scripts">Batch Scripts</a></li>
+<li><a class="reference internal" href="#using-pbshost">Using PBSHost</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="handling_output.html"
+                        title="previous chapter">Handling Output</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plotting.html"
+                        title="next chapter">Plotting</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ug/pbs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-the-pbs-scheduler">
+<h1>Using The PBS Scheduler<a class="headerlink" href="#using-the-pbs-scheduler" title="Permalink to this headline">¶</a></h1>
+<p>There are two different ways to run PUQ on compute clusters.</p>
+<div class="section" id="batch-scripts">
+<h2>Batch Scripts<a class="headerlink" href="#batch-scripts" title="Permalink to this headline">¶</a></h2>
+<p>The first method uses a batch script to run PUQ.  The PUQ control script uses <a class="reference internal" href="../reference/hosts.html#puq.InteractiveHost" title="puq.InteractiveHost"><tt class="xref py py-class docutils literal"><span class="pre">InteractiveHost</span></tt></a>
+like normal.  A typical PBS script would look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>#!/bin/bash -l
+#PBS -q standby
+#PBS -l nodes=1:ppn=48
+#PBS -l walltime=0:02:00
+#PBS -o run_pbs.pbsout
+#PBS -e run_pbs.pbserr
+cd  $PBS_O_WORKDIR
+source /scratch/prism/memosa/env-hansen.sh
+puq start my_control_script
+</pre></div>
+</div>
+<p>Of course you need to set the walltime, nodes and ppn for your run.</p>
+</div>
+<div class="section" id="using-pbshost">
+<h2>Using PBSHost<a class="headerlink" href="#using-pbshost" title="Permalink to this headline">¶</a></h2>
+<p>Another way to use PUQ with clusters is by using <a class="reference internal" href="../reference/hosts.html#puq.PBSHost" title="puq.PBSHost"><tt class="xref py py-class docutils literal"><span class="pre">PBSHost</span></tt></a>.
+This method runs a PUQ monitor process on the frontend which submits PBS or Moab jobs
+as needed. This allows you to monitor the progress of PUQ.  The disadvantage of this
+approach is that submission of new batch jobs stops if the PUQ monitor is killed.</p>
+<p>To use PBSHost, in any script where you see:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">host</span> <span class="o">=</span> <span class="n">InteractiveHost</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>simply replace <strong>InteractiveHost</strong> with <strong>PBSHost</strong>.  You will need to give
+PBSHost a few additional arguments.</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>env</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Bash environment script (.sh) to be sourced.</span></dt>
+<dd><p class="first last">The is a sh or bash script that normally loads modules and sets paths.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><strong>cpus</strong> : Number of cpus each process uses.</p>
+</li>
+<li><dl class="first docutils">
+<dt><strong>cpus_per_node</strong> <span class="classifier-delimiter">:</span> <span class="classifier">How many cpus to use on each node. PUQ has no</span></dt>
+<dd><p class="first last">way to determine the number of cpus per node, so there is no default.
+You must supply this. It does not have to be the actual number of CPUs
+in the clusters&#8217; nodes, but it should not be more.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><strong>qname</strong> : The name of the queue to use. &#8216;standby&#8217; is the default</p>
+</li>
+<li><dl class="first docutils">
+<dt><strong>walltime</strong> <span class="classifier-delimiter">:</span> <span class="classifier">How much time to allow for the process to complete. Format</span></dt>
+<dd><p class="first last">is HH:MM:SS.  Default is 1 hour.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>modules</strong> <span class="classifier-delimiter">:</span> <span class="classifier">List of additional required modules. Default is none.</span></dt>
+<dd><p class="first last">Used when the testprogram requires modules to be loaded to run.  For
+example, to run a matlab script you will need to set this to [&#8216;matlab&#8217;]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>pack</strong> <span class="classifier-delimiter">:</span> <span class="classifier">Number of sequential jobs to run in each PBS script. Default is 1.</span></dt>
+<dd><p class="first last">This is used to pack many small jobs into one PBS script.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>You want to run Monte Carlo with 10000 jobs, each just a few seconds:</dt>
+<dd><ul class="first simple">
+<li>cpus=1</li>
+<li>cpus_per_node=8</li>
+<li>pack=1000</li>
+<li>walltime=&#8216;00:10:00&#8217;</li>
+</ul>
+<p class="last">PBSHost will create 10 PBS scripts, each with 1000 jobs, running 8 at a time
+(because each takes only 1 CPU and nodes have 8).  Walltime is 1000 * 3 / 8 seconds
+which is a bit over 6 minutes. I rounded up to 10.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Like the previous, except each job uses lots of memory, so you can have only two running in a node at a time.</dt>
+<dd><ul class="first simple">
+<li>cpus=1</li>
+<li>cpus_per_node=2</li>
+<li>pack=1000</li>
+<li>walltime=&#8216;00:25:00&#8217;</li>
+</ul>
+<p class="last">PBSHost will create 10 PBS scripts, each with 1000 jobs, running 2 at a time
+(because each takes only 1 CPU and nodes have 2).  Walltime is 1000 * 3 / 2 seconds
+which is 25 minutes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>You want to run Monte Carlo with 10000 jobs, each just a few seconds:</dt>
+<dd><ul class="first simple">
+<li>cpus=1</li>
+<li>cpus_per_node=8</li>
+<li>walltime=&#8216;00:00:01&#8217;</li>
+</ul>
+<p class="last">PBSHost will create 1250 PBS scripts, each with 8 jobs, running 8 at a time
+(because each takes only 1 CPU and nodes have 8).</p>
+</dd>
+</dl>
+</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is currently a hardcoded limit of 200 PBS jobs queued at once.
+PUQ will monitor PBS jobs, and as they complete, will submit more until all
+1250 have completed.</p>
+</div>
+<ol class="arabic" start="4">
+<li><dl class="first docutils">
+<dt>You have 128 mpi jobs that run on 48 CPUs.</dt>
+<dd><ul class="first simple">
+<li>cpus=48</li>
+<li>cpus_per_node=8</li>
+<li>pack=2</li>
+</ul>
+<p class="last">PBSHost will allocate 6 nodes for each job. 64 PBS jobs will be submitted.
+Each PBS job will run two mpi jobs sequentially. walltime should be set to
+twice what each job takes to run.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plotting.html" title="Plotting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="handling_output.html" title="Handling Output"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../users_guide.html" >User&#8217;s Guide and Tutorial</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

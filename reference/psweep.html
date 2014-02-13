@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PSweep Reference &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="Examples" href="../examples/examples.html" />
+    <link rel="prev" title="TestProgram" href="testprogram.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="testprogram.html" title="TestProgram"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="testprogram.html"
+                        title="previous chapter">TestProgram</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../examples/examples.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/psweep.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="psweep-reference">
+<h1>PSweep Reference<a class="headerlink" href="#psweep-reference" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="puq.LHS">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">LHS</tt><big>(</big><em>params</em>, <em>num</em>, <em>ds=False</em>, <em>response=True</em>, <em>iteration_cb=None</em><big>)</big><a class="headerlink" href="#puq.LHS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing Latin hypercube sampling (LHS).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>params</strong> &#8211;
+Input list of <a class="reference internal" href="parameters.html#puq.Parameter" title="puq.Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>s.</li>
+<li><strong>num</strong> &#8211;
+Number of samples to use.</li>
+<li><strong>ds</strong> (<em>boolean</em>) &#8211;
+Use a modified LHS which always picks the center
+of the Latin square.</li>
+<li><strong>response</strong> (<em>boolean</em>) &#8211;
+Generate a response surface using the sample
+points.</li>
+<li><strong>iteration_cb</strong> (<em>function</em>) &#8211;
+A function to call after completion.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="puq.MonteCarlo">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">MonteCarlo</tt><big>(</big><em>params</em>, <em>num</em>, <em>response=True</em>, <em>iteration_cb=None</em><big>)</big><a class="headerlink" href="#puq.MonteCarlo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="puq.Smolyak">
+<em class="property">class </em><tt class="descclassname">puq.</tt><tt class="descname">Smolyak</tt><big>(</big><em>params</em>, <em>level</em>, <em>iteration_cb=None</em><big>)</big><a class="headerlink" href="#puq.Smolyak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class implementing gPC using Smolyak Sparse Grids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>params</strong> &#8211;
+Input list of <a class="reference internal" href="parameters.html#puq.Parameter" title="puq.Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>s.</li>
+<li><strong>level</strong> &#8211;
+Polynomial degree for the response function.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If <em>level</em> is set too low, then the response surface
+will not precisely fit the observed responses. The goodness
+of the fit is calculated as by RMSE. A perfect fit will have RMSE=0.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../examples/examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="testprogram.html" title="TestProgram"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

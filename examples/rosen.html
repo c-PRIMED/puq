@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rosen &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="examples.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="examples.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rosen</a><ul>
+<li><a class="reference internal" href="#contents">Contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="previous chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/rosen.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-puq">
+<span id="rosen"></span><h1>rosen<a class="headerlink" href="#module-puq" title="Permalink to this headline">¶</a></h1>
+<p>The rosen test directory has examples of the <em>Rosenbrock</em> function
+which is <span class="math">\(f(x,y) = 100(y-x^2)^2 + (1-x)^2\)</span></p>
+<p>Because the Rosenbrock function is a simple polynomial, the Smolyak
+method provides the best approach.  However, Monte Carlo and Latin Hypecube
+examples are provided for comparison.</p>
+<p>Different test programs which implement the Rosenbrock function are provided
+as examples of using Python, C, and Matlab code.</p>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>rosen.py</strong></dt>
+<dd>Example using <a class="reference internal" href="../reference/smolyak.html#puq.Smolyak" title="puq.Smolyak"><tt class="xref py py-class docutils literal"><span class="pre">Smolyak</span></tt></a></dd>
+<dt><strong>rosen_c.py</strong></dt>
+<dd>Example using rosen_cprog with <a class="reference internal" href="../reference/smolyak.html#puq.Smolyak" title="puq.Smolyak"><tt class="xref py py-class docutils literal"><span class="pre">Smolyak</span></tt></a></dd>
+<dt><strong>rosen_ml.py</strong></dt>
+<dd>Example using rosen.m with <a class="reference internal" href="../reference/smolyak.html#puq.Smolyak" title="puq.Smolyak"><tt class="xref py py-class docutils literal"><span class="pre">Smolyak</span></tt></a></dd>
+<dt><strong>rosen_mc.py</strong></dt>
+<dd>Example using <a class="reference internal" href="../reference/psweep.html#puq.MonteCarlo" title="puq.MonteCarlo"><tt class="xref py py-class docutils literal"><span class="pre">MonteCarlo</span></tt></a></dd>
+<dt><strong>rosen_lhs.py</strong></dt>
+<dd>Example using <a class="reference internal" href="../reference/psweep.html#puq.LHS" title="puq.LHS"><tt class="xref py py-class docutils literal"><span class="pre">LHS</span></tt></a></dd>
+</dl>
+<hr class="docutils" />
+<dl class="docutils">
+<dt><strong>rosen_prog.py</strong></dt>
+<dd>Test program written in Python</dd>
+<dt><strong>rosen_cprog.c</strong></dt>
+<dd>Test program written in C.</dd>
+<dt><strong>rosen.m</strong></dt>
+<dd>Test program for Matlab or Octave.</dd>
+</dl>
+<hr class="docutils" />
+<dl class="docutils">
+<dt><strong>Makefile</strong></dt>
+<dd>Makefile for rosen_cprog</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="examples.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

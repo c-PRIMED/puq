@@ -1,5 +1,0 @@
-include *.rst 
-include stdeb.cfg
-recursive-include src *.cpp *.h *.pyx
-recursive-include doc *.rst
-recursive-include examples *

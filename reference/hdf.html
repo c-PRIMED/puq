@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hdf - Functions for Accessing HDF5 Files &mdash; PUQ 2.2.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="PUQ 2.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="../reference.html" />
+    <link rel="next" title="Hosts" href="hosts.html" />
+    <link rel="prev" title="calibrate" href="calibrate.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="py4sci"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hosts.html" title="Hosts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="calibrate.html" title="calibrate"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" accesskey="U">Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="calibrate.html"
+                        title="previous chapter">calibrate</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hosts.html"
+                        title="next chapter">Hosts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/hdf.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-puq.hdf">
+<span id="hdf-functions-for-accessing-hdf5-files"></span><h1>hdf - Functions for Accessing HDF5 Files<a class="headerlink" href="#module-puq.hdf" title="Permalink to this headline">¶</a></h1>
+<p>Convenience functions that read or write to the HDF5 file</p>
+<dl class="function">
+<dt id="puq.hdf.data_description">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">data_description</tt><big>(</big><em>hf</em>, <em>var</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#data_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.data_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the description of an output variable. If the
+description is empty, returns the variable name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</li>
+<li><strong>var</strong> &#8211;
+Output variable name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.get_output_names">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">get_output_names</tt><big>(</big><em>hf</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#get_output_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.get_output_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the output variables names in the HDF5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A sorted list of the output variable names in the HDF5 file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.get_param_names">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">get_param_names</tt><big>(</big><em>hf</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#get_param_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.get_param_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of the input parameter names in the HDF5 file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.get_params">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">get_params</tt><big>(</big><em>hf</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#get_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of arrays of input parameter values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.get_response">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">get_response</tt><big>(</big><em>hf</em>, <em>var</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#get_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.get_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the response function for an output variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</li>
+<li><strong>var</strong> &#8211;
+Output variable name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.get_result">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">get_result</tt><big>(</big><em>hf</em>, <em>var=None</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.get_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an array containing the values of the output variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</li>
+<li><strong>var</strong> &#8211;
+Output variable name. Only required if there is more than
+one output variable.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt> &#8211; 
+if <strong>var</strong> is not found or <strong>var</strong> is None and there
+are multiple output variables.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.param_description">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">param_description</tt><big>(</big><em>hf</em>, <em>var</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#param_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.param_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the description of an input variable. If the
+description is empty, returns the variable name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</li>
+<li><strong>var</strong> &#8211;
+Input parameter name.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="puq.hdf.set_result">
+<tt class="descclassname">puq.hdf.</tt><tt class="descname">set_result</tt><big>(</big><em>hf</em>, <em>var</em>, <em>data</em>, <em>desc=''</em><big>)</big><a class="reference internal" href="../_modules/puq/hdf.html#set_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#puq.hdf.set_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets values of the output variable in the HDF5 file.
+Writes array to &#8216;/output/data/<strong>var</strong>&#8216;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hf</strong> &#8211;
+An open HDF5 filehandle or a string containing the HDF5
+filename to use.</li>
+<li><strong>var</strong> &#8211;
+Output variable name.</li>
+<li><strong>data</strong> &#8211;
+Array of data to write.</li>
+<li><strong>desc</strong> &#8211;
+Description.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hosts.html" title="Hosts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="calibrate.html" title="calibrate"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+       <li><a href="../index.html">documentation </a> &raquo;</li>
+
+          <li><a href="../reference.html" >Reference</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Martin Hunt, Purdue University.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
