@@ -1,0 +1,7 @@
+*.py[cod]
+*.so
+sweep_*.hdf5
+build
+dist
+*.egg-info/
+*.o
