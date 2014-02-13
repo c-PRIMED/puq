@@ -150,9 +150,6 @@ def start(*args):
         scriptname += ".py"
     sw.input_script = os.path.abspath(scriptname)
 
-    if 'datafilter' in dir(_temp):
-        sw.datafilter = _temp.datafilter
-
     res = sw.run(opt.f)
     if res:
         sw.analyze()
@@ -183,8 +180,6 @@ def analyze(*args):
     usage = "Usage: puq analyze [options] [hdf5_filename].\nType 'puq analyze -h' for option descriptions."
     parser = OptionParser(usage)
     parser.add_option("-v", action="store_true", default=False, help="Verbose.")
-    parser.add_option("--filter", type='string',
-                      help="Filename containing a filter for the data(s).")
     parser.add_option("--psamples", type='string',
                       help="Filename CSV table of parameter samples.")
     parser.add_option("-r", action="store_true", help="Re-analyze the data.")
@@ -210,31 +205,8 @@ def analyze(*args):
     if not opt.r and uqtype and uqtype in h5:
         num_outputs = len(h5[uqtype])
 
-    if opt.filter:
-        sys.path = [os.getcwd()] + sys.path
-        module = os.path.splitext(os.path.split(opt.filter)[1])[0]
-        _temp = __import__(module, globals(), locals(), [], 0)
-
-        update = False
-        for k,v in _temp.__dict__.iteritems():
-            if isinstance(v, puq.Parameter):
-                for i,p in enumerate(sweep.psweep.params):
-                    if p.name == v.name:
-                        vprint(1, "REPLACING\n\t%s\nWITH\n\t%s" % (p,v))
-                        sweep.psweep.params[i] = v
-                        update = True
-                        break
-        if update:
-            sweep._save_hdf5()
-
-        if 'datafilter' in dir(_temp):
-            sweep.datafilter = _temp.datafilter
-        else:
-            print "ERROR: No datafilter found in %s" % opt.filter
-            return
-
     errors = 0
-    if opt.filter or num_outputs == 0:
+    if num_outputs == 0:
         if 'output/data' in h5:
             del h5['/output/data']
         errors = sweep.analyze(opt.v)

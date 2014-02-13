@@ -2,9 +2,11 @@
 Overview
 ===============================
 
-The PUQ framework is a general purpose parameter sweep framework, with different methods for performing uncertainty quantification.
+PUQ is a general purpose parameter sweep framework, which can perform uncertainty quantification (UQ),
+do sensitivity analysis, and build response surfaces.
 
-You provide a program that takes parameters as arguments. This is called the *Test Program*.
+You provide a program that takes parameters as arguments. This is called the *Test Program*
+or simulation.
 It can be written in any language as long as it can take command line arguments. PUQ treats
 the test program like a "black box". It need not know anything about it except how to send it
 inputs and how to get the outputs.
@@ -31,16 +33,16 @@ Goals
  - Easy to use. Tools that are hard to use don't get used, or get used improperly.
  - Expandable. Should be able to handle any necessary UQ or optimization methods.
 
+In Progress
+-----------
+
+  - Integration with HUBzero and nanoHUB platforms.
+
 Future Plans
 ----------------
 
-In Progress
+  - Adaptive response surface builder. Chooses the best method without
+    user intervention.  Can refine until it meets a specific accuracy goal.
 
-  - Bayesian calibration
-  - Use Gaussian Process Regression to build response surfaces
-  
-Future
-
-  - Better job control. 
-  - Integration with HUBzero platforms.
+  - Better job control.
 

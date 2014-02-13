@@ -18,10 +18,11 @@ from response import ResponseFunc
 
 class Smolyak(PSweep):
     """
-    Class implementing Smolyak Sparse Grid Stochastic Collocation
+    Class implementing gPC using Smolyak Sparse Grids
 
-    - **params** : Input list of :class:`Parameter`\s.
-    - **level** : Polynomial degree for the response function.
+    Args:
+      params: Input list of :class:`Parameter`\s.
+      level: Polynomial degree for the response function.
 
     If *level* is set too low, then the response surface
     will not precisely fit the observed responses. The goodness

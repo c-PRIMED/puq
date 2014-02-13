@@ -12,15 +12,13 @@ def calibrate(params, caldata, err, func, weight=20):
     """
     Calibrate a variable or variables.
 
-    :param params: Input parameters.
-    :type params: List
-    :param caldata: Experimental output values.
-    :type caldata: Array
-    :param err: Deviation representing the measurement error in caldata.
-    :type err: Float
-    :param func: Response function or simulation.
-    :type func: Function
-    :returns: A copy of *params* modified with the calibrated variables.
+    Args:
+      params (list): Input parameters.
+      caldata (list or array): Experimental output values.
+      err (float): Deviation representing the measurement error in caldata.
+      func: Response function.
+    Returns:
+      A copy of **params** modified with the calibrated variables.
     """
     import pymc
     from copy import copy

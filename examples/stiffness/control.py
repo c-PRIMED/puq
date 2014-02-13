@@ -2,7 +2,7 @@ from puq import *
 
 def run():
     # Young's Modulus in MPa
-    E = UniformParameter('E', 'Youngs Modulus', min=180e3, max=220e3)
+    E = UniformParameter('e', 'Youngs Modulus', min=180e3, max=220e3)
 
     # residual stress in Mpa. Actual is not Uniform, but this is OK
     # for a response surface.
@@ -41,8 +41,7 @@ def run():
 
     # Our test program. Make sure %1 corresponds to the first parameter
     # in the list passed to Smolyak() above
-    prog = TestProgram('fixed beam stiffness',
-       exe="octave -q --eval 'stiffness(%1, 0.3, %2, %3, %4, %5, 0.5, 0)'",
-       desc='fixed beam stiffness')
+    prog = TestProgram(desc='fixed beam stiffness',
+        exe="octave -q --eval 'stiffness($e, 0.3, $sigma, $L, $b, $h, 0.5, 0)'")
 
     return Sweep(uq, host, prog)

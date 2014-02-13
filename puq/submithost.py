@@ -19,8 +19,9 @@ class SubmitHost(Host):
     """
     Create a host object that uses the hub submit command.
 
-    - **cpus** : Number of cpus each process uses. Default=1.
-    - **cpus_per_node** : How many cpus to use on each node.  Default=1.
+    Args:
+      cpus: Number of cpus each process uses. Default=1.
+      cpus_per_node: How many cpus to use on each node.  Default=1.
     """
     def __init__(self, venue=None, cpus=1, cpus_per_node=1, walltime=60):
         Host.__init__(self)

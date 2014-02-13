@@ -3,12 +3,12 @@ Using The PBS Scheduler
 
 .. currentmodule:: puq
 
-There are two different ways to run PUQ on compute clusters.  
+There are two different ways to run PUQ on compute clusters.
 
 Batch Scripts
 -------------
 The first method uses a batch script to run PUQ.  The PUQ control script uses :class:`InteractiveHost`
-like normal.  A typical PBS script would look like this::  
+like normal.  A typical PBS script would look like this::
 
 	#!/bin/bash -l
 	#PBS -q standby
@@ -27,9 +27,9 @@ Using PBSHost
 
 Another way to use PUQ with clusters is by using :class:`PBSHost`.
 This method runs a PUQ monitor process on the frontend which submits PBS or Moab jobs
-as needed. This allows you to monitor the progress of PUQ.  The disadvantage of this 
+as needed. This allows you to monitor the progress of PUQ.  The disadvantage of this
 approach is that submission of new batch jobs stops if the PUQ monitor is killed.
- 
+
 To use PBSHost, in any script where you see::
 
 	host = InteractiveHost()
@@ -84,7 +84,7 @@ Examples
 	PBSHost will create 1250 PBS scripts, each with 8 jobs, running 8 at a time
 	(because each takes only 1 CPU and nodes have 8).
 
-.. note::  There is currently a hardcoded limit of 10 PBS jobs queued at once.
+.. note::  There is currently a hardcoded limit of 200 PBS jobs queued at once.
 	PUQ will monitor PBS jobs, and as they complete, will submit more until all
 	1250 have completed.
 

@@ -20,9 +20,10 @@ class PSweep(object):
 
     def run(self, sweep):
         """
-        Gets the parameters then adds the command plus parameters to the host
-        object job list. Then tells the host to run.  After all jobs have completed,
-        collect the data and call analyze(). If iteration_cb is defined, call it.
+        Gets the parameters then adds the command plus parameters to
+        the host object job list. Then tells the host to run.  After
+        all jobs have completed, collect the data and call analyze().
+        If iteration_cb is defined, call it.
 
         Returns True on success.
         """

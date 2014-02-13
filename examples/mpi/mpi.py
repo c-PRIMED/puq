@@ -20,10 +20,9 @@ prog = TestProgram('zeta', desc='zeta function',
 
 def run():
     x = Parameter('x', 'X', mean=5, dev=1)
-    host = InteractiveHost(cpus=2, cpus_per_node=2)
-    #host = PBSHost(env='/scratch/prism/memosa/env.sh', cpus=8, cpus_per_node=8, walltime='2:00')
+    host = InteractiveHost()
 
     uq = Smolyak([x], 3)
-    prog = TestProgram('zeta', desc='zeta function',
-                       exe="mpirun -np 2 ./zeta -n %1")
+    prog = TestProgram(desc='zeta function',
+                       exe="mpirun -np 2 ./zeta -n $x")
     return Sweep(uq, host, prog)

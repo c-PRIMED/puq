@@ -7,11 +7,10 @@ Usage: multiple.py
 from puq import *
 
 def run():
-    # Declare our parameters here
 
+    # Declare our parameters here
     v = Parameter('v', 'velocity', mean=5, dev=1)
     m = Parameter('m', 'mass', mean=5, dev=1)
-
 
     # Which host to use
     host = InteractiveHost()

@@ -11,17 +11,9 @@ def run(lev=4):
     # Declare a UQ method.
     uq = Smolyak([p1, p2], level=lev)
 
-    # Our test program. Make sure %1 corresponds to the first parameter
-    # in the list passed to Smolyak() above, in this case 'x'
-    prog = TestProgram('rosen matlab',
-           exe="octave -q --eval 'rosen($x, $y)'",
-
-           # Deprecated format string using '%'
-           # exe="octave -q --eval 'rosen(%1, %2)'",
-
-           # matlab instead of octave
-           # exe="matlab -nodisplay -r 'rosen($x, $y);quit()'",
-
-           desc='Rosenbrock Function (octave)')
+    prog = TestProgram(
+      exe="octave -q --eval 'rosen($x, $y)'",
+      # exe="matlab -nodisplay -r 'rosen($x, $y);quit()'",
+      desc='Rosenbrock Function (octave)')
 
     return Sweep(uq, host, prog)

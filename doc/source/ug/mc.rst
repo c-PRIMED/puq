@@ -23,9 +23,9 @@ See :doc:`simulations` and puq/examples/matlab.
 
 Line 16 calls :func:`dump_hdf5` with our output. :func:`dump_hdf5` takes three arguments, a name, a value, and an optional description.
 It formats the data so that PUQ can easily recognize it in standard output. It is placed in the HDF5 output file under
-'output/data/varname' ('output/data/z' for our example).  If we run out test program, we get::
+'output/data/varname' ('output/data/z' for our example).  If we run our test program, we get::
 
-	~/memosa/src/puq/examples/rosen> ./rosen_prog.py --x=0 --y=1
+	~/puq/examples/rosen> ./rosen_prog.py --x=0 --y=1
 	HDF5:{'name': 'z', 'value': 101.0, 'desc': ''}:5FDH
 
 So we have a working test program.  We will limit x and y
@@ -60,37 +60,37 @@ Because control scripts are python scripts, the '.py' is optional.
 Here are three runs, all doing 20 samples.
 ::
 
-	~/memosa/src/puq/examples/rosen> puq start rosen_mc
+	~/puq/examples/rosen> puq start rosen_mc
 	Saving run to sweep_52410436.hdf5
-	
+
 	Processing <HDF5 dataset "z": shape (20,), type "<f8">
 	Mean   = 463.467551273
 	StdDev = 499.225504146
-	
-	~/memosa/src/puq/examples/rosen> puq start rosen_mc 20
+
+	~/puq/examples/rosen> puq start rosen_mc 20
 	Saving run to sweep_52410475.hdf5
-	
+
 	Processing <HDF5 dataset "z": shape (20,), type "<f8">
 	Mean   = 266.371029691
 	StdDev = 362.362400696
-	
-	~/memosa/src/puq/examples/rosen> puq start -f mc.hdf5 rosen_mc 20
+
+	~/puq/examples/rosen> puq start -f mc.hdf5 rosen_mc 20
 	Saving run to mc.hdf5
-	
+
 	Processing <HDF5 dataset "z": shape (20,), type "<f8">
 	Mean   = 322.364238869
 	StdDev = 246.016024931
-    
-    
 
-As you can see, 20 samples is not enough to get an accurate mean. To get Monte Carlo Sampling to converge 
+
+
+As you can see, 20 samples is not enough to get an accurate mean. To get Monte Carlo Sampling to converge
 on a more accurate value, you would need to run thousands of samples. That is fine in a simple case
 like the Rosenbrock function, but a complex simulation might take days or
 weeks per sample.
 
 To plot the response surface::
 
-	~/memosa/src/puq/examples/rosen> puq plot -r mc.hdf5
+	~/puq/examples/rosen> puq plot -r mc.hdf5
 
 
 .. figure:: images/z-mc-surface.png
@@ -111,13 +111,13 @@ but not for a complex simulation that ran for days to complete 20 jobs.
 
 Fortunately you can easily add more samples to an existing Monte Carlo run::
 
-    ~/memosa/src/puq/examples/rosen> puq extend --num 80 mc.hdf5
+    ~/puq/examples/rosen> puq extend --num 80 mc.hdf5
 	Extending mc.hdf5 using MonteCarlo
-	
+
 	Processing <HDF5 dataset "z": shape (100,), type "<f8">
 	Mean   = 377.988520682
 	StdDev = 599.985509368
-    
+
 .. figure:: images/z-mc-surface100.png
    :width: 500px
    :align: left
@@ -126,7 +126,7 @@ Fortunately you can easily add more samples to an existing Monte Carlo run::
 
 The response surface now looks more accurate although the mean is still not close to the real mean.  To plot the PDF of z, you can do::
 
-	~/memosa/src/puq/examples/rosen> puq plot mc.hdf5
+	~/puq/examples/rosen> puq plot mc.hdf5
 
 .. figure:: images/z-mc-pdf.png
    :width: 500px

@@ -1,18 +1,18 @@
 from puq import *
 
-def run():
+def run(lev=2):
     # Declare our parameters here
-    x = Parameter('x', 'x', min=-2, max=2)
-    y = Parameter('y', 'y', min=-2, max=2)
+    p1 = Parameter('x', 'x', min=-2, max=2)
+    p2 = Parameter('y', 'y', min=-2, max=2)
 
     # Create a host
     host = InteractiveHost()
 
     # Declare a UQ method.
-    uq = Smolyak([x,y], level=4)
+    uq = Smolyak([p1, p2], level=lev)
 
-    prog = TestProgram('rosen_cprog', desc='Rosenbrock Function (C)',
-                       exe="./rosen_cprog -x %1 -y %2")
+    prog = TestProgram(desc='Rosenbrock Function (C)',
+        exe="./rosen_cprog -x $x -y $y")
 
     return Sweep(uq, host, prog)
 

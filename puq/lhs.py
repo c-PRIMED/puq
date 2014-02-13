@@ -16,6 +16,18 @@ from puq.jpickle import pickle
 from puq.pdf import UniformPDF
 
 class LHS(PSweep):
+    """
+    Class implementing Latin hypercube sampling (LHS).
+
+    Args:
+      params: Input list of :class:`Parameter`\s.
+      num: Number of samples to use.
+      ds(boolean): Use a modified LHS which always picks the center
+        of the Latin square.
+      response(boolean): Generate a response surface using the sample
+        points.
+      iteration_cb(function): A function to call after completion.
+    """
     def __init__(self, params, num, ds=False, response=True, iteration_cb=None):
         PSweep.__init__(self, iteration_cb)
         self.params = params

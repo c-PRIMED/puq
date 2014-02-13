@@ -5,7 +5,7 @@ Introduction
 :Version: 2.2
 :Authors: Martin Hunt
 :Web site:
-:Documentation: http://memshub.org/site/memosa_docs/puq/index.html
+:Documentation: https://github.com/martin-hunt/puq
 :Copyright: This document has been placed in the public domain.
 :License: MIT License.
 
@@ -60,7 +60,7 @@ python modules. To install in your home directory, use::
 
   python setup.py install --user
 
-To install for all users on Unix/Linux::
+To install for all users on Unix/Linux or Mac::
 
   python setup.py build
   sudo python setup.py install

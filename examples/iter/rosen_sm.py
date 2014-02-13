@@ -1,12 +1,13 @@
 from puq import *
-import numpy as np
 
-done = 0
-def callback(sw):
-    global done
-    print 'callback'
-    if done < 4:
-        done += 1
+# Example callback that causes the sweep
+# to repeat until a specific condition is met.
+def callback(sw, hf):
+    rmsep = hdf.get_response(hf,'z').rmse()[1]
+    print 'callback: rmse=%s%%' % rmsep
+
+    # iterate until error < 1%
+    if rmsep > 1:
         sw.psweep.extend()
         return False
     return True
@@ -23,6 +24,6 @@ def run():
     uq = Smolyak([x,y], level=1, iteration_cb=callback)
 
     # Our test program
-    prog = TestProgram('./rosen_prog.py', desc='Rosenbrock Function (python)')
+    prog = TestProgram('./rosen_prog.py', desc='Rosenbrock Function')
 
     return Sweep(uq, host, prog)

@@ -22,16 +22,16 @@ _dcache = {}
 
 class Sweep(object):
     """
-    Creates an object that contains all the information about a parameter sweep.
+    Creates an object that contains all the information about
+    a parameter sweep.
 
-    :param psweep: Parameter Sweep object. See :class:`PSweep`.
-    :param host: Host object.  See :class:`Host`.
-    :param prog: TestProgram object: See :class:`TestProgram`.
-    :param caldata: Experimental data for calibration. Optional.
-    :param calerr: Measurement error in the experimental data.
-    :param description: Optional description of this run.
-    :type data: Array
-    :type err: Float
+    Args:
+      psweep: Parameter Sweep object. See :class:`PSweep`.
+      host: Host object.  See :class:`Host`.
+      prog: TestProgram object: See :class:`TestProgram`.
+      caldata(array: Experimental data for calibration. Optional.
+      calerr(float): Measurement error in the experimental data.
+      description(string): Optional description of this run.
     """
 
     def __init__(self, psweep, host, prog, caldata=None, calerr=None, description=''):
@@ -117,10 +117,15 @@ class Sweep(object):
         from the outputs and call the PSweep analyze method.  If the PSweep method
         has an iterative callback defined, call it, otherwise return.
 
-        :param fn: HDF5 filename for output. '.hdf5' will be appended to the filename if necessary.
-        If None, uses 'sweep_' followed by a timestamp.
-
-        :returns: True on success.
+        Args:
+          fn(string): HDF5 filename for output. '.hdf5' will be
+            appended to the filename if necessary. If fn is None,
+            a filename will be generated starting with "sweep\_"
+            followed by a timestamp.
+          overwrite(boolean): If True and fn is not None, will
+            silently overwrite any previous files of the same name.
+        Returns:
+          True on success.
         """
 
         if fn is not None:
@@ -162,15 +167,7 @@ class Sweep(object):
         finished_jobs = self.host.collect(hf)
         self._extract_hdf5(hf, finished_jobs)
 
-        used_filter = False
-        if hasattr(self, 'datafilter'):
-            vprint(2, "Starting datafilter.")
-            self.datafilter(hf)
-            vprint(2, "Datafilter finished successfully.")
-            used_filter = True
-
         has_data = 'data' in hf['output']
-
         if has_data:
             outd = hf['output/data']
             data = dict([(x, outd[x].value) for x in outd])
@@ -182,8 +179,6 @@ class Sweep(object):
         if not has_data and not self._reinit:
             print "WARNING: There is no data in the output section!"
             print "Check that your runs completed successfully."
-            if used_filter:
-                print "Check that your data filter is working correctly."
             return False
         return params, data
 

@@ -196,8 +196,10 @@ class InteractiveHost(Host):
     """
     Create a host object that runs all jobs on the local CPU.
 
-    - **cpus** : Number of cpus each process uses. Default=1.
-    - **cpus_per_node** : How many cpus to use on each node.  Default=all cpus.
+    Args:
+      cpus: Number of cpus each process uses. Default=1.
+      cpus_per_node: How many cpus to use on each node.
+        Default=all cpus.
     """
     def __init__(self, cpus=1, cpus_per_node=0):
         Host.__init__(self)

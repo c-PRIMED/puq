@@ -8,7 +8,7 @@ covering the input parameter space, the elementary effects can be computed
 at no additional cost.
 
 The sensitivity measurements are **u*** and **dev** (:math:`\sigma`). u* is the mean of the distribution of the absolute values of the elementary effects of the input factors,
-:math:`\mu^* = \frac{1}{r} \sum_{j=1}^r \left| d \left( X^{(j)} \right) \right|` where :math:`d(X)` is the 
+:math:`\mu^* = \frac{1}{r} \sum_{j=1}^r \left| d \left( X^{(j)} \right) \right|` where :math:`d(X)` is the
 elementary effect for the input parameter.  It is the overall influence of the input parameter on the output.
 
 dev is the standard deviation of the distribution of the elementary effects for the parameter.
@@ -24,12 +24,12 @@ An example is shown below.
 
 Elementary effects for input parameter **a** are computed along each red arrow.
 Elementary effects for input parameter **b** are computed along each green arrow.
-Each elementary effect  is the change in output value across the arrow scaled by the length.  For example, 
+Each elementary effect  is the change in output value across the arrow scaled by the length.  For example,
 the output goes up by 10 when **a** changed by half its range, so that elementary effect is 20. Because the above example is linear, all the elementary effects for **a** are 20.
 
 Sensitivity test 1 has two input parameters with range [0 10]::
-	
-	~/memosa/src/puq/examples/sensitivity> puq start test1
+
+	~/puq/examples/sensitivity> puq start test1
 	Sweep id is 30573805
 
 	Processing <HDF5 dataset "p": shape (13,), type "<f8">
@@ -41,7 +41,7 @@ Sensitivity test 1 has two input parameters with range [0 10]::
 	-----------------------------
 	a    2.0000e+01    1.9476e-11
 	b    1.0000e+01    9.7339e-12
-	
+
 PUQ prints the list of input variables (parameters) in order from the
 highest u* to the lowest.
 
@@ -57,9 +57,9 @@ Effect of Smolyak Level on Sensitivity
 --------------------------------------
 
 The **level** parameter to the Smolyak method sets the polynomial degree for the response surface.
-A level 1 Smolyak run require only 2*ndim+1 (ndim = number of dimensions, or input parameters) 
+A level 1 Smolyak run require only 2*ndim+1 (ndim = number of dimensions, or input parameters)
 calculations and the response surface will be linear.  This will usually be a poor fit for a response surface,
-bit it might be sufficient for basic sensitivity analysis. 
+bit it might be sufficient for basic sensitivity analysis.
 
 A More Complex Example
 ----------------------
@@ -87,12 +87,12 @@ For the worked example, :math:`k=6` and :math:`a=\left[78, 12, 0.5, 2, 97, 33\ri
 	+----+------+-------+
 	| x5 | 0.04 |  0.04 |
 	+----+------+-------+
-	
+
 Using PUQ, level 1 Smolyak::
 
-	~/memosa/src/puq/examples/sensitivity> puq start sobol
+	~/puq/examples/sensitivity> puq start sobol
 	Sweep id is 30605799
-	
+
 	SENSITIVITY:
 	Var       u*            dev
 	------------------------------
@@ -102,7 +102,7 @@ Using PUQ, level 1 Smolyak::
 	x6    2.3584e-02    2.3584e-02
 	x1    9.9779e-03    9.9779e-03
 	x5    8.0235e-03    8.0235e-03
-	
-The estimates don't agree exactly because they use different sample points, however they do agree 
+
+The estimates don't agree exactly because they use different sample points, however they do agree
 on the order of significance for the inputs.  If would be easy to increase the accuracy by using a level 2 Smolyak grid.
 

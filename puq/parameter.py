@@ -63,19 +63,24 @@ def get_psamples(params, psamples=None, num=None):
 
 class Parameter(object):
     '''
-    Superclass for all Parameter subclasses. For backwards compatibility it
-    can be called directly and will return the proper subclass.
+    Superclass for all Parameter subclasses. For backwards
+    compatibility it can be called directly and will return the
+    proper subclass.
 
-    :class:`NormalParameter` is returned if 'dev' is set.
-    :class:`UniformParameter` is returned if either 'min' or 'max' is set.
-    :class:`CustomParameter` is returned if 'pdf' or 'caldata' is set.
+    - :class:`NormalParameter` is returned if *dev* is set.
+    - :class:`UniformParameter` is returned if either *min* or *max*
+      is set.
+    - :class:`CustomParameter` is returned if *pdf* or *caldata* is set.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *kargs* : Keyword args defined by the distribution.
+    Args:
+      name: Name of the parameter. This should be a short name,
+        like a variable.
+      description:  A longer description of the parameter.
+      kargs: Keyword args defined by the distribution.
 
     .. seealso::
-       :class:`NormalParameter`, :class:`UniformParameter`, :class:`CustomParameter`
+       :class:`NormalParameter`, :class:`UniformParameter`,
+       :class:`CustomParameter`
     '''
 
     def __new__(cls, *args, **kw):
@@ -125,11 +130,13 @@ class Parameter(object):
 
 class DParameter(Parameter):
     '''
-    Class implementing a Discrete Parameter which contains values from a list or array.
+    Class implementing a Discrete Parameter which contains values
+    from a list or array.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *values* :   A 1D list or array of values for the parameter.
+    Args:
+      name: Name of the parameter. This should be a short name, like a variable.
+      description:  A longer description of the parameter.
+      values:   A 1D list or array of values for the parameter.
     '''
     def __init__(self, name, description, values=None):
         self.name = self.check_name(name)
@@ -147,24 +154,24 @@ class NormalParameter(Parameter):
     '''
     Class implementing a Parameter with a Normal distribution.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *args* : Keyword args.  Valid args are:
+    Args:
+      name: Name of the parameter. This should be a short name, like a variable.
+      description:  A longer description of the parameter.
+      kwargs: Keyword args.  Valid args are:
 
-    ======== ============================
-    Arg      Description
-    ======== ============================
-    mean     The mean of the distribution
-    dev      The standard deviation
-    ======== ============================
-
+        ======== ============================
+        Arg      Description
+        ======== ============================
+        mean     The mean of the distribution
+        dev      The standard deviation
+        ======== ============================
     '''
-    def __init__(self, name, description, **args):
-        debug("name:%s desc:%s args:%s" % (name, description, args))
+    def __init__(self, name, description, **kwargs):
+        debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
         self.name = self.check_name(name)
         self.description = description
-        self.caldata = args.pop('caldata', None)
-        self.pdf = NormalPDF(**args)
+        self.caldata = kwargs.pop('caldata', None)
+        self.pdf = NormalPDF(**kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
@@ -174,25 +181,27 @@ class RayleighParameter(Parameter):
     '''
     Class implementing a Parameter with a Rayleigh distribution.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *args* : Keyword args.  Valid args are:
+    Args:
+      name: Name of the parameter. This should be a short name,
+        like a variable.
+      description:  A longer description of the parameter.
+      kwargs: Keyword args.  Valid args are:
 
-    ======== ============================
-    Arg      Description
-    ======== ============================
-    scale    The scale. Must be > 0.
-    ======== ============================
+        ======== ============================
+        Arg      Description
+        ======== ============================
+        scale    The scale. Must be > 0.
+        ======== ============================
 
     .. seealso::
        :class:`RayleighPDF`
     '''
-    def __init__(self, name, description, **args):
-        debug("name:%s desc:%s args:%s" % (name, description, args))
+    def __init__(self, name, description, **kwargs):
+        debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
         self.name = self.check_name(name)
         self.description = description
-        self.caldata = args.pop('caldata', None)
-        self.pdf = RayleighPDF(**args)
+        self.caldata = kwargs.pop('caldata', None)
+        self.pdf = RayleighPDF(**kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
@@ -202,25 +211,27 @@ class ExponParameter(Parameter):
     '''
     Class implementing a Parameter with an Exponential distribution.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *args* : Keyword args.  Valid args are:
+    Args:
+      name: Name of the parameter. This should be a short name,
+        like a variable.
+      description:  A longer description of the parameter.
+      kwargs: Keyword args.  Valid args are:
 
-    ======== =================================
-    Arg      Description
-    ======== =================================
-    rate     The rate parameter. Must be > 0.
-    ======== =================================
+        ======== ================================
+        Arg      Description
+        ======== ================================
+        rate     The rate parameter. Must be > 0.
+        ======== ================================
 
     .. seealso::
        :class:`ExponPDF`
     '''
-    def __init__(self, name, description, **args):
-        debug("name:%s desc:%s args:%s" % (name, description, args))
+    def __init__(self, name, description, **kwargs):
+        debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
         self.name = self.check_name(name)
         self.description = description
-        self.caldata = args.pop('caldata', None)
-        self.pdf = ExponPDF(**args)
+        self.caldata = kwargs.pop('caldata', None)
+        self.pdf = ExponPDF(**kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
@@ -230,26 +241,28 @@ class WeibullParameter(Parameter):
     '''
     Class implementing a Parameter with a Weibull distribution.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *args* : Keyword args.  Valid args are:
+    Args:
+      name: Name of the parameter. This should be a short name,
+        like a variable.
+      description:  A longer description of the parameter.
+      kwargs: Keyword args.  Valid args are:
 
-    ======== ============================
-    Arg      Description
-    ======== ============================
-    shape    The shape. Must be > 0.
-    scale    The scale. Must be > 0.
-    ======== ============================
+        ======== ============================
+        Arg      Description
+        ======== ============================
+        shape    The shape. Must be > 0.
+        scale    The scale. Must be > 0.
+        ======== ============================
 
     .. seealso::
        :class:`WeibullPDF`
     '''
-    def __init__(self, name, description, **args):
-        debug("name:%s desc:%s args:%s" % (name, description, args))
+    def __init__(self, name, description, **kwargs):
+        debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
         self.name = self.check_name(name)
         self.description = description
-        self.caldata = args.pop('caldata', None)
-        self.pdf = WeibullPDF(**args)
+        self.caldata = kwargs.pop('caldata', None)
+        self.pdf = WeibullPDF(**kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
@@ -260,24 +273,26 @@ class CustomParameter(Parameter):
     '''
     Class implementing a Parameter with a Custom distribution.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *args* : Keyword args.  Valid args are:
+    Args:
+      name: Name of the parameter. This should be a short name,
+        like a variable.
+      description:  A longer description of the parameter.
+      kwargs: Keyword args.  Valid args are:
 
-    ============ ===============================================
-    Arg          Description
-    ============ ===============================================
-    pdf          :class:`puq.PDF`
-    use_samples  Use data samples attached to pdf (if available)
-    ============ ===============================================
+        ============ ===============================================
+        Arg          Description
+        ============ ===============================================
+        pdf          :class:`PDF`
+        use_samples  Use data samples attached to pdf (if available)
+        ============ ===============================================
     '''
-    def __init__(self, name, description, **args):
+    def __init__(self, name, description, **kwargs):
         #Parameter.__init__(self, args)
         self.name = self.check_name(name)
         self.description = description
-        self.use_samples = args.get('use_samples')
-        self.pdf = args.get('pdf')
-        self.caldata = args.get('caldata')
+        self.use_samples = kwargs.get('use_samples')
+        self.pdf = kwargs.get('pdf')
+        self.caldata = kwargs.get('caldata')
 
         if self.pdf is None and self.caldata is None:
             self.usage(0)
@@ -320,27 +335,29 @@ class UniformParameter(Parameter):
     '''
     Class implementing a Parameter with a Uniform distribution.
 
-    - *name* : Name of the parameter. This should be a short name, like a variable.
-    - *description* :  A longer description of the parameter.
-    - *args* : Keyword args.  Valid args are:
+    Args:
+      name: Name of the parameter. This should be a short name,
+        like a variable.
+      description:  A longer description of the parameter.
+      kwargs: Keyword args.  Valid args are:
 
-    ======== ============================
-    Property Description
-    ======== ============================
-    mean     The mean of the distribution
-    max      The maximum
-    min      The minimum
-    ======== ============================
+        ======== ============================
+        Property Description
+        ======== ============================
+        mean     The mean of the distribution
+        max      The maximum
+        min      The minimum
+        ======== ============================
 
     You **must** specify two of the above properties. If you
     give all three, they will be checked for consistency.
     :math:`mean = (min + max)/2`
     '''
-    def __init__(self, name, description, **args):
+    def __init__(self, name, description, **kwargs):
         self.name = self.check_name(name)
         self.description = description
-        self.caldata = args.pop('caldata', None)
-        self.pdf = UniformPDF(**args)
+        self.caldata = kwargs.pop('caldata', None)
+        self.pdf = UniformPDF(**kwargs)
 
     def __str__(self):
         return "UniformParameter %s (%s)\n\t%s" %\

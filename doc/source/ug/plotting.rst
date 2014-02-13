@@ -4,7 +4,7 @@ Plotting
 
 .. note::
 
-   The following information shows how to use tthe old 'plot' function.  You may find it
+   The following information shows how to use the old 'plot' function.  You may find it
    more convenient to use the plot function in :doc:`analyze <analyze>` instead.
 
 
@@ -22,7 +22,7 @@ use **-f**.
 
 	~> puq plot -h
 	Usage: puq plot [options] hdf5_filename.
-	
+
 	Examples:
 	plot                  Plots all output PDFs. This is the default.
 	plot -k               Plots output PDFs using Gaussian Kernel Density.
@@ -31,10 +31,10 @@ use **-f**.
 	plot -v 'v1,v2'       Same as before, except plot v1 and v2.
 	plot -r               Plot response surface of output variables.
 	plot -r -v 'v1,v2'    Plots response surface of output variables v1 and v2.
-	plot -f fmt           Save plots. Valid values for 'fmt' are eps, pdf, png, ps, raw, 
+	plot -f fmt           Save plots. Valid values for 'fmt' are eps, pdf, png, ps, raw,
 	                      rgba, svg, and svgz.
 	plot -h               Help with additional options.
-	
+
 	Options:
 	  -h, --help           show this help message and exit
 	  -r                   Response Surface Plot
@@ -55,7 +55,7 @@ use **-f**.
 	                       depends on the plot type.
 	  --fontsize=FONTSIZE  Normal font size in points.
 	  --using=USING        Filename containing substitute parameter(s).
-		
+
 
 PDF Plots
 ---------
@@ -69,37 +69,37 @@ Example
 ^^^^^^^
 
 In examples/basic, there are two input variables, 'x' and 'y' and three outputs,
-:math:`f(x,y) = x`, :math:`g(x,y) = y`, and :math:`h(x,y) = x + y`.  
+:math:`f(x,y) = x`, :math:`g(x,y) = y`, and :math:`h(x,y) = x + y`.
 
 Run PUQ::
 
-	~/memosa/src/puq/examples/basic> puq start basic
+	~/puq/examples/basic> puq start basic
 	Sweep id is 172906455
-	
+
 	Processing <HDF5 dataset "f": shape (5,), type "<f8">
 		Surface   = 1.0*x
 		RMSE      = 0.00e+00 (0.00e+00 %)
-	
+
 	SENSITIVITY:
 	Var      u*            dev
 	-----------------------------
 	x    1.0000e+01    0.0000e+00
 	y    0.0000e+00    0.0000e+00
-	
+
 	Processing <HDF5 dataset "g": shape (5,), type "<f8">
 		Surface   = 1.0*y
 		RMSE      = 8.95e-12 (7.26e-11 %)
-	
+
 	SENSITIVITY:
 	Var      u*            dev
 	-----------------------------
 	y    1.2317e+01    2.0001e-11
 	x    0.0000e+00    0.0000e+00
-	
+
 	Processing <HDF5 dataset "h": shape (5,), type "<f8">
 		Surface   = x + y
 		RMSE      = 8.95e-12 (7.26e-11 %)
-	
+
 	SENSITIVITY:
 	Var      u*            dev
 	-----------------------------
@@ -108,16 +108,16 @@ Run PUQ::
 
 .. note::
 
-	The response of 'f' is '1.0*x', the response of 'g' is '1.0*y' and the response of 'h' is 'x + y'. 
+	The response of 'f' is '1.0*x', the response of 'g' is '1.0*y' and the response of 'h' is 'x + y'.
 	These are exactly as expected.
-	
+
 Plot the PDFs.  Use the 'l' and 'k' flags to see both linear and Gaussian KDE fits::
 
-	~/memosa/src/puq/examples/basic> puq plot -lk -f png
+	~/puq/examples/basic> puq plot -lk -f png
 	plotting PDF for f
 	plotting PDF for g
 	plotting PDF for h
-	~/memosa/src/puq/examples/basic> ls -l *.png
+	~/puq/examples/basic> ls -l *.png
 	-rw-rw-r--. 1 mmh mmh 28623 Jul  8 23:03 pdf-f.png
 	-rw-rw-r--. 1 mmh mmh 39468 Jul  8 23:03 pdf-g.png
 	-rw-rw-r--. 1 mmh mmh 40094 Jul  8 23:03 pdf-h.png
@@ -135,6 +135,6 @@ Plot the PDFs.  Use the 'l' and 'k' flags to see both linear and Gaussian KDE fi
 	:scale: 30 %
 
 Click on an image to see it larger.  You can see that the 'f' PDF
-is a Uniform distribution between 0 and 10. And the 'g' PDF is a Normal 
+is a Uniform distribution between 0 and 10. And the 'g' PDF is a Normal
 with a mean of 10 and deviation of 2.  These are exactly as expected.
 

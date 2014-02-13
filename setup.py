@@ -71,7 +71,7 @@ if __name__ == "__main__":
         packages=['puq', 'puqutil'],
         package_data={'': ['*.rst'], 'puqutil': ['*.f90', '*.h']},
         scripts=['bin/puq'],
-        url='http://memshub.org/site/memosa_docs/puq/index.html',
+        url='https://github.com/martin-hunt/puq',
         license=open('LICENSE.rst').read(),
         description='PUQ Uncertainty Quantification Tool',
         long_description=open('README.rst').read(),
@@ -89,6 +89,7 @@ if __name__ == "__main__":
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS :: MacOS X",
         "Topic :: Scientific/Engineering :: Information Analysis"
         ]
         )

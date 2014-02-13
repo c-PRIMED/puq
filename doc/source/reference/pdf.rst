@@ -1,6 +1,6 @@
 PDF
 ==========
-.. currentmodule:: puq.pdf
+.. currentmodule:: puq
 
 .. autoclass:: PDF
 	:members:

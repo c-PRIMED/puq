@@ -6,7 +6,7 @@ problems; they were slow to converge on a correct answer and their results
 were non-deterministic, varying from run to run due to the inherent randomness.
 
 The Smolyak algorithm is a significant improvement. It uses a smaller
-number of runs to generate a response surface. 
+number of runs to generate a response surface.
 
 To move from Monte Carlo to Latin Hypercube sampling, we had to change
 a single line in our control script. To use Smolyak, we simply change that same
@@ -20,7 +20,7 @@ to::
 
 Or use 'rosen.py' in puq/examples/rosen.::
 
-    ~/memosa/src/puq/examples/rosen> puq start rosen
+    ~/puq/examples/rosen> puq start rosen
     Saving run to sweep_140682290.hdf5
 
     Processing <HDF5 dataset "z": shape (13,), type "<f8">
@@ -42,10 +42,10 @@ For the Smolyak method, the response surface should ge a perfect fit if the poly
 the Smolyak level parameter.  For our example, we used a level 2 Smolyak run to approzimate a The Rosenbrock function, which is 4th degree.  Because of this, the response surface does not exactly fit the data points.  The RMSE is 20.5%.
 
 PUQ also calculates the sensitivity of the parameters using the `Elementary Effects Method <http://en.wikipedia.org/wiki/Elementary_effects_method>`_
- 
+
 We can plot the response surface and pdf::
 
-    ~/memosa/src/puq/examples/rosen> puq plot -r sweep_140682290.hdf5 
+    ~/puq/examples/rosen> puq plot -r sweep_140682290.hdf5
     plotting PDF for z
 
 And if you look at the response surface, you see the actual data as blue dots. Many of them are not on the response surface, indicating a bad fit.
@@ -74,7 +74,7 @@ Next, if we bring up an editor and change the Smolyak level first to 3 then to 4
 
 ::
 
-     ~/memosa/src/puq/examples/rosen> puq extend sweep_140682290.hdf5 
+     ~/puq/examples/rosen> puq extend sweep_140682290.hdf5
     Extending sweep_140682290.hdf5 Using Smolyak
     Extending Smolyak to level 3
 
@@ -97,7 +97,7 @@ Next, if we bring up an editor and change the Smolyak level first to 3 then to 4
 
 ::
 
-    ~/memosa/src/puq/examples/rosen> puq extend sweep_140682290_A.hdf5 
+    ~/puq/examples/rosen> puq extend sweep_140682290_A.hdf5
     Extending sweep_140682290.hdf5 using Smolyak
     Extending Smolyak to level 4
 
@@ -118,7 +118,7 @@ Next, if we bring up an editor and change the Smolyak level first to 3 then to 4
    **PDF for Smolyak level 4, Rosenbrock function on [-2,2]**
 
 
-With 65 samples Smolyak outperforms Monte Carlo with 1000 samples. 
+With 65 samples Smolyak outperforms Monte Carlo with 1000 samples.
 
 .. note::
 

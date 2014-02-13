@@ -1,9 +1,9 @@
 from puq import *
 
 def run():
-    x = UniformParameter('x', 'x', min=-5, max=5)
+    p1 = UniformParameter('x', 'x', min=-5, max=5)
     host = InteractiveHost()
-    uq = Smolyak([x], level=2)
+    uq = Smolyak([p1], level=2)
 
     """
     Call the wrapper with a=1, b=2, c=3
@@ -16,8 +16,7 @@ def run():
     the same name but containing different information on each run.
     """
 
-    prog = TestProgram('wrapper',
-                       desc='Quadratic using bash file wrapper',
+    prog = TestProgram(desc='Quadratic using bash file wrapper',
                        exe="../sim_file_wrap.sh 1 2 3 $x",
                        newdir=True)
     return Sweep(uq, host, prog)

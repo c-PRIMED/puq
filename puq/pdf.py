@@ -29,15 +29,14 @@ Class implementing a PDF (Probability Density Function).
 
 class PDF(object):
     """
-    Create a PDF object.
+    Create a PDF (Probability Density Function) object.
 
     Use this to create a PDF object given a list or array
     of x values the corresponding PDF values.
 
-    :param xvals: x values
-    :param yvals: values for PDF(x)
-    :type xvals: 1D array or list
-    :type yvals: 1D array or list
+    Args:
+      xvals (1D array or list): x values
+      yvals (1D array or list): values for PDF(x)
     """
 
     def __init__(self, xvals, yvals):
@@ -106,7 +105,8 @@ class PDF(object):
         it is truncated to 99.99% by default.  You can
         customize this by setting options['pdf']['range'].
 
-        :returns:    A tuple containing the min and max.
+        Returns:
+          A tuple containing the min and max.
         """
         return (self.x[0], self.x[-1])
 
@@ -117,7 +117,8 @@ class PDF(object):
         it is truncated to 99.8% by default.  You can
         customize this by setting options['pdf']['srange'].
 
-        :returns:    A tuple containing the min and max.
+        Returns:
+          A tuple containing the min and max.
         """
         _range = options['pdf']['srange']
         range = [(1.0 - _range)/2.0, (1.0 + _range)/2.0]
@@ -143,19 +144,23 @@ class PDF(object):
 
     def pdf(self, arr):
         """
-        Probability Density Function.
+        Computes the Probability Density Function (PDF) for some values.
 
-        :param arr: Array of x values.
-        :returns: Array of pdf(x).
+        Args:
+          arr: Array of x values.
+        Returns:
+          Array of pdf(x).
         """
         return np.interp(arr, self.x, self.y, left=0.0, right=0.0)
 
     def cdf(self, arr):
         """
-        Cumulative Density Function.
+        Computes the Cumulative Density Function (CDF) for some values.
 
-        :param arr: Array of x values.
-        :returns: Array of cdf(x).
+        Args:
+          arr: Array of x values.
+        Returns:
+          Array of cdf(x).
         """
         return np.interp(arr, self.x, self.cdfy, left=0.0, right=1.0)
 
@@ -163,24 +168,28 @@ class PDF(object):
         """
         Percent Point Function (inverse CDF)
 
-        :param arr: Array of x values.
-        :returns: Array of ppf(x).
+        Args:
+          arr: Array of x values.
+        Returns:
+          Array of ppf(x).
         """
         return np.interp(arr, self.cdfy, self.x)
 
     def lhs1(self, num):
-        '''
+        """
         Latin Hypercube Sample in [-1,1] for this distribution.
 
         The order of the numbers
         in the array is random, so it can be combined with other arrays
-        to form a latin hypercube. Note that this *can* return values
+        to form a latin hypercube. Note that this can return values
         outside the range [-1,1] for distributions with long tails.
-        This method is used by :mod:`Smolyak`.
+        This method is used by :mod:`puq.Smolyak`.
 
-        :param num: Number of samples to generate.
-        :returns: 1D array of length *num*.
-        '''
+        Args:
+          num: Number of samples to generate.
+        Returns:
+          1D array of length *num*.
+        """
         pmin, pmax = self.range
         return (2. * self.lhs(num) - (pmax + pmin)) / (pmax - pmin)
 
@@ -192,7 +201,7 @@ class PDF(object):
         in the array is random, so it can be combined with other arrays
         to form a latin hypercube. Note that this *can* return values
         outside the range [-1,1] for distributions with long tails.
-        This method is used by :mod:`Smolyak`.
+        This method is used by :mod:`puq.Smolyak`.
 
         :param num: Number of samples to generate.
         :returns: 1D array of length *num*.

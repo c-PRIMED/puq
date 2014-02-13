@@ -5,7 +5,6 @@ Example of scripting a PUQ run, extending it, and plotting PDFs
 
 import puq
 import numpy as np
-import puq.read
 import matplotlib
 matplotlib.use('tkagg', warn=False)
 import matplotlib.pyplot as plt

@@ -20,14 +20,14 @@ to::
 Or use 'rosen_lhs.py' in puq/examples/rosen.
 ::
 
-    ~/memosa/src/puq/examples/rosen> puq start rosen_lhs
-    Saving run to sweep_140657251.hdf5
+    ~/puq/examples/rosen> puq start -f rosen_lhs.hdf5 rosen_lhs
+    Saving run to rosen_lhs.hdf5
 
     Processing <HDF5 dataset "z": shape (20,), type "<f8">
     Mean   = 516.828
     StdDev = 634.386086052
-    ~/memosa/src/puq/examples/rosen> mv sweep_140657251.hdf5  rosen_lhs.hdf5
-    ~/memosa/src/puq/examples/rosen> puq plot -r rosen_lhs.hdf5
+
+    ~/puq/examples/rosen> puq plot -r rosen_lhs.hdf5
 
 .. figure:: images/z-lhs-surface.png
    :width: 500px
@@ -37,16 +37,16 @@ Or use 'rosen_lhs.py' in puq/examples/rosen.
 
 ::
 
-    ~/memosa/src/puq/examples/rosen> puq extend rosen_lhs.hdf5 
+    ~/puq/examples/rosen> puq extend rosen_lhs.hdf5
 	Extending rosen_lhs.hdf5 using LHS
 	Extending Descriptive Sampling run to 60 samples.
 
     Processing <HDF5 dataset "z": shape (60,), type "<f8">
     Mean   = 495.208576132
     StdDev = 605.837656938
-    ~/memosa/src/puq/examples/rosen> puq plot -r rosen_lhs.hdf5
+    ~/puq/examples/rosen> puq plot -r rosen_lhs.hdf5
     plotting z
-    ~/memosa/src/puq/examples/rosen> puq plot rosen_lhs.hdf5
+    ~/puq/examples/rosen> puq plot rosen_lhs.hdf5
     plotting PDF for z
 
 

@@ -3,8 +3,8 @@ from puq import *
 def run(level=2):
 
     # Declare our parameters here. Both are uniform on [-2, 2]
-    x = UniformParameter('x', 'x', min=-2, max=2)
-    y = UniformParameter('y', 'y', min=-2, max=2)
+    p1 = UniformParameter('x', 'x', min=-2, max=2)
+    p2 = UniformParameter('y', 'y', min=-2, max=2)
 
     # Create a host
     host = InteractiveHost()
@@ -18,10 +18,11 @@ def run(level=2):
     #host = PBSHost(env='/scratch/prism/mmh/memosa/env-hansen.sh', cpus=1, cpus_per_node=8, walltime='2:00', pack=8)
 
     # Declare a UQ method.
-    uq = Smolyak([x,y], level=level)
+    uq = Smolyak([p1, p2], level=level)
 
     # Our test program
-    prog = TestProgram('./rosen_prog.py', desc='Rosenbrock Function (python)')
+    prog = TestProgram(exe='./rosen_prog.py --x=$x --y=$y',
+      desc='Rosenbrock Function')
 
     return Sweep(uq, host, prog)
 

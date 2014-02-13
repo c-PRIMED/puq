@@ -7,41 +7,57 @@ import os, shutil
 
 class TestProgram(object):
     """
-    Class implementing a TestProgram object. User must supply at least a name.
+    Class implementing a TestProgram object representing the
+    simulation to run.
 
-    - *name* : Name of the program. This is the executable if no *exe* is defined.
-    - *exe*  : (Optional) An executable command template to run. First some basic \
-    substitution is done. '$var' is replaced by the value of variable 'var', etc. \
-    See python template strings.
-    - *desc* : Optional description of the test program. Saved in the HDF file.
-    - *newdir* : Boolean indicating that each job should be run in its own directory.\
-    Default is False.
-    - *infiles* : If *newdir* is True, then this is an optional list of files\
-    that should be copied to each new directory.
-    - *outfiles* : An optional list of files that will be copied into the HDF5
-    file upon completion. The files will be in /output/jobs/n where 'n' is the
-    job number.
+    Args:
+      name(string): Name of the program. This is the executable if
+        no *exe* is defined.
+      exe(string): An executable command template to run. Strings of
+        the form '$var' are replaced with the value of *var*.
+        See python template strings
+        (`<http://docs.python.org/2/library/string.html#template-strings>`_)
+      desc: Optional description of the test program.
+      newdir(boolean): Run each job in its own directory.  Necessary
+        if the simulation generates output files.  Default is False.
+      infiles(list): If *newdir* is True, then this is an optional
+        list of files that should be copied to each new directory.
+      outfiles(list): An optional list of files that will be saved
+        into the HDF5 file upon completion. The files will be in
+        /output/jobs/n where 'n' is the job number.
 
     Example1::
 
-      prog = TestProgram('springmassdamper',
-               exe="matlab -nodisplay -r 'springmassdamperl(%1, %2, %3, 1.0); quit'")
+      p1 = UniformParameter('x', 'x', min=-2, max=2)
+      p2 = UniformParameter('y', 'y', min=-2, max=2)
+
+      prog = TestProgram('./rosen_prog.py', desc='Rosenbrock Function')
+
+      # or, the equivalent using template strings
+
+      prog = TestProgram(exe='./rosen_prog.py --x=$x --y=$y',
+        desc='Rosenbrock Function')
+
 
     Example2::
 
+      # Using newdir and infiles. Will run each job in a new directory
+      # with a copy of all the infiles.
+
       prog = TestProgram('PM2', newdir=True, desc='MPM Scaling',
-               infiles=['pm2geometry', 'pm2input', 'pmgrid_geom.nc', 'pmpart_geom.nc'])
+        infiles=['pm2geometry', 'pm2input', 'pmgrid_geom.nc',
+        'pmpart_geom.nc'])
 
     """
 
-    def __init__(self, name, exe='', newdir=False, infiles='', desc='', outfiles=''):
+    def __init__(self, name='', exe='', newdir=False, infiles='', desc='', outfiles=''):
         self.name = name
         self.newdir = newdir
         self.infiles = infiles
         self.outfiles = outfiles
         self.exe = exe
-        if desc == '':
-            desc = 'Output of %s.' % name
+        if self.name == '' and self.exe == '':
+            raise ValueError("name or exe must be set.")
         self.desc = desc
 
     def setup(self, dirname):

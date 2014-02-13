@@ -213,16 +213,15 @@ class Function(object):
 
 class ResponseFunc(Function):
     """
-    :param eqn: An equation for the response function.
-    :type eqn: A string.
-    :param params: Input parameters.
-    :type params: A list of Parameter objects.
-    :param vars: An list of variables and their ranges.
-    :type vars: example [(var, (min, max)), ...]
-    :param data: Actual data points used to compute the response surface. (optional)
-       Used to compute the quality of fit (RMSE).
-    :type data: array of points. First column is first variable or parameter, etc.
-       Last column is the result.
+    Args:
+      eqn(string): An equation for the response function.
+      params(list): Input parameters.
+      vars(list): An list of variables and their ranges.
+        Example [(var, (min, max)), ...]
+      data(array): Actual data points used to compute the
+        response surface. (optional) Used to compute the
+        quality of fit (RMSE). First column is first variable
+        or parameter, etc. Last column is the result.
     """
     def __init__(self, eqn, **kwargs):
         if not eqn:
@@ -280,12 +279,14 @@ class ResponseFunc(Function):
         This returns a new copy of the response function and does not update the
         original one.
 
-        :param sig: Significance.  Default is 1.0e-6.
-
-        :returns: New response equation.
+        Args:
+          sig(float): Significance.  Default is 1.0e-6.
+        Returns:
+          New response equation.
 
         .. note::
-            May reduce accuracy of response surface.  Use with care.
+            May reduce accuracy of response surface.  Use
+            with care.
         """
         import itertools
         if not self.eqn.is_polynomial():
@@ -313,9 +314,12 @@ class ResponseFunc(Function):
         This returns a new copy of the response function and does not update the
         original one.
 
-        :param digits: How many significant digits to keep. Default is 6.
+        Args:
+          digits: How many significant digits to keep.
+          Default is 6.
 
-        :returns: New response equation.
+        Returns:
+          New response equation.
 
         .. note::
             May reduce accuracy of response surface.  Use with care.

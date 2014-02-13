@@ -7,17 +7,19 @@ import numpy as np
 
 class PBSHost(Host):
     """
-    Queues jobs using the PBS batch scheduler. Supports Torque and PBSPro.
+    Queues jobs using the PBS batch scheduler.
+    Supports Torque and PBSPro.
 
-    - **env** : Bash environment script (.sh) to be sourced.
-    - **cpus** : Number of cpus each process uses. Required.
-    - **cpus_per_node** : How many cpus to use on each node.  Required.
-    - **qname** : The name of the queue to use.
-    - **walltime** : How much time to allow for the process to complete. Format
+    Args:
+      env(str): Bash environment script (.sh) to be sourced.
+      cpus(int): Number of cpus each process uses. Required.
+      cpus_per_node(int): How many cpus to use on each node.  Required.
+      qname(str): The name of the queue to use.
+      walltime(str): How much time to allow for the process to complete. Format
         is HH:MM:SS.  Default is 1 hour.
-    - **modules** : List of additional required modules. Default is none.
-    - **pack** : Number of sequential jobs to run in each PBS script. Default is 1.
-    - **qlimit**: Max number of PBS jobs to submit at once. Default is 200.
+      modules(list): Additional required modules. Default is none.
+      pack(int): Number of sequential jobs to run in each PBS script. Default is 1.
+      qlimit(int): Max number of PBS jobs to submit at once. Default is 200.
     """
 
     def __init__(self, env,  cpus=0, cpus_per_node=0,
@@ -73,10 +75,6 @@ class PBSHost(Host):
         str = st.read().rstrip().rstrip(';')
         if not str:
             return
-
-        #print "str=", str
-        #print
-        #print str.split(';')
 
         d = dict(x.split('=') for x in str.split(';'))
 
@@ -206,7 +204,7 @@ class PBSHost(Host):
         f.write('#PBS -e %s.pbserr\n' % fname)
         if self.env:
             f.write('source %s\n' % self.env)
-	for m in self.modules:
+        for m in self.modules:
             f.write('module load %s\n' % m)
         f.write('cd  $PBS_O_WORKDIR\n')
         f.write('%s\n' % cmd)
@@ -224,12 +222,12 @@ class PBSHost(Host):
         for j in joblist:
             j['job'] = job
             j['status'] = 'Q'
-        d = {'jnum': self.jnum,
-             'joblist': joblist,
-             'job_state': 'Q',
-             'queue': self.qname,
-             'Submit_arguments': '%s.pbs' % fname,
-             'jobid': job}
+            d = {'jnum': self.jnum,
+              'joblist': joblist,
+              'job_state': 'Q',
+              'queue': self.qname,
+              'Submit_arguments': '%s.pbs' % fname,
+              'jobid': job}
         self.jnum += 1
         return d
 

@@ -1,53 +1,95 @@
 Getting Started
 ===============
 
-If you are running PUQ as part of MEMOSA, you will need a MEMOSA build, with the
-environment set up properly.  See the MEMOSA wiki for help.
+PUQ works on Linux and MacOSX.
 
-Because PUQ is still under very active development, it is best to use the same version of PUQ
-while working on your project. Updates may break backwards compatibility, at least temporarily.
-If this happens, please report it.
+nanoHUB Workspaces
+------------------
 
-To test that everything is set up properly, just try the **puq** command without any arguments.
-Correct output should look something like this::
+If you have access to a nanoHUB workspace, PUQ is already installed.
+If 'puq' is not in your path, use the 'use' command to load it.
+::
 
-    ~/memosa> puq
+  ~> which puq
+  ~> use -e puq-2.2.1
+  ~> which puq
+  /apps/share64/debian7/puq/puq-2.2.1/build-debian7/bin/puq
 
-    This program does parameter sweeps for uncertainty
-	quantification and optimization.
-	
-	Usage: puq [-q|-v] [start|stop|status|resume|analyze|plot]
-	Options:
-	  -q                           Quiet.  Useful for scripts.
-	  
-	  -v                           Verbose. Show even more information.
-	  
-	  -k                           Keep temporary directories.
-	  
-	  start script[.py] [args]     Start PUQ using script 'script'
-	  
-	  stop   [id]                  Stop all jobs from sweep 'id'. Remove any results.
-	  
-	  status [id]                  Returns the number of jobs remaining in the sweep.
-	  
-	  resume [id]                  Resumes execution of sweep 'id'.
-	  
-	  analyze [options] [id]       Does post-processing.
-	  
-	  extend [id]                  Extend a sweep by adding additional jobs.
-	  
-	  plot [options] [id]          Plots output pdf(s) or response surface. Type
-	                               'puq plot -h' for options.
-	                               
-	  read                         Read a parameter or PDF from a python input script, 
-	                               json file, csv file, or URI.  Visualize, modify, and save it.
-	                               
-	  strip                        PUQ keeps all stdout from every job.  This command removes
-	                               output lines not containing data and repacks the HDF5 file,
-	                               reducing its size.
-	                               
-	  dump                         Dumps output data in CSV format.
-	  
+Type 'use' without arguments to see a list of packages.  You should use
+the latest version of PUQ.
+
+Installing from PyPI
+--------------------
+
+PUQ uses distutils, which is the default way of installing python
+modules. Simply do::
+
+  pip install puq
+
+The installer might ask you to install some other packages first.
+Just use 'pip' to install them.  For the Mac, we have very
+successfully used Anaconda, a free Python distribution containing
+all the required components to install PUQ. https://store.continuum.io/cshop/anaconda/
+
+
+Building and Installing from Sources
+------------------------------------
+
+If you are a developer and have a local copy of the sources,
+
+To install in your home directory, use:
+::
+
+  python setup.py install --user
+
+To install for all users on Unix/Linux or Mac:
+::
+
+  python setup.py build
+  sudo python setup.py install
+
+For more information: https://pypi.python.org/pypi/puq/ and
+https://github.com/martin-hunt/puq
+
+------
+
+To test that everything is set up properly, just try the **puq** command
+without any arguments. Correct output should look something like this::
+
+  > puq
+
+  This program does parameter sweeps for uncertainty
+  quantification and optimization.
+
+  Usage: puq [-q|-v] [start|stop|status|resume|analyze|plot]
+  Options:
+  -q                           Quiet.  Useful for scripts.
+
+  -v                           Verbose. Show even more information.
+
+  -k                           Keep temporary directories.
+
+  start script[.py] [args]     Start PUQ using script 'script'
+
+  status [id]                  Returns the number of jobs remaining in the sweep.
+
+  resume [id]                  Resumes execution of sweep 'id'.
+
+  analyze [options] [id]       Does post-processing.
+
+  extend [id]                  Extend a sweep by adding additional jobs.
+
+  plot [options] [id]          Plots output pdf(s) or response surface. Type
+  'puq plot -h' for options.
+
+  read                         Read a parameter or PDF from a python input script,
+                               json file, csv file, or URI.  Visualize, modify, and save it.
+
+  strip                        PUQ keeps all stdout from every job.  This command
+                               removes output lines not containing data and
+                               repacks the HDF5 file, reducing its size.
+
+  dump                         Dumps output data in CSV format.
 
 Requirements
 ------------
@@ -94,7 +136,7 @@ A *discrete* parameter has a finite number of values.
    which will be supported in the future.
 
 Parameters are represented as PDFs. They might be approximated by a standard PDF, such as uniform,
-or gaussian (normal).  Or they can be created from the results of experiments or measurements. 
+or gaussian (normal).  Or they can be created from the results of experiments or measurements.
 
 .. seealso:: :doc:`../reference/parameters`
 
@@ -108,8 +150,10 @@ be necessary to create a wrapper script for it.
 Host
 ^^^^
 
-Jobs can be run sequentially on an interactive scheduler. 
-This would be the typical desktop or workstation. PBS, TORQUE, and Moab are also supported for use in cluster environments.
+Jobs can be run sequentially or in parallel on an interactive scheduler.
+This would be the typical desktop or workstation.
+PBS, TORQUE, and HUBzero submit are also supported for use in cluster
+environments.
 
 
 
