@@ -13,7 +13,7 @@ from hosts import Host
 from shutil import rmtree
 from stat import S_ISDIR
 from glob import glob
-from threading import Thread, Lock, Event
+from threading import Thread
 
 class SubmitHost(Host):
     """
@@ -47,7 +47,7 @@ class SubmitHost(Host):
                 cmds = [(x[0], '@@'+x[0]) for x in a]
             print >>f, ','.join([str(b[1]) for b in a])
         f.close()
-        scmd = "submit -d input.csv %s" % self.prog.cmd(cmds)
+        scmd = "submit --runName=puq -d input.csv %s" % self.prog.cmd(cmds)
         self.add_job(shlex.split(scmd), '', 0, '')
 
     # run, monitor and status return
@@ -70,18 +70,7 @@ class SubmitHost(Host):
             return False
         return True
 
-    def stdout_monitor(self, proc):
-        from fcntl import fcntl, F_SETFL, F_GETFL
-        from select import select
-        fileno = proc.stdout.fileno()
-        fcntl(fileno, F_SETFL, fcntl(fileno, F_GETFL) | os.O_NONBLOCK)
-        while not self.stop.is_set() and proc.poll() is None:
-            if select([fileno], [], [])[0]:
-                with self.outlock:
-                    print proc.stdout.read()
-                    sys.stdout.flush()
-
-    def peg_parse(self, dir):
+    def peg_parse(self):
         # parse the contents of the pegasusstatus.txt file
         done = 0
         filename = 'pegasusstatus.txt'
@@ -100,43 +89,38 @@ class SubmitHost(Host):
         # different OS versions.
         found = False
         while not found:
-            d = dict((d, os.stat(d).st_mtime) \
-                for d in glob('[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') \
-                if S_ISDIR(os.stat(d).st_mode))
-            if d:
+            try:
+                os.chdir('puq/work')
                 found = True
-            else:
+            except:
                 time.sleep(10)
 
-        dir = sorted(d, key=lambda x: x[1])[0]
-        os.chdir(dir)
-        os.chdir('work')
         done = -1
-        while not self.stop.is_set():
+        stop = False
+        while not stop:
             try:
-                d = self.peg_parse(dir)
+                d = self.peg_parse()
             except:
                 d = done
             if d > done:
-                with self.outlock:
-                    print '=RAPPTURE-PROGRESS=>%d' % (int(d))
-                    sys.stdout.flush()
+                print '=RAPPTURE-PROGRESS=>%d Running' % (int(d))
+                sys.stdout.flush()
                 done = d
-            if int(d) == 100:
-                self.stop.set()
+            if int(d) >= 100:
+                stop = True
             else:
-                self.stop.wait(30)
+                time.sleep(10)
 
     def _run(self):
         j = self.jobs[0]
         print '=RAPPTURE-PROGRESS=>0 Starting'
         sys.stdout.flush()
-        myprocess = Popen(j['cmd'], stdout=PIPE, bufsize=0)
 
-        self.outlock = Lock()
-        self.stop = Event()
-        p1 = Thread(target=self.stdout_monitor, args=(myprocess,))
-        p1.daemon = True
+        try:
+            myprocess = Popen(j['cmd'], stdout=PIPE, bufsize=0)
+        except Exception, e:
+            print 'Command %s failed: %s' % (' '.join(j['cmd']), e)
+            sys.stdout.flush()
 
         p2 = Thread(target=self.status_monitor)
         p2.daemon = True
@@ -145,17 +129,21 @@ class SubmitHost(Host):
         # wait for command to finish
         err = True
         try:
-            myprocess.wait()
+            ret = myprocess.wait()
+            if ret:
+                err = False
+                print 'Submit failed with error %s' % ret
+                fn = glob('puq/*.stderr')
+                if fn:
+                    with open(fn[0]) as f:
+                        print f.read()
         except KeyboardInterrupt:
             print '\nPUQ interrupted. Cleaning up. Please wait...\n'
             err = False
             myprocess.kill()
 
         j['status'] = 'F'
-        if p1 and p1.is_alive():
-            p1.join()
 
-        self.stop.set()
         if p2 and p2.is_alive():
             p2.join()
 
@@ -176,14 +164,7 @@ class SubmitHost(Host):
         # find the jobs that are completed and, if the stdout/stderr files are there,
         # move them to hdf5
         finished_jobs = []
-        # get a list of all 8-digit directories
-        d = dict((d, os.stat(d).st_mtime) \
-            for d in glob('[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') \
-            if S_ISDIR(os.stat(d).st_mode))
-
-        # sort the directories by mtime and pick the first
-        dir = sorted(d, key=lambda x: x[1])[0]
-        os.chdir(dir)
+        os.chdir('puq')
 
         # Get the job stats. Do this in a loop because it looks like
         # sometimes this code gets run before pegasus generates the file.
