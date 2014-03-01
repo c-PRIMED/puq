@@ -13,7 +13,7 @@ from hosts import Host
 from shutil import rmtree
 from stat import S_ISDIR
 from glob import glob
-from threading import Thread
+from threading import Thread, Event
 
 class SubmitHost(Host):
     """
@@ -88,16 +88,15 @@ class SubmitHost(Host):
         # this turned out to be more reliable across
         # different OS versions.
         found = False
-        while not found:
+        while not found and not self.stop.is_set():
             try:
                 os.chdir('puq/work')
                 found = True
             except:
-                time.sleep(10)
+                self.stop.wait(10)
 
         done = -1
-        stop = False
-        while not stop:
+        while not self.stop.is_set():
             try:
                 d = self.peg_parse()
             except:
@@ -107,9 +106,9 @@ class SubmitHost(Host):
                 sys.stdout.flush()
                 done = d
             if int(d) >= 100:
-                stop = True
+                self.stop.set()
             else:
-                time.sleep(10)
+                self.stop.wait(10)
 
     def _run(self):
         j = self.jobs[0]
@@ -117,11 +116,12 @@ class SubmitHost(Host):
         sys.stdout.flush()
 
         try:
-            myprocess = Popen(j['cmd'], stdout=PIPE, bufsize=0)
+            myprocess = Popen(j['cmd'], stdout=PIPE, stderr=PIPE, bufsize=0)
         except Exception, e:
             print 'Command %s failed: %s' % (' '.join(j['cmd']), e)
             sys.stdout.flush()
 
+        self.stop = Event()
         p2 = Thread(target=self.status_monitor)
         p2.daemon = True
         p2.start()
@@ -133,10 +133,13 @@ class SubmitHost(Host):
             if ret:
                 err = False
                 print 'Submit failed with error %s' % ret
-                fn = glob('puq/*.stderr')
-                if fn:
-                    with open(fn[0]) as f:
-                        print f.read()
+                whocares = os.listdir(os.getcwd())
+                if os.path.exists('puq'):
+                    fn = glob('puq/*.stderr')
+                    if fn:
+                        with open(fn[0]) as f:
+                            print f.read()
+                sys.stdout.flush()
         except KeyboardInterrupt:
             print '\nPUQ interrupted. Cleaning up. Please wait...\n'
             err = False
@@ -144,6 +147,7 @@ class SubmitHost(Host):
 
         j['status'] = 'F'
 
+        self.stop.set()
         if p2 and p2.is_alive():
             p2.join()
 
