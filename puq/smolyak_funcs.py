@@ -50,7 +50,7 @@ def index_step(p, n):
 @memoize
 def chaos_sequence(ndim, p):
     assert ndim > 0
-    return index_step(zeros((1, ndim)), p);
+    return index_step(zeros((1, ndim), int), p);
 
 @memoize
 def _legendre(n):
