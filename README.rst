@@ -4,8 +4,8 @@ Introduction
 
 :Version: 2.2
 :Authors: Martin Hunt
-:Web site: https://github.com/martin-hunt/puq
-:Documentation: http://martin-hunt.github.io/puq/
+:Web site: https://github.com/c-PRIMED/puq
+:Documentation: http://c-primed.github.io/puq/
 :Copyright: This document has been placed in the public domain.
 :License: MIT License.
 
