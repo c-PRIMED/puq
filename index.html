@@ -1,241 +1,79 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<html>
 
-
-<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK &mdash; PUQ 2.2.2 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '2.2.2',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="PUQ 2.2.2 documentation" href="#" />
-    <link rel="next" title="Overview" href="overview.html" /> 
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="PUQ : Uncertainty Quantification and Sensitivity Analysis Tool">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>PUQ</title>
   </head>
+
   <body>
 
-<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
-<a href="#"><img src="_static/logo.png" border="0" alt="py4sci"/></a>
-</div>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/c-PRIMED/puq">View on GitHub</a>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="overview.html" title="Overview"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
-       <li><a href="#">documentation </a> &raquo;</li>
- 
-      </ul>
+          <h1 id="project_title">PUQ</h1>
+          <h2 id="project_tagline">Uncertainty Quantification and Sensitivity Analysis Tool</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/c-PRIMED/puq/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/c-PRIMED/puq/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
     </div>
 
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK</a><ul>
-<li><a class="reference internal" href="#contents">Contents:</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-</li>
-</ul>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="overview.html"
-                        title="next chapter">Overview</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="puq-prism-uncertainty-quantification-framework">
-<h1>PUQ - PRISM UNCERTAINTY QUANTIFICATION FRAMEWORK<a class="headerlink" href="#puq-prism-uncertainty-quantification-framework" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="contents">
-<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#goals">Goals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#in-progress">In Progress</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#future-plans">Future Plans</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="users_guide.html">User&#8217;s Guide and Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ug/started.html">Getting Started</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/started.html#nanohub-workspaces">nanoHUB Workspaces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/started.html#installing-from-pypi">Installing from PyPI</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/started.html#building-and-installing-from-sources">Building and Installing from Sources</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/started.html#requirements">Requirements</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/mc.html">Monte Carlo Sampling</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/mc.html#extending-the-sample-size">Extending the Sample Size</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/lhs.html">Latin Hypercube Sampling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ug/smolyak_python.html">Smolyak Sparse Grid Algorithm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ug/smolyak_mod.html">Modifying Smolyak Sweeps</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/smolyak_mod.html#extending">Extending</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/smolyak_mod.html#modifying-parameters-reusing-response-surfaces">Modifying Parameters &amp; Reusing Response Surfaces</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/callbacks.html">Callbacks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ug/calibration.html">Calibration of Input Variables</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/calibration.html#using-puq-for-calibration">Using PUQ for Calibration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/calibration.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/sensitivity.html">Sensitivity Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/sensitivity.html#effect-of-smolyak-level-on-sensitivity">Effect of Smolyak Level on Sensitivity</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/sensitivity.html#a-more-complex-example">A More Complex Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/analyze.html">Using PUQ Analyze</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/analyze.html#response-surfaces">Response Surfaces</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/analyze.html#probability-density-functions-pdfs">Probability Density Functions (PDFs)</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/read.html">Using PUQ Read</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ug/simulations.html">Making PUQ Work With Your Code</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/simulations.html#c-programs">C Programs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/simulations.html#matlab-programs">Matlab Programs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/simulations.html#fortran-programs">Fortran Programs</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/handling_output.html">Handling Output</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/handling_output.html#the-standard-way">The Standard Way</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/handling_output.html#when-the-standard-way-doesn-t-work">When the Standard Way Doesn&#8217;t Work</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/handling_output.html#wrappers">Wrappers</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/pbs.html">Using The PBS Scheduler</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/pbs.html#batch-scripts">Batch Scripts</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/pbs.html#using-pbshost">Using PBSHost</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/pbs.html#examples">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/plotting.html">Plotting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/plotting.html#pdf-plots">PDF Plots</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/out2in.html">Using Output PDFs as Inputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ug/scripting.html">Scripting PUQ</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ug/scripting.html#running-sweeps">Running Sweeps</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ug/scripting.html#reading-results">Reading Results</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ug/correlated.html">Handling Correlated PDFs</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="reference/calibrate.html">calibrate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/hdf.html">hdf - Functions for Accessing HDF5 Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/hosts.html">Hosts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/parameters.html">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/pdf.html">PDF</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/puqutil.html">puqutil - Output Functions for PUQ</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/puqutil.html#output-format">Output Format</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/puqutil.html#python-functions">Python Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/puqutil.html#functions-for-c-c">Functions for C/C++</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="reference/smolyak.html">Smolyak UQ Method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/sweep.html">Sweep Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/testprogram.html">TestProgram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="reference/psweep.html">PSweep Reference</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/rosen.html">rosen</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/rosen.html#contents">Contents</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
-</div>
-</div>
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
 
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
-          </div>
-        </div>
-      </div>
-      <div class="clearer"></div>
+<h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+
+<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+
+<h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+
+<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+
+<h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+      </section>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="overview.html" title="Overview"
-             >next</a> |</li>
-        <li><a href="#">home</a>|&nbsp;</li>
-        <li><a href="search.html">search</a>|&nbsp;</li>
-       <li><a href="#">documentation </a> &raquo;</li>
- 
-      </ul>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">PUQ maintained by <a href="https://github.com/c-PRIMED">c-PRIMED</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
     </div>
-    <div class="footer">
-        &copy; Copyright 2014, Martin Hunt, Purdue University.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
-    </div>
+
+    
+
   </body>
 </html>
