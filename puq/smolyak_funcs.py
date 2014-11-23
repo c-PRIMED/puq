@@ -26,7 +26,7 @@ def index_step1(m):
         for i in range(0, cols):
             z = row.copy()
             z[i] += 1
-            if out == None:
+            if out is None:
                 out = array([z])
             else:
                 copy = True
