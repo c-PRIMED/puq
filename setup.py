@@ -205,6 +205,7 @@ def setup_package():
           tests_require=['pytest-cov', 'pytest'],
           command_options=command_options,
           entry_points={'console_scripts': CONSOLE_SCRIPTS},
+          zip_safe=False,
           scripts=['bin/puq'],
           ext_modules=[
           Extension("sparse_grid_cc",
