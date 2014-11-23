@@ -5,3 +5,6 @@ build
 dist
 *.egg-info/
 *.o
+.coverage
+.eggs
+htmlcov

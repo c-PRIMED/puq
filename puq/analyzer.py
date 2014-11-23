@@ -26,9 +26,10 @@ import ScrolledText
 import os, weakref, re
 from urlparse import urlparse
 import h5py
-from puq import Parameter, PDF, ExperimentalPDF, pickle, unpickle, gaussian_kde, SampledFunc
+from puq import Parameter, PDF, ExperimentalPDF, pickle, unpickle, SampledFunc
 import math
 import webbrowser, shutil, atexit, shelve
+from scipy.stats import gaussian_kde
 
 DB_LIST = ["http://dash.prism.nanohub.org/prism/default/call/run/upload_service",
            "http://127.0.0.1:8000/prism/default/call/run/upload_service"

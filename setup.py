@@ -1,95 +1,219 @@
-from setuptools import setup
-from distutils.extension import Extension
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
 import sys
+import inspect
+from distutils.cmd import Command
 
-def check_dep(mv):
-    import re
-    """
-    Can't get install_requires to always do the right thing, so
-    we do this the hard way.  Just check dependencies and abort
-    if all is not well.
-    """
-    ok = True
-    for p,v in mv.iteritems():
-        vn = map(int, re.findall(r'([\d]+)', v))
+import versioneer
+import setuptools
+from setuptools.command.test import test as TestCommand
+from setuptools import setup, Extension
+
+__location__ = os.path.join(os.getcwd(), os.path.dirname(
+    inspect.getfile(inspect.currentframe())))
+
+# Change these settings according to your needs
+MAIN_PACKAGE = "puq"
+DESCRIPTION = 'PUQ Uncertainty Quantification Tool'
+LICENSE = "mit"
+URL = 'https://github.com/c-PRIMED/puq'
+AUTHOR = "Martin Hunt"
+EMAIL = "mmh@purdue.edu"
+
+COVERAGE_XML = False
+COVERAGE_HTML = True
+JUNIT_XML = False
+
+# Add here all kinds of additional classifiers as defined under
+# https://pypi.python.org/pypi?%3Aaction=list_classifiers
+CLASSIFIERS = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Topic :: Scientific/Engineering :: Information Analysis"
+    ]
+
+# Add here console scripts like ['hello_world = foobar.module:function']
+CONSOLE_SCRIPTS = []
+
+# Versioneer configuration
+versioneer.VCS = 'git'
+versioneer.versionfile_source = os.path.join(MAIN_PACKAGE, '_version.py')
+versioneer.versionfile_build = os.path.join(MAIN_PACKAGE, '_version.py')
+versioneer.tag_prefix = 'v'  # tags are like v1.2.0
+versioneer.parentdir_prefix = MAIN_PACKAGE + '-'
+
+
+class PyTest(TestCommand):
+    user_options = [("cov=", None, "Run coverage"),
+                    ("cov-xml=", None, "Generate junit xml report"),
+                    ("cov-html=", None, "Generate junit html report"),
+                    ("junitxml=", None, "Generate xml of test results")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.cov = None
+        self.cov_xml = False
+        self.cov_html = False
+        self.junitxml = None
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        if self.cov is not None:
+            self.cov = ["--cov", self.cov, "--cov-report", "term-missing"]
+            if self.cov_xml:
+                self.cov.extend(["--cov-report", "xml"])
+            if self.cov_html:
+                self.cov.extend(["--cov-report", "html"])
+        if self.junitxml is not None:
+            self.junitxml = ["--junitxml", self.junitxml]
+
+    def run_tests(self):
         try:
-            if p == 'poster':
-                ver = str(__import__(p, [], [], ['version']).version)
-            elif p == 'h5py':
-                ver = str(__import__(p, [], [], ['version']).version.version)
-            else:
-                ver = __import__(p, [], [], ['__version__']).__version__
-            vern = map(int, re.findall(r'([\d]+)', ver))
-            for v1,v2 in zip(vn, vern):
-                if v1 > v2:
-                    print 'Error: Package %s needs version %s and found %s.' % (p, v, ver)
-                    ok = False
-                    break
-                if v2 > v1:
-                    break
+            import pytest
         except:
-            print 'Error: Package %s not found. Please install it.' % (p)
-            ok = False
-            ver = []
-        # print p, v, ver
-    return ok
+            raise RuntimeError("py.test is not installed, "
+                               "run: pip install pytest")
+        params = {"args": self.test_args}
+        if self.cov:
+            params["args"] += self.cov
+            params["plugins"] = ["cov"]
+        if self.junitxml:
+            params["args"] += self.junitxml
+        errno = pytest.main(**params)
+        sys.exit(errno)
 
 
+def sphinx_builder():
+    try:
+        from sphinx.setup_command import BuildDoc
+    except ImportError:
+        class NoSphinx(Command):
+            user_options = []
 
-if __name__ == "__main__":
-    if sys.version_info.major == 3:
-        print 'PUQ is not yet working with Python 3.'
-        sys.exit(-1)
-    if sys.version_info.minor < 6:
-        print 'PUQ requires Python >= 2.6.'
-        sys.exit(-1)
+            def initialize_options(self):
+                raise RuntimeError("Sphinx documentation is not installed, "
+                                   "run: pip install sphinx")
 
-    mvers = {
-    'numpy' : '1.6',
-    'scipy' : '0.8',
-    'h5py' : '1.3',
-    'jsonpickle' : '0.4',
-    'matplotlib' : '1.1',
-    'sympy' : '0.7.1',
-    'nose' : '0.11',
-    'poster' : '0.8'
-    }
-    if not check_dep(mvers):
-        sys.exit(-1)
+        return NoSphinx
+
+    class BuildSphinxDocs(BuildDoc):
+
+        def run(self):
+            if self.builder == "doctest":
+                import sphinx.ext.doctest as doctest
+                # Capture the DocTestBuilder class in order to return the total
+                # number of failures when exiting
+                ref = capture_objs(doctest.DocTestBuilder)
+                BuildDoc.run(self)
+                errno = ref[-1].total_failures
+                sys.exit(errno)
+            else:
+                BuildDoc.run(self)
+
+    return BuildSphinxDocs
+
+
+class ObjKeeper(type):
+    instances = {}
+
+    def __init__(cls, name, bases, dct):
+        cls.instances[cls] = []
+
+    def __call__(cls, *args, **kwargs):
+        cls.instances[cls].append(super(ObjKeeper, cls).__call__(*args,
+                                                                 **kwargs))
+        return cls.instances[cls][-1]
+
+
+def capture_objs(cls):
+    from six import add_metaclass
+    module = inspect.getmodule(cls)
+    name = cls.__name__
+    keeper_class = add_metaclass(ObjKeeper)(cls)
+    setattr(module, name, keeper_class)
+    cls = getattr(module, name)
+    return keeper_class.instances[cls]
+
+
+def get_install_requirements(path):
+    content = open(os.path.join(__location__, path)).read()
+    return [req for req in content.splitlines() if req != '']
+
+
+def read(fname):
+    return open(os.path.join(__location__, fname)).read()
+
+
+def setup_package():
+    # Assemble additional setup commands
+    cmdclass = versioneer.get_cmdclass()
+    cmdclass['docs'] = sphinx_builder()
+    cmdclass['doctest'] = sphinx_builder()
+    cmdclass['test'] = PyTest
+
+    # Some helper variables
+    version = versioneer.get_version()
+    docs_path = os.path.join(__location__, "docs")
+    docs_build_path = os.path.join(docs_path, "_build")
+    install_reqs = get_install_requirements("requirements.txt")
+
+    command_options = {
+        'docs': {'project': ('setup.py', MAIN_PACKAGE),
+                 'version': ('setup.py', version.split('-', 1)[0]),
+                 'release': ('setup.py', version),
+                 'build_dir': ('setup.py', docs_build_path),
+                 'config_dir': ('setup.py', docs_path),
+                 'source_dir': ('setup.py', docs_path)},
+        'doctest': {'project': ('setup.py', MAIN_PACKAGE),
+                    'version': ('setup.py', version.split('-', 1)[0]),
+                    'release': ('setup.py', version),
+                    'build_dir': ('setup.py', docs_build_path),
+                    'config_dir': ('setup.py', docs_path),
+                    'source_dir': ('setup.py', docs_path),
+                    'builder': ('setup.py', 'doctest')},
+        'test': {'test_suite': ('setup.py', 'test'),
+                 'cov': ('setup.py', 'puq')}}
+    if JUNIT_XML:
+        command_options['test']['junitxml'] = ('setup.py', 'junit.xml')
+    if COVERAGE_XML:
+        command_options['test']['cov_xml'] = ('setup.py', True)
+    if COVERAGE_HTML:
+        command_options['test']['cov_html'] = ('setup.py', True)
 
     from numpy.distutils.misc_util import get_numpy_include_dirs
     incdirs = get_numpy_include_dirs()
 
-    vt = open('puq/version.py').read()
-    puq_version = str(vt.split("'")[1])
+    setup(name=MAIN_PACKAGE,
+          version=version,
+          url=URL,
+          description=DESCRIPTION,
+          author=AUTHOR,
+          author_email=EMAIL,
+          license=LICENSE,
+          long_description=read('README.rst'),
+          classifiers=CLASSIFIERS,
+          test_suite='tests',
+          packages=setuptools.find_packages(exclude=['tests', 'tests.*']),
+          install_requires=install_reqs,
+          setup_requires=['six'],
+          cmdclass=cmdclass,
+          tests_require=['pytest-cov', 'pytest'],
+          command_options=command_options,
+          entry_points={'console_scripts': CONSOLE_SCRIPTS},
+          scripts=['bin/puq'],
+          ext_modules=[
+          Extension("sparse_grid_cc",
+                    sources=["src/sg.cpp", "src/sparse_grid_cc.cpp"],
+                    include_dirs=incdirs,
+                    language="c++",
+                    libraries=["stdc++"]),
+          ],
+    )
 
-    setup(
-        name='puq',
-        version=puq_version,
-        author='Martin Hunt',
-        author_email='mmh@purdue.edu',
-        packages=['puq', 'puqutil'],
-        package_data={'': ['*.rst'], 'puqutil': ['*.f90', '*.h']},
-        scripts=['bin/puq'],
-        url='https://github.com/martin-hunt/puq',
-        license=open('LICENSE.rst').read(),
-        description='PUQ Uncertainty Quantification Tool',
-        long_description=open('README.rst').read(),
-        test_suite='nose.collector',
-        zip_safe=False,
-        ext_modules=[
-        Extension("sparse_grid_cc",
-            sources=["src/sg.cpp", "src/sparse_grid_cc.cpp"],
-            include_dirs=incdirs,
-            language="c++",
-            libraries=["stdc++"]),
-        ],
-        classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: POSIX :: Linux",
-        "Operating System :: MacOS :: MacOS X",
-        "Topic :: Scientific/Engineering :: Information Analysis"
-        ]
-        )
+if __name__ == "__main__":
+    setup_package()

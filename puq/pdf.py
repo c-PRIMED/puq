@@ -14,7 +14,7 @@ import math, __builtin__
 from scipy import trapz, interpolate
 import scipy.stats
 from puq.options import options
-from puq.kde import gaussian_kde
+from scipy.stats import gaussian_kde
 from logging import info, debug, exception, warning, critical
 import sys, matplotlib
 if sys.platform == 'darwin':

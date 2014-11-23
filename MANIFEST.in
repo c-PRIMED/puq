@@ -1,6 +1,8 @@
+include versioneer.py
 include *.rst
-include stdeb.cfg
-recursive-include src *.cpp *.h *.pyx
+include *.txt
+recursive-include puq *.py
+recursive-include puqutil *.py *.f90 *.h
 recursive-include doc *.rst
 recursive-include examples *
 include doc/PUQ.pdf

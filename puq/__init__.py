@@ -12,10 +12,9 @@ from psweep import PSweep
 from testprogram import TestProgram
 from pdf import PDF, ExperimentalPDF, NormalPDF, WeibullPDF, UniformPDF, HPDF, TrianglePDF, posterior, RayleighPDF, ExponPDF, NetPDF
 from pbshost import PBSHost
-from util import Callback
+from util import Callback, dump_hdf5
 from response import Function, ResponseFunc, SampledFunc
 from jpickle import pickle, unpickle, NetObj, LoadObj, write_json
-from kde import gaussian_kde
 from analyzer import analyzer
 from calibrate import calibrate
 from .version import __version__

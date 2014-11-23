@@ -42,7 +42,8 @@ def run_uniformMC(progname):
     return Sweep(uq, InteractiveHost(), progname)
 
 def test_add_norm_dist():
-    sw = run('./vel_add.py')
+    print os.getcwd()
+    sw = run('test/vel_add.py')
     sw.run(fname, overwrite=True)
     sw.analyze()
 
@@ -65,7 +66,7 @@ def test_add_norm_dist():
     os.remove(fname)
 
 def test_add_unif_dist():
-    sw = run_uniform('./vel_add.py')
+    sw = run_uniform('test/vel_add.py')
     sw.run(fname, overwrite=True)
     sw.analyze()
 
@@ -90,7 +91,7 @@ def test_add_unif_dist():
     os.remove(fname)
 
 def test_add_norm_distMC():
-    sw = runMC('./vel_add.py')
+    sw = runMC('test/vel_add.py')
     sw.run(fname, overwrite=True)
     sw.analyze()
 
@@ -102,7 +103,7 @@ def test_add_norm_distMC():
     os.remove(fname)
 
 def test_add_unif_distMC():
-    sw = run_uniformMC('./vel_add.py')
+    sw = run_uniformMC('test/vel_add.py')
     sw.run(fname, overwrite=True)
     sw.analyze()
 

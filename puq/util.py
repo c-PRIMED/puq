@@ -12,9 +12,16 @@ from logging import info, debug, exception, warning, critical
 from puq.options import options
 from puq.hdf import get_result
 
+
+def dump_hdf5(name, v, desc=''):
+    np.set_printoptions(threshold=np.nan)
+    print 'HDF5:%s:5FDH' % repr({'name': name, 'desc': desc, 'value': v})
+
+
 def vprint(level, str):
     if options['verbose'] >= level:
         print str
+
 
 # read psamples from a csv file and return a dictionary
 def get_psamples_from_csv(sw, h5, sname):
@@ -38,6 +45,7 @@ def get_psamples_from_csv(sw, h5, sname):
         return None
     return samples
 
+
 class Callback:
     """
     This class provides a convenient class to use with callback functions.
@@ -54,6 +62,7 @@ class Callback:
 class TimedOutExec(Exception):
         pass
 
+
 def getachar(prompt, echo=True):
     fd = sys.stdin.fileno()
     old_mode = termios.tcgetattr(fd)
@@ -69,6 +78,7 @@ def getachar(prompt, echo=True):
     if echo and ch:
         print ch
     return ch
+
 
 def process_data(hf, grpname, callback):
     debug(grpname)
@@ -96,6 +106,7 @@ def process_data(hf, grpname, callback):
                 vgrp[v[0]] = v[1]
             except TypeError:
                 vgrp[v[0]] = repr(v[1])
+
 
 def strip(fname):
     tmpname = fname + '_strip'

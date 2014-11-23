@@ -24,7 +24,7 @@ import ScrolledText
 import sys, os, weakref, copy
 from urlparse import urlparse, urlunsplit
 import h5py
-from puq import Parameter, PDF, ExperimentalPDF, options, pickle, unpickle, NetObj, gaussian_kde, SampledFunc
+from puq import Parameter, PDF, ExperimentalPDF, options, pickle, unpickle, NetObj, SampledFunc
 import math
 import webbrowser, shutil, atexit, shelve
 import logging
@@ -32,6 +32,8 @@ from logging import info, debug, exception, warning, critical
 from optparse import OptionParser
 from cnote import CNote, sq_colors, sq_image
 from tooltip import ToolTip
+from scipy.stats import gaussian_kde
+
 
 class MyCombobox:
     def __init__(self, parent, txt, values, current, callback=None):
