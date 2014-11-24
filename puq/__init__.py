@@ -18,3 +18,7 @@ from jpickle import pickle, unpickle, NetObj, LoadObj, write_json
 from analyzer import analyzer
 from calibrate import calibrate
 from .version import __version__
+
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions

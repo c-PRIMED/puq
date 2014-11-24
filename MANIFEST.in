@@ -6,3 +6,4 @@ recursive-include puqutil *.py *.f90 *.h
 recursive-include doc *.rst
 recursive-include examples *
 include doc/PUQ.pdf
+include puq/_version.py
