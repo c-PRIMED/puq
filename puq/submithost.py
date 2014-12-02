@@ -116,7 +116,7 @@ class SubmitHost(Host):
         sys.stdout.flush()
 
         try:
-            myprocess = Popen(j['cmd'], stdout=PIPE, stderr=PIPE, bufsize=0)
+            myprocess = Popen(j['cmd'], bufsize=0)
         except Exception, e:
             print 'Command %s failed: %s' % (' '.join(j['cmd']), e)
             sys.stdout.flush()
@@ -194,8 +194,7 @@ class SubmitHost(Host):
         for j in job:
             jobnum = int(j)-1
             times[jobnum] =  job[j][2]
-            if job[j][3] == 0:
-                finished_jobs.append(jobnum)
+            finished_jobs.append(jobnum)
             if not S_ISDIR(os.stat(j).st_mode):
                 print "ERROR: job %s directory not found" % j
                 continue
@@ -205,7 +204,11 @@ class SubmitHost(Host):
                 outfile = glob('*.std%s' % ext)
                 if outfile:
                     f = open(outfile[0], 'r')
-                    grp.create_dataset('std%s' % ext, data=f.read())
+                    fdata = f.read()
+                    grp.create_dataset('std%s' % ext, data=fdata)
+                    if job[j][3] != 0:
+                        # error code was set
+                        print "ERROR: Job %s failed: %s" % (j, fdata)
                     f.close()
             for fn in self.prog.outfiles:
                 try:

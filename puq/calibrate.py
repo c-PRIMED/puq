@@ -1,75 +1,113 @@
 """
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2104 PUQ Authors
 See LICENSE file for terms.
 """
 
+import puq
 import numpy as np
-from puq.parameter import NormalParameter
-from puq.pdf import PDF
+import copy
 
-def calibrate(params, caldata, err, func, weight=20):
+
+def PymcPDFNode(name, pdf):
+    import pymc
+
+    def logp(value):
+        p = pdf.pdf(value)
+        if p <= 0:
+            return -np.inf
+        return np.log(p)
+
+    def random():
+        return pdf.random(1)[0]
+
+    value = (pdf.x[0] + pdf.x[-1])/2.0
+
+    return pymc.Stochastic(
+        logp=logp,
+        doc='Custom Pymc PDF Node',
+        name=name,
+        parents={},
+        random=random,
+        trace=True,
+        value=value,
+        dtype=type(value),
+        observed=False,
+        cache_depth=2,
+        plot=True,
+        verbose=0)
+
+
+def calibrate(params, caldata, err, func, num_samples=100000):
     """
-    Calibrate a variable or variables.
+    Performs Bayesian calibration for a variable or variables.
 
     Args:
-      params (list): Input parameters.
+      params (list): Input parameters. Parameters which have caldata
+      included are not calibrated. Parameters without caldata must
+      have a caltype. See XXX.
+
       caldata (list or array): Experimental output values.
-      err (float): Deviation representing the measurement error in caldata.
+
+      err (float or array of floats): Standard deviation of the measurement
+          error in **caldata**.  If this is a scalar, then use the same error
+          for every data point.
+
       func: Response function.
+
     Returns:
       A copy of **params** modified with the calibrated variables.
     """
     import pymc
-    from copy import copy
-
     print "Performing Bayesian Calibration..."
 
     v = {}
-    dev = {}
-    mean = {}
-    expand = False
+    means = {}
+    devs = {}
+    dlen = caldata.shape[0]
 
-    # First check to see if any parameters have PDFS or lists of PDFs for data and need expanded
-    for p in params:
-        if hasattr(p, 'caldata') and (isinstance(p.caldata, list) or isinstance(p.caldata, PDF)):
-            expand = True
-            caldata = np.repeat(caldata, weight)
-            break
+    num_burn = num_samples / 5
+    num_thin = num_samples / 10000
 
     # For each PUQ parameter
     for p in params:
         p.name = str(p.name)
         if hasattr(p, 'caldata') and p.caldata is not None:
-            # If calibration data is available, save that for pymc
-            if expand:
-                if isinstance(p.caldata, list):
-                    v[p.name] = np.array([x.ds(weight) for x in p.caldata]).flatten()
-                elif isinstance(p.caldata, np.ndarray):
-                    v[p.name] = np.repeat(p.caldata, weight)
-                elif isinstance(p.caldata, PDF):
-                    v[p.name] = np.repeat(p.caldata.ds(len(caldata)/weight), weight)
-                else:
-                    v[p.name] = p.caldata
-            else:
-                v[p.name] = p.caldata
+            # noncalibration parameter with measurements and errors
+            v[p.name] = p.caldata
         else:
-            # For now, we calibrate to a Normal.  Priors for mean and dev are uniform over a large range.
-            udev = np.sqrt((p.pdf.range[1] - p.pdf.range[0])**2 / 12.0)
-            mean[p.name] = pymc.Uniform(p.name+'_mean', *p.pdf.range, value=(p.pdf.range[0] + p.pdf.range[1])/2.0)
-            dev[p.name] = pymc.Uniform(p.name+'_dev', udev/1000.0, udev, value=udev/1000.0)
-            # create a stochastic node for pymc with the mean and dev from above and some initial values to try
-            v[p.name] = pymc.Normal(p.name,
-                                    mu=mean[p.name],
-                                    tau=1.0/dev[p.name]**2,
-                                    value=np.linspace(p.pdf.range[0], p.pdf.range[1], len(caldata)))
+            if p.caltype == 'S' or p.caltype is None:
+                means[p.name] = PymcPDFNode(p.name + '_mean', p.pdf)
+
+                def logp(value):
+                    if value <= 0:
+                        return -np.inf
+                    return -np.log(value)
+
+                devs[p.name] = pymc.Stochastic(
+                    name=p.name + '_dev',
+                    logp=logp,
+                    doc='',
+                    parents={},
+                    value=p.pdf.dev)
+                values = np.linspace(p.pdf.x[0], p.pdf.x[-1], dlen)
+                v[p.name] = pymc.Normal(
+                    p.name,
+                    mu=means[p.name],
+                    tau=1.0 / devs[p.name] ** 2,
+                    value=values)
+            elif p.caltype == 'D':
+                v[p.name] = PymcPDFNode(p.name + '_mean', p.pdf)
+            else:
+                msg = "Calibration type of '%s' undefined. Must be 'S' or 'D'" % p.caltype
+                raise ValueError(msg)
+
 
     # Create a node for the model output.  This is deterministic because the model output
     # (from the eval function, which is our response surface evaluation func) returns
     # the same value every time for a given set of input parameters.  The parents are
     # a python dictionary containing name, value pairs where the value is either an
     # array of experimental data or a pymc stochastic node.
-
     results = pymc.Deterministic(
         eval=func,
         name='results',
@@ -85,35 +123,30 @@ def calibrate(params, caldata, err, func, weight=20):
     pymc.Normal('exp_out', mu=results, tau=1.0/err**2, value=caldata, observed=True)
 
     # create the model
-    model = pymc.Model(mean.values() + dev.values())
+    model = pymc.Model(v)
 
-    # use MAP to set a starting points
+    # use MAP to set starting points
     map_ = pymc.MAP(model)
     map_.fit()
 
     # do the MCMC
     mcmc = pymc.MCMC(model)
     #mcmc.use_step_method(pymc.AdaptiveMetropolis, mean.values() + dev.values())
-    mcmc.sample(iter=50000, burn=10000, tune_interval=100, tune_throughout=True, progress_bar=True)
+    mcmc.sample(iter=num_samples, burn=num_burn, thin=num_thin, tune_interval=100, tune_throughout=True, progress_bar=True)
 
-    print
-    for m in mean.values():
-        # FIXME. save trace data instead
-        pymc.Matplot.plot(m, verbose=0)
-    for d in dev.values():
-        # FIXME. save trace data instead
-        pymc.Matplot.plot(d, verbose=0)
-
-    newparams = copy(params)
+    newparams = copy.copy(params)
     for i, p in enumerate(newparams):
         if hasattr(p, 'caldata') and p.caldata is not None:
             continue
-        m = np.mean(mean[p.name].trace[:])
-        d = np.mean(dev[p.name].trace[:])
-        print "Calibrated %s to Normal(%s, %s)." % (p.name, m, d)
-        newparams[i] = NormalParameter(p.name, p.description, mean=m, dev=d)
+        vals = v[p.name].trace[:].ravel()
+        print "Calibrated %s to a PDF with mean=%s and dev=%s" % (p.name, np.mean(vals), np.std(vals))
+        pdf = puq.ExperimentalPDF(vals, fit=True)
+        newparams[i] = puq.CustomParameter(newparams[i].name,
+                                           newparams[i].description,
+                                           pdf=pdf,
+                                           use_samples=True)
         try:
-            newparams[i].values = copy(p.values)
+            newparams[i].values = copy.copy(p.values)
         except:
             pass
         newparams[i].original_parameter = p

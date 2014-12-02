@@ -8,13 +8,15 @@ See LICENSE file for terms.
 '''
 from puq.pdf import NormalPDF, UniformPDF, ExperimentalPDF, WeibullPDF, RayleighPDF, ExponPDF, PDF
 from logging import debug
-import sys, matplotlib, sympy
+import sys
+import matplotlib
 if sys.platform == 'darwin':
     matplotlib.use('macosx', warn=False)
 else:
     matplotlib.use('tkagg', warn=False)
 import matplotlib.pyplot as plt
 import numpy as np
+
 
 # return an array of parameter samples
 def get_psamples(params, psamples=None, num=None):
@@ -39,7 +41,7 @@ def get_psamples(params, psamples=None, num=None):
     else:
         num_samples = 10000
 
-    if xseed is None and not hasattr(p,'pdf'):
+    if xseed is None and not hasattr(p, 'pdf'):
         return None
 
     for p in params:
@@ -60,6 +62,7 @@ def get_psamples(params, psamples=None, num=None):
             else:
                 xseed = np.column_stack((xseed, p.pdf.ds(num_samples)))
     return xseed
+
 
 class Parameter(object):
     '''
@@ -100,18 +103,12 @@ class Parameter(object):
             raise Exception('Unable to determine PDF type')
         return klass.__new__(klass, *args, **kw)
 
-    def __init__(self, *args, **kargs):
-        debug(args)
-
-    def check_name(self, name):
-        try:
-            e = sympy.S(name)
-            assert str(e.evalf()) == name
-            return name
-        except:
-            pass
-        print "Parameter name %s conflicts with internal variables.\nPlease use a different name." % name
-        sys.exit(0)
+    def __init__(self, name, description, **kwargs):
+        self.name = name
+        self.description = description
+        self.caldata = kwargs.pop('caldata', None)
+        self.caltype = kwargs.pop('caltype', None)
+        self.kwargs = kwargs
 
     def plot(self, **kwargs):
         self.pdf.plot(kwargs)
@@ -128,6 +125,7 @@ class Parameter(object):
         self.plot()
         p.text(self.pdf.__str__())
 
+
 class DParameter(Parameter):
     '''
     Class implementing a Discrete Parameter which contains values
@@ -139,8 +137,7 @@ class DParameter(Parameter):
       values:   A 1D list or array of values for the parameter.
     '''
     def __init__(self, name, description, values=None):
-        self.name = self.check_name(name)
-        self.description = description
+        Parameter.__init__(self, name, description)
         if values is None:
             self.values = None
         else:
@@ -149,6 +146,7 @@ class DParameter(Parameter):
     # This is what you see when the object is printed
     def __str__(self):
         return "DParameter %s (%s)\n\tvalues=%s" % (self.name, self.description, self.values)
+
 
 class NormalParameter(Parameter):
     '''
@@ -168,14 +166,13 @@ class NormalParameter(Parameter):
     '''
     def __init__(self, name, description, **kwargs):
         debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
-        self.name = self.check_name(name)
-        self.description = description
-        self.caldata = kwargs.pop('caldata', None)
-        self.pdf = NormalPDF(**kwargs)
+        Parameter.__init__(self, name, description, **kwargs)
+        self.pdf = NormalPDF(**self.kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
         return "NormalParameter %s (%s)\n\t%s" % (self.name, self.description, self.pdf.__str__())
+
 
 class RayleighParameter(Parameter):
     '''
@@ -198,14 +195,13 @@ class RayleighParameter(Parameter):
     '''
     def __init__(self, name, description, **kwargs):
         debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
-        self.name = self.check_name(name)
-        self.description = description
-        self.caldata = kwargs.pop('caldata', None)
-        self.pdf = RayleighPDF(**kwargs)
+        Parameter.__init__(self, name, description, **kwargs)
+        self.pdf = RayleighPDF(**self.kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
         return "RayleighParameter %s (%s)\n\t%s" % (self.name, self.description, self.pdf.__str__())
+
 
 class ExponParameter(Parameter):
     '''
@@ -228,14 +224,13 @@ class ExponParameter(Parameter):
     '''
     def __init__(self, name, description, **kwargs):
         debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
-        self.name = self.check_name(name)
-        self.description = description
-        self.caldata = kwargs.pop('caldata', None)
-        self.pdf = ExponPDF(**kwargs)
+        Parameter.__init__(self, name, description, **kwargs)
+        self.pdf = ExponPDF(**self.kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
         return "ExponParameter %s (%s)\n\t%s" % (self.name, self.description, self.pdf.__str__())
+
 
 class WeibullParameter(Parameter):
     '''
@@ -259,10 +254,8 @@ class WeibullParameter(Parameter):
     '''
     def __init__(self, name, description, **kwargs):
         debug("name:%s desc:%s kwargs:%s" % (name, description, kwargs))
-        self.name = self.check_name(name)
-        self.description = description
-        self.caldata = kwargs.pop('caldata', None)
-        self.pdf = WeibullPDF(**kwargs)
+        Parameter.__init__(self, name, description, **kwargs)
+        self.pdf = WeibullPDF(**self.kwargs)
 
     # This is what you see when the object is printed
     def __str__(self):
@@ -287,12 +280,9 @@ class CustomParameter(Parameter):
         ============ ===============================================
     '''
     def __init__(self, name, description, **kwargs):
-        #Parameter.__init__(self, args)
-        self.name = self.check_name(name)
-        self.description = description
+        Parameter.__init__(self, name, description, **kwargs)
         self.use_samples = kwargs.get('use_samples')
         self.pdf = kwargs.get('pdf')
-        self.caldata = kwargs.get('caldata')
 
         if self.pdf is None and self.caldata is None:
             self.usage(0)
@@ -331,6 +321,7 @@ class CustomParameter(Parameter):
         return "CustomParameter %s (%s)\n%s" %\
             (self.name, self.description, self.pdf.__str__())
 
+
 class UniformParameter(Parameter):
     '''
     Class implementing a Parameter with a Uniform distribution.
@@ -354,10 +345,8 @@ class UniformParameter(Parameter):
     :math:`mean = (min + max)/2`
     '''
     def __init__(self, name, description, **kwargs):
-        self.name = self.check_name(name)
-        self.description = description
-        self.caldata = kwargs.pop('caldata', None)
-        self.pdf = UniformPDF(**kwargs)
+        Parameter.__init__(self, name, description, **kwargs)
+        self.pdf = UniformPDF(**self.kwargs)
 
     def __str__(self):
         return "UniformParameter %s (%s)\n\t%s" %\
