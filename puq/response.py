@@ -1,6 +1,6 @@
 """
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013, 2014 PUQ Authors
 See LICENSE file for terms.
 """
 
@@ -21,6 +21,7 @@ else:
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import matplotlib.pyplot as plt
+
 
 class Function(object):
     """
@@ -349,6 +350,20 @@ class ResponseFunc(Function):
         rmsep = 100.0*rmse/(np.max(results) - np.min(results))
         return rmse, rmsep
 
+    def to_sampled(self):
+        """
+        Returns a new SampledFunc() from the ResponseFunc(), if possible.
+        """
+        if self.data is None:
+            raise ValueError("Data must be included in the ResponseFunc() to convert it to a SampledFunc()")
+        if self.params is None:
+            sf = SampledFunc(*[d for d in self.data.T], vars=self.vars)
+        else:
+            sf = SampledFunc(*[d for d in self.data.T], params=self.params)
+        sf.eqn = self.eqn
+        return sf
+
+
 class SampledFunc(Function):
     def __init__(self, *pts, **kwargs):
         if pts is None or len(pts) == 0:
@@ -412,3 +427,16 @@ class SampledFunc(Function):
     def eval(self, *pts):
         pts = np.broadcast_arrays(*pts)
         return self._interp_func(*pts)
+
+    def to_response(self):
+        """
+        Returns a new ResponseFunc() from the SampledFunc(), if possible.
+        """
+        if self.eqn is None:
+            raise ValueError("Equation required to convert it to a ResponseFunc()")
+
+        if self.params is None:
+            rf = ResponseFunc(self.eqn, vars=self.vars, data=np.column_stack((self.pts)))
+        else:
+            rf = ResponseFunc(self.eqn, params=self.params, data=np.column_stack((self.pts)))
+        return rf

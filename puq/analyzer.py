@@ -28,13 +28,14 @@ from urlparse import urlparse
 import h5py
 from puq import Parameter, PDF, ExperimentalPDF, pickle, unpickle, SampledFunc
 import math
-import webbrowser, shutil, atexit, shelve
+import webbrowser, shutil, atexit
 from scipy.stats import gaussian_kde
 
 DB_LIST = ["http://dash.prism.nanohub.org/prism/default/call/run/upload_service",
            "http://127.0.0.1:8000/prism/default/call/run/upload_service"
            ]
 PUQPREFS = "~/.puq"
+
 
 def upload_file(filename, rename=''):
     from poster.encode import multipart_encode
@@ -52,6 +53,7 @@ def upload_file(filename, rename=''):
 
     # Actually do the request, and get the response
     return urllib2.urlopen(request).read()
+
 
 class Dialog(Toplevel):
 
@@ -132,6 +134,7 @@ class Dialog(Toplevel):
     def apply(self):
         pass  # override
 
+
 class MyPrefs(Dialog):
 
     def __init__(self, parent, title=None, fname=''):
@@ -164,26 +167,34 @@ class MyPrefs(Dialog):
     def apply(self):
         self.result = self.box_value.get()
 
+
 def update_prefs(write=False):
     global PUQPREFS, DBADDR, DB_LIST
-    shelf = shelve.open(os.path.expanduser(PUQPREFS))
+    shelf = {}
 
     if write:
-        shelf["DBADDR"] = DBADDR
-        shelf["DB_LIST"] = DB_LIST
+        with open(os.path.expanduser(PUQPREFS), 'w') as f:
+            shelf["DBADDR"] = DBADDR
+            shelf["DB_LIST"] = DB_LIST
+            f.write(pickle(shelf))
         return
+    try:
+        f = open(os.path.expanduser(PUQPREFS), 'r')
+        shelf = unpickle(f.read())
+    except:
+        f = None
 
     if "DBADDR" in shelf:
         DBADDR = shelf["DBADDR"]
     else:
         DBADDR = DB_LIST[0]
-        shelf["DBADDR"] = DBADDR
+
     if "DB_LIST" in shelf:
         DB_LIST = shelf["DB_LIST"]
-    else:
-        shelf["DB_LIST"] = DB_LIST
 
-    shelf.close()
+    if f is not None:
+        f.close()
+
 
 def preferences():
     global DBADDR
@@ -191,6 +202,7 @@ def preferences():
     if m.result:
         DBADDR = m.result
         update_prefs(write=True)
+
 
 def ask_upload():
     from tkMessageBox import askyesno, showinfo, WARNING
@@ -253,6 +265,7 @@ def cleanup_and_exit(save):
     except:
         pass
 
+
 def ask_quit():
     global modified
     from tkMessageBox import askyesno, WARNING
@@ -263,8 +276,9 @@ def ask_quit():
             cleanup_and_exit(True)
     cleanup_and_exit(False)
 
-# checkbutton
+
 class CB:
+    # checkbutton
     CB_list = []
 
     def __init__(self, parent, txt, val=1, callback=None):
@@ -292,8 +306,9 @@ class CB:
             if name == n.txt:
                 return n.var.get()
 
-# radiobutton
+
 class RB:
+    # radiobutton
     RB_list = []
 
     def __init__(self, parent, values, val, callback=None):
@@ -321,6 +336,7 @@ class RB:
             if name == n.txt:
                 return n.var.get()
 
+
 class MyEntry:
     def __init__(self, parent, txt, var, val, callback=None):
         self.callback = callback
@@ -344,16 +360,21 @@ class MyEntry:
     def update(self, val):
         self.var.set(val)
 
+
 class PlotOption:
     def __init__(self, parent):
         self.frame = LabelFrame(parent, text="Plot Options")
         self.frame.pack(side=TOP, fill=BOTH)
 
     def state(self, state, val, path):
+        return
+        """
         if state == 'RESPONSE' or state == 'SAMPLED' or state == 'PDF':
             st = 'normal'
         else:
             st = 'disabled'
+        """
+
 
 class MB:
     def __init__(self, parent):
@@ -421,7 +442,7 @@ class MB:
         showinfo(message=__doc__, title='ABOUT')
 
     def state(self, st, val, path):
-        #print "MB state %s" % st
+        # print "MB state %s" % st
         self.st = st
         s0, s1 = DISABLED, DISABLED
         if st == 'PDF' or st == 'PARAMETER':
@@ -433,6 +454,7 @@ class MB:
         self.exportmenu.entryconfig(1, state=s0)
         self.exportmenu.entryconfig(2, state=s1)
         self.exportmenu.entryconfig(3, state=s0)
+
 
 class InitFrame:
     def __init__(self, parent):
@@ -498,6 +520,7 @@ class InitFrame:
         else:
             self.cleanup()
 
+
 class BasicFrame:
     def __init__(self, parent):
         self.txt = ScrolledText.ScrolledText(parent)
@@ -509,6 +532,8 @@ class BasicFrame:
             self.txt.pack(fill=BOTH, side=LEFT, expand=True)
         else:
             self.txt.pack_forget()
+
+
 class DataFrame:
     def __init__(self, parent):
         self.txt = ScrolledText.ScrolledText(parent)
@@ -521,6 +546,7 @@ class DataFrame:
             self.txt.pack(fill=BOTH, side=LEFT, expand=True)
         else:
             self.txt.pack_forget()
+
 
 class StdoutFrame:
     def __init__(self, parent):
@@ -546,6 +572,7 @@ class StdoutFrame:
             self.txt.pack(fill=BOTH, side=LEFT, expand=True)
         else:
             self.txt.pack_forget()
+
 
 class TextFrame:
     def __init__(self, parent):
@@ -602,9 +629,9 @@ class TextFrame:
         self.stext.config(state=DISABLED)
         self.stext.pack(fill=BOTH, side=TOP, expand=True)
 
-# might be a progressbar someday.
-class ProgressFrame:
 
+class ProgressFrame:
+    # might be a progressbar someday
     def __init__(self, parent):
         self.parent = parent
 
@@ -620,8 +647,8 @@ class ProgressFrame:
             except:
                 pass
 
-class PdfFrame:
 
+class PdfFrame:
     def __init__(self, parent):
         self.parent = parent
         PdfFrame.me = weakref.proxy(self)
@@ -938,8 +965,8 @@ class PdfFrame:
         if newmax != self.max:
             self.changed(max=newmax)
 
-class ParameterFrame:
 
+class ParameterFrame:
     def __init__(self, parent):
         self.parent = parent
         ParameterFrame.me = weakref.proxy(self)
@@ -1109,6 +1136,7 @@ class TimeFrame:
         plt.xlabel('Job')
         plt.ylabel('Seconds')
 
+
 class ResponseFrame:
     def __init__(self, parent):
         self.tframe = Frame(parent)
@@ -1118,6 +1146,7 @@ class ResponseFrame:
         try:
             self.tframe.pack_forget()
             self.canvas._tkcanvas.pack_forget()
+            plt.close(self.f)
             del self.canvas
             del self.f
         except:
@@ -1151,6 +1180,7 @@ class ResponseFrame:
             jfile.write(pickle(self.val))
 
     def state(self, st, val, path):
+        # print "ResponseFrame state", st, val, path
         self.cleanup()
         if st != 'RESPONSE':
             return
@@ -1178,8 +1208,8 @@ class ResponseFrame:
             self.a.grid(True)
             val.plot(fig=self.a)
 
-class ParFrame:
 
+class ParFrame:
     def __init__(self, parent):
         self.parent = parent
 
@@ -1208,7 +1238,7 @@ class ParFrame:
         t.column("pdf", width=400)
         t.heading("#0", text='Name')
         t.heading("#1", text='Description')
-        t.heading("#2", text='PDF')
+        t.heading("#2", text='PDFXX')
         for p in val.params:
             cname = p.__class__.__name__[:-9]
             pdf_str = '%s [%s - %s] mean=%s dev=%s mode=%s' % (cname, p.pdf.range[0], p.pdf.range[1], p.pdf.mean, p.pdf.dev, p.pdf.mode)
@@ -1217,8 +1247,8 @@ class ParFrame:
         scrollbar.config(command=t.yview)
         t.pack(side=TOP, fill=BOTH, expand=YES)
 
-class ParFrame2:
 
+class ParFrame2:
     def __init__(self, parent):
         self.parent = parent
 
@@ -1270,11 +1300,12 @@ class SurFrame:
         except:
             pass
 
-    def rbf_changed(self, rbfunc):
+    def surf_changed(self, rbfunc=None):
         global modified
         #print "rbf changed to ", rbfunc
         #print self.val.rbf
-        self.val.rbf = rbfunc
+        if rbfunc is not None:
+            self.val.rbf = rbfunc
         del h5[self.path]
         h5[self.path] = pickle(self.val)
         # invalidate the pdf
@@ -1303,9 +1334,10 @@ class SurFrame:
         if st != 'RESPONSE':
             return
 
+        self.val = val
+        self.path = path
+
         if isinstance(val, SampledFunc):
-            self.val = val
-            self.path = path
             self.surframe = LabelFrame(self.parent, text="Radial Basis Function")
             rbfvals = [
                 "multiquadric",
@@ -1315,7 +1347,10 @@ class SurFrame:
                 "inverse",
                 "gaussian"
             ]
-            self.rbf = MyCombobox(self.surframe, 'RBF', rbfvals, current=val.rbf, callback=self.rbf_changed)
+            self.rbf = MyCombobox(self.surframe, 'RBF', rbfvals, current=val.rbf, callback=self.surf_changed)
+            if hasattr(self.val, 'eqn'):
+                self.cbut = MyButton(self.surframe, text='Use Polynomials', cb=self.change)
+                self.cbut.button.pack(side=RIGHT, anchor='e', padx=5, pady=5)
         else:
             self.surframe = LabelFrame(self.parent, text="Surface")
 
@@ -1335,8 +1370,21 @@ class SurFrame:
             else:
                 bgcolor = ''
             self.rmse = MyLabel(self.surframe, value='%.3g%%' % rmsep, text='RMSE', bg=bgcolor)
-            self.rmse.frame.pack(side=TOP, anchor='w', padx=5, pady=5)
+            self.rmse.frame.pack(side=LEFT, anchor='w', padx=5, pady=5)
+            self.cbut = MyButton(self.surframe, text='Use Radial Basis Functions', cb=self.change)
+            self.cbut.button.pack(side=RIGHT, anchor='e', padx=5, pady=5)
         self.surframe.pack(side=LEFT, fill=BOTH, expand=1)
+
+    def change(self):
+        if isinstance(self.val, SampledFunc):
+            self.val = self.val.to_response()
+            self.cbut.update('Use Radial Basis Functions')
+            self.surf_changed()
+        else:
+            self.val = self.val.to_sampled()
+            self.cbut.update('Use Polynomials')
+            self.surf_changed("multiquadric")
+
 
 class MyCombobox:
     def __init__(self, parent, txt, values, current, callback=None):
@@ -1356,6 +1404,7 @@ class MyCombobox:
     def state(self, st, path):
         self.cb.config(state=st)
 
+
 class MyLabel:
     def __init__(self, parent, text, value, bg=''):
         self.frame = Frame(parent, background='black', bd=1)
@@ -1369,6 +1418,15 @@ class MyLabel:
 
     def update(self, val):
         self.label.config(text=val)
+
+
+class MyButton:
+    def __init__(self, parent, text, cb):
+        self.button = Button(parent, text=text, command=cb)
+
+    def update(self, val):
+        self.button['text'] = val
+
 
 class MyApp:
     global root
@@ -1458,7 +1516,7 @@ class MyApp:
         # Called when what is supposed to be displayed is changed.
         # val is the value of the object
         # path is a string with the hdf5 path of the object
-        # print "state_changed %s - %s - %s" % (st, val, path)
+        # print "MyApp state_changed %s - %s - %s" % (st, val, path)
         if st is None:
             st = MyApp.state
             val = MyApp.val
@@ -1599,6 +1657,7 @@ class MyApp:
         MyApp.state_changed(st, val, path)
         self.state_changed_method(st, val, path)
 
+
 def analyzer(sw, errors):
     global h5, root, modified, filename, fname_orig, sweep
 
@@ -1617,7 +1676,7 @@ def analyzer(sw, errors):
     update_prefs()
 
     root = Tk()
-    app = MyApp(root, h5, errors)
+    MyApp(root, h5, errors)
     root.title("PUQ Results: %s" % filename)
     root.protocol("WM_DELETE_WINDOW", ask_quit)
 
