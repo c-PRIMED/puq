@@ -164,87 +164,58 @@ def test_custom_pdf_single_fit():
 
 def test_custom_pdf_single():
     a = np.array([42])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
+    assert c.pdf.mean == 42
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 42
+
 
 def test_custom_pdf_zero():
     a = np.array([0])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
+    assert c.pdf.mean == 0
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 0
+
 
 def test_custom_pdf_zerozero():
-    a = np.array([0,0])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    a = np.array([0, 0])
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
+    assert c.pdf.mean == 0
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 0
+
 
 def test_custom_pdf_zerozerozero():
-    a = np.array([0,0,0])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    a = np.array([0, 0, 0])
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
+    assert c.pdf.mean == 0
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 0
+
 
 def test_custom_pdf_zerozerozero_fit():
-    a = np.array([0,0,0])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a, fit=True))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    a = np.array([0, 0, 0])
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a, fit=True))
+    assert c.pdf.mean == 0
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 0
+
 
 def test_custom_pdf_const():
     a = np.array([2,2,2,2,2,2,2,2,2,2,2])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a))
+    assert c.pdf.mean == 2
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 2
+
 
 def test_custom_pdf_const_fit():
     a = np.array([2,2,2,2,2,2,2,2,2,2,2])
-    ok = False
-    try:
-        c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a, fit=True))
-    except ValueError:
-        ok = True
-    except:
-        assert False, 'Wrong Exception'
-    if not ok:
-        assert False, 'No Exception when one was expected'
+    c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a, fit=True))
+    assert c.pdf.mean == 2
+    assert c.pdf.dev == 0
+    assert c.pdf.mode == 2
 
 
 #### EXCEPTION TESTING

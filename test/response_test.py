@@ -142,12 +142,6 @@ def test_rf_eval0():
     assert np.all(rf.eval(np.array([4]), np.array([5])) == [21.0])
     assert np.all(rf.eval(np.array([1,4,8]), np.array([2,5,9])) == [3.0, 21.0, 73.0])
 
-def test_rf_eval1():
-    rf = ResponseFunc('x*x+y', vars=(('x',(0,100)),('y',(0,100))))
-    # use keyword arguments
-    assert np.all(rf.eval(x=np.array([1,4,8]), y=np.array([2,5,9])) == [3.0, 21.0, 73.0])
-    assert np.all(rf.eval(y=np.array([2,5,9]), x=np.array([1,4,8])) == [3.0, 21.0, 73.0])
-
 def test_sf_eval0():
     pts = np.array([[0,0,1],[10,10,1],[100,100,1],[50,50,1],[100,50,1],[50,100,1],[50,0,1],[0,50,1]])
     sf = SampledFunc(pts[:,0], pts[:,1], pts[:,2], vars=(('x',(0,100)),('y',(0,100))))
