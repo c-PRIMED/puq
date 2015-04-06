@@ -1,6 +1,6 @@
 """
 This file is part of PUQ
-Copyright (c) 2013, 2014 PUQ Authors
+Copyright (c) 2013-2015 PUQ Authors
 See LICENSE file for terms.
 """
 
@@ -48,7 +48,10 @@ class Function(object):
 
         xx = meshgridn(*d)
         pts = np.vstack(map(np.ndarray.flatten, xx)).T
-        res = np.array(self.evala(pts))
+        res = self.evala(pts)
+        if type(res) is not np.ndarray:
+            return res, res
+
         h = []
         for i, p in enumerate(pts):
             if isinstance(p, np.ndarray):
@@ -89,7 +92,7 @@ class Function(object):
 
     def pdf(self, fit=True, params=[], force=False, min=None, max=None,
             return_samples=False, psamples=None):
-
+        print 'pdf', min, max
         if not self.params and not params:
             raise ValueError("Cannot generate PDF for response function without params.")
 
@@ -114,20 +117,11 @@ class Function(object):
 
         results = np.array(self.evala(xseed))
 
-        if min is None or max is None:
-            calc_min, calc_max = self.minmax()
-
         if min is None:
-            if np.min(results) < calc_min:
-                min = np.min(results)
-            else:
-                min = calc_min
+            min = np.min(results)
 
         if max is None:
-            if np.max(results) > calc_max:
-                max = np.max(results)
-            else:
-                max = calc_max
+            max = np.max(results)
 
         if params:
             self.params = saved_params
@@ -210,6 +204,9 @@ class Function(object):
                 xlab = "%s (%s)" % (xlab, self.params[0].description)
         if labels:
             plt.xlabel(xlab)
+        # some matplotlibs have broken limits when scatterplots and
+        # line plots are mixed
+        plt.xlim(np.min(x) - .02*np.min(x), np.max(x) + .02*np.max(x))
         return p
 
 class ResponseFunc(Function):
@@ -259,18 +256,16 @@ class ResponseFunc(Function):
 
     def _plot1(self, *args, **kwargs):
         p = Function._plot1(self, *args, **kwargs)
-        plt.title('Response Plot for %s' % self._eqn)
+        plt.title('Response Plot')
         if self.data is not None:
             # scatter plot actual data
             plt.scatter(self.data[:, 0], self.data[:, 1], color='black')
-        plt.ylabel(self._eqn)
         return p
 
     def _plot2(self, *args, **kwargs):
         ax = Function._plot2(self, *args, **kwargs)
         if self.data is not None:
             # scatter plot actual data
-            #print self.rmse()
             ax.scatter(self.data[:, 0], self.data[:, 1], self.data[:, 2], color='black')
         return ax
 
@@ -347,7 +342,10 @@ class ResponseFunc(Function):
         # rs will contain the results calculated from the response function
         rs = self.evala(self.data[:, :-1])
         rmse = np.sqrt(np.mean((results - rs)**2))
-        rmsep = 100.0*rmse/(np.max(results) - np.min(results))
+        if np.max(results) == np.min(results):
+            rmsep = 100.0*rmse
+        else:
+            rmsep = 100.0*rmse/(np.max(results) - np.min(results))
         return rmse, rmsep
 
     def to_sampled(self):
