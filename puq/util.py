@@ -11,12 +11,12 @@ import numpy as np
 from logging import info, debug, exception, warning, critical
 from puq.options import options
 from puq.hdf import get_result
-
+from puq.jpickle import pickle
 
 def dump_hdf5(name, v, desc=''):
     np.set_printoptions(threshold=np.nan)
-    print 'HDF5:%s:5FDH' % repr({'name': name, 'desc': desc, 'value': v})
-
+    line = pickle({'name': name, 'desc': desc, 'value': v})
+    print 'HDF5:%s:5FDH' % line
 
 def vprint(level, str):
     if options['verbose'] >= level:
