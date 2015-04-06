@@ -94,6 +94,8 @@ class Sweep(object):
         h = h.require_group('params')
         for p in self.psweep.params:
             h[p.name] = pickle(p)
+            h[p.name].attrs['description'] = p.description
+            h[p.name].attrs['label'] = p.label
 
         # input script
         if hasattr(self, 'input_script'):
@@ -240,14 +242,16 @@ class Sweep(object):
             for var in hf['output/data']:
                 if not isinstance(hf['output/data/%s' % var], h5py.Group):
                     tlen = len(hf['output/data/%s' % var].value)
-                    num_jobs = len(hf['output/jobs'])-1
+                    num_jobs = len(hf['output/jobs'])
+                    if 'time' in hf['output/jobs']:
+                        num_jobs -= 1
                     if tlen != num_jobs:
                         errors += 1
                         print "Expected %s data points for variable %s, but got %s." % (num_jobs, var, tlen)
                         self.analyze_errors(hf)
                         return errors
 
-        if not 'psamples' in hf:
+        if 'psamples' not in hf:
             s = get_psamples(self.psweep.params)
             if s is not None:
                 hf['psamples'] = s
@@ -307,7 +311,7 @@ class Sweep(object):
         v = x['value']
         n = x['name']
 
-        if not n in _vcache:
+        if n not in _vcache:
             if isinstance(v, ndarray):
                 _vcache[n] = np.empty([mjob] + list(v.shape))
             else:
