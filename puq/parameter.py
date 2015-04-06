@@ -106,6 +106,7 @@ class Parameter(object):
     def __init__(self, name, description, **kwargs):
         self.name = name
         self.description = description
+        self.label = kwargs.pop('label', name)
         self.caldata = kwargs.pop('caldata', None)
         self.caltype = kwargs.pop('caltype', None)
         self.kwargs = kwargs
