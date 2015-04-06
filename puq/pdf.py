@@ -53,6 +53,15 @@ class PDF(object):
         range = [(1.0 - _range)/2.0, (1.0 + _range)/2.0]
 
         self.x = xvals
+
+        if len(xvals) == 1 or xvals[0] == xvals[-1]:
+            self.x = [xvals[0]]
+            self.y = [1]
+            self.cdfy = [1]
+            self.mean = xvals[0]
+            self.dev = 0
+            return
+
         self.cdfy = np.append([0.0], np.cumsum((np.diff(yvals)/2.0 + yvals[:-1])*np.diff(xvals)))
         self.cdfy /= self.cdfy[-1]
 
@@ -60,11 +69,19 @@ class PDF(object):
         resample = False
         mmin, mmax = self.ppf([0, 1])
         dist = mmax - mmin
-        #print "range of pdf = [%s - %s]" % (mmin, mmax)
-        #print "range of PDF = [%s - %s]" % (xvals[0], xvals[-1])
-        #print "dist=%s" % dist
-        #print "proposed range = [%s - %s]" % (self.ppf(range[0]), self.ppf(range[1]))
-        #print "[%s , %s]" % ((mmin - self.ppf(range[0]))/dist, (mmax - self.ppf(range[1]))/dist)
+
+        if dist == 0.0:
+            self.x = [xvals[0]]
+            self.y = [1]
+            self.cdfy = [1]
+            self.mean = xvals[0]
+            self.dev = 0
+            return
+
+        # print "range of pdf = [%s - %s]" % (mmin, mmax)
+        # print "range of PDF = [%s - %s]" % (xvals[0], xvals[-1])
+        # print "dist=%s" % (dist)
+        # print "proposed range = [%s - %s]" % (self.ppf(range[0]), self.ppf(range[1]))
 
         if np.isnan(mmin) or abs((mmin - self.ppf(range[0])) / dist) > .1:
             mmin = self.ppf(range[0])
@@ -251,17 +268,17 @@ class PDF(object):
         return PDF(-self.x[::-1], self.y[::-1])
 
     def __radd__(self, b):
-        #print "__radd %s %s" % (self,b)
+        # print "__radd %s %s" % (self,b)
         return self._nadd(b)
 
     def _nadd(self, b):
-        #print "_nadd %s" % (b)
+        # print "_nadd %s" % (b)
         # add a scalar to a PDF
         return PDF(b + self.x, self.y)
 
     def __add__(self, b):
         "Add two PDFs, returning a new one."
-        #print "__add__ %s %s" % (self,b)
+        # print "__add__ %s %s" % (self,b)
         if isinstance(b, int) or isinstance(b, float) or isinstance(b, long):
             return self._nadd(b)
 
@@ -360,6 +377,8 @@ class PDF(object):
         Find the mode of the PDF.  The mode is the x value at which pdf(x)
         is at its maximum.  It is the peak of the PDF.
         """
+        if len(self.x) == 1:
+            return self.x[0]
         mode = None
         maxy = None
         for x, y in zip(self.x, self.y):
@@ -401,6 +420,7 @@ class PDF(object):
         self.plot()
         p.text(self.__str__())
 
+
 def _get_range(sfunc, min, max):
     " Truncate PDFs with long tails"
 
@@ -431,6 +451,7 @@ def _get_range(sfunc, min, max):
         max = mmax
 
     return min, max
+
 
 def ExponPDF(rate):
     """
@@ -471,6 +492,7 @@ def RayleighPDF(scale):
     min, max = _get_range(sfunc, None, None)
     x = np.linspace(min, max, nsamp)
     return PDF(x, sfunc.pdf(x))
+
 
 def WeibullPDF(shape, scale):
     """
@@ -546,6 +568,7 @@ def NetPDF(addr):
         raise Exception('Link is not a PDF')
     return p
 
+
 def UniformPDF(min=None, max=None, mean=None):
     """
     Creates a uniform Probability Density Function.
@@ -590,6 +613,7 @@ def UniformPDF(min=None, max=None, mean=None):
 
     return PDF([min, max], [1, 1])
 
+
 def TrianglePDF(min, mode, max):
     """
     Creates a triangle Probability Density Function.
@@ -607,11 +631,13 @@ def TrianglePDF(min, mode, max):
     min, mode, max = np.sort([min, mode, max])
     return PDF([min, mode, max], [0, 1, 0])
 
+
 def JeffreysPDF(min, max):
     # untested
     min = float(min)
     max = float(max)
     return PDF([min, max], [1.0 / (min * np.log(max/min)), 1.0 / (max * np.log(max/min))])
+
 
 def ExperimentalPDF(data, min=None, max=None, fit=False, bw=None, nbins=0, prior=None, error=None, force=False):
     """
@@ -648,6 +674,13 @@ def ExperimentalPDF(data, min=None, max=None, fit=False, bw=None, nbins=0, prior
         raise ValueError('max cannot be set to less than maximum value in the data.')
     if nbins and nbins <= 1:
         raise ValueError("ERROR: invalid number of bins: %s" % nbins)
+
+    # constant
+    if np.min(data) == np.max(data) and not error:
+        p = PDF([np.min(data)], [1])
+        p.data = data
+        return p
+
     if len(data) < 1 or (len(data) == 1 and not error):
         raise ValueError("ERROR: need at least two data points to build a PDF, or a prior and 1 data point.")
 
@@ -675,7 +708,10 @@ def ExperimentalPDF(data, min=None, max=None, fit=False, bw=None, nbins=0, prior
         if nbins == 0:
             iqr = scipy.stats.scoreatpercentile(data, 75) - scipy.stats.scoreatpercentile(data, 25)
             if iqr == 0.0:
-                raise ValueError("Cannot generate histogram fron non-variable data.")
+                # constant
+                p = PDF([np.min(data)], [1])
+                p.data = data
+                return p
             nbins = int((np.max(data) - np.min(data)) / (2*iqr/len(data)**(1.0/3)) + .5)
 
         y, bins = np.histogram(data, nbins, normed=True)
@@ -690,6 +726,11 @@ def ExperimentalPDF(data, min=None, max=None, fit=False, bw=None, nbins=0, prior
                 mmax = max
             x = np.linspace(float(mmin), float(mmax), options['pdf']['numpart'])
             y = interpolate.splev(x, sp, der=0)
+            if np.isnan(np.sum(y)):
+                # interpolate failed. constant pdf
+                p = PDF([np.min(data)], [1])
+                p.data = [data[0]]
+                return p
             y[y < 0] = 0    # if the extrapolation goes negative...
             p = PDF(x, y)
         else:
@@ -697,6 +738,7 @@ def ExperimentalPDF(data, min=None, max=None, fit=False, bw=None, nbins=0, prior
             p = PDF([np.min(data), np.max(data)], [1, 1])
     p.data = data
     return p
+
 
 def HPDF(data, min=None, max=None):
     """
