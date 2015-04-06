@@ -10,13 +10,18 @@ options = {
     'keep': 0,
     'plot':
         {
-        'format' : 'i',
+            'format': 'i',
         },
     'pdf':
         {
-        'numpart': 100,
-        'range': 0.9999,
-        'srange': 0.998,
+            # number of sample points in PDF
+            'numpart': 100,
+
+            # range to use for building response
+            'range': 0.999,
+
+            # range to use for printing
+            'srange': 0.995,
         },
     }
 
