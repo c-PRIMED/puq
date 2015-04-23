@@ -31,6 +31,7 @@ class Function(object):
     def evala(self, p):
         return self.eval(*p.T)
 
+    # find min and max output of a response
     def minmax(self):
         import heapq
         from scipy.optimize import fmin_l_bfgs_b
@@ -138,8 +139,6 @@ class Function(object):
         self.params = params
         return [(p.name, (p.pdf.range[0], p.pdf.range[1])) for p in params]
 
-    # FIXME: we can do 4D plots using colormaps and slicing.
-
     def plot(self, *args, **kwargs):
         dims = len(self.vars)
         if dims > 2:
@@ -208,6 +207,7 @@ class Function(object):
         # line plots are mixed
         plt.xlim(np.min(x) - .02*np.min(x), np.max(x) + .02*np.max(x))
         return p
+
 
 class ResponseFunc(Function):
     """
@@ -391,7 +391,7 @@ class SampledFunc(Function):
         return ax
 
     def _reinit_(self):
-        #print "REINIT SampledFunc", type(self.pts) is np.ndarray
+        # print "REINIT SampledFunc", type(self.pts) is np.ndarray
         self.rbfunc = str(self.rbfunc)
 
         # backwards compatability Mar 2013.
@@ -407,7 +407,7 @@ class SampledFunc(Function):
         return self.eps
 
     def set_epsilon(self, eps):
-        #print "Setting epsilon to %s" % eps
+        # print "Setting epsilon to %s" % eps
         self.eps = eps
         self._reinit_()
     epsilon = property(get_epsilon, set_epsilon, None, None)
@@ -416,7 +416,7 @@ class SampledFunc(Function):
         return self.rbfunc
 
     def set_rbf(self, rbf):
-        #print "Setting rbf to %s" % rbf
+        # print "Setting rbf to %s" % rbf
         self.rbfunc = rbf
         self._reinit_()
     rbf = property(get_rbf, set_rbf, None, None)
