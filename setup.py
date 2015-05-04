@@ -5,7 +5,6 @@ import os
 import sys
 import inspect
 from distutils.cmd import Command
-
 import versioneer
 import setuptools
 from setuptools.command.test import test as TestCommand
@@ -44,7 +43,7 @@ CONSOLE_SCRIPTS = []
 versioneer.VCS = 'git'
 versioneer.versionfile_source = os.path.join(MAIN_PACKAGE, '_version.py')
 versioneer.versionfile_build = os.path.join(MAIN_PACKAGE, '_version.py')
-versioneer.tag_prefix = 'v'  # tags are like v1.2.0
+versioneer.tag_prefix = ''  # tags are like 1.2.0
 versioneer.parentdir_prefix = MAIN_PACKAGE + '-'
 
 
