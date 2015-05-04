@@ -2,6 +2,7 @@ include versioneer.py
 include *.rst
 include *.txt
 recursive-include puq *.py
+recursive-include src Makefile setup.py *.cc *.cpp *.h *.pyx
 recursive-include puqutil *.py *.f90 *.h
 recursive-include doc *.rst
 recursive-include examples *

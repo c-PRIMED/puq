@@ -2,7 +2,7 @@
 Introduction
 ************
 
-:Version: 2.2
+:Version: 2.2.9
 :Authors: Martin Hunt
 :Web site: https://github.com/c-PRIMED/puq
 :Documentation: http://c-primed.github.io/puq/
