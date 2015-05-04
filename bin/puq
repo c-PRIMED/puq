@@ -3,11 +3,13 @@
 This program does parameter sweeps for uncertainty
 quantification and optimization.
 
-Usage: puq [-q|-v] [start|stop|status|resume|analyze|plot]
+Usage: puq [-q|-v|-k] [start|stop|status|resume|analyze|plot]
 Options:
   -q                           Quiet.  Useful for scripts.
 
   -v                           Verbose. Show even more information.
+
+  -V, --version                Print version and exit.
 
   -k                           Keep temporary directories.
 
@@ -337,6 +339,7 @@ if __name__ == '__main__':
     parser.add_option("-d", action="store_true", help="Debug")
     parser.add_option("-q", action="store_true", help="Quiet")
     parser.add_option("-v", action="store_true", help="Verbose")
+    parser.add_option("-V", "--version", action="store_true", help="Version", dest="V")
     parser.add_option("-k", action="store_true", help="Keep Directories")
     (opt, args) = parser.parse_args()
 
@@ -364,6 +367,10 @@ if __name__ == '__main__':
              "read": puq.read.read,
              "monitor": resume,
     }
+    if opt.V:
+        print puq.__version__
+        sys.exit(0)
+
     if len(args) == 0:
         usage()
     elif funcs.has_key(args[0]):
