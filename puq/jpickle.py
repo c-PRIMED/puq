@@ -54,6 +54,15 @@ class SympyMulHandler(jsonpickle.handlers.BaseHandler):
         return sympy.S(obj['value'])
 jsonpickle.handlers.registry.register(sympy.Mul, SympyMulHandler)
 
+from sympy.core.numbers import Float
+class SympyFloatHandler(jsonpickle.handlers.BaseHandler):
+    def flatten(self, obj, data):
+        data['value'] = str(obj)
+        return data
+    def restore(self, obj):
+        return sympy.S(obj['value'])
+jsonpickle.handlers.registry.register(Float, SympyFloatHandler)
+
 class NumpyArrayHandler(jsonpickle.handlers.BaseHandler):
     def flatten(self, obj, data):
         #print "arrayhandler flatten", obj.dtype

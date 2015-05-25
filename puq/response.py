@@ -93,7 +93,7 @@ class Function(object):
 
     def pdf(self, fit=True, params=[], force=False, min=None, max=None,
             return_samples=False, psamples=None):
-        print 'pdf', min, max
+
         if not self.params and not params:
             raise ValueError("Cannot generate PDF for response function without params.")
 
@@ -116,7 +116,14 @@ class Function(object):
         else:
             xseed = psamples
 
-        results = np.array(self.evala(xseed))
+        results = self.evala(xseed)
+
+        # If the response surface is constant, 'results' is a constant.
+        # We will need to return an appropriate array filled with it.
+        if type(results) != np.ndarray:
+            val = results
+            results = np.empty(xseed.shape[0])
+            results.fill(val)
 
         if min is None:
             min = np.min(results)
