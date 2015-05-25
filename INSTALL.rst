@@ -32,7 +32,7 @@ during the installation process.
 
 * `h5py`_ : A Pythonic interface to the HDF5 binary data format. Requires the `HDF5`_ library.
 * `SciPy`_ : Library of algorithms for mathematics, science and engineering.
-* `nose`_ : A test discovery-based unittest extension (required to run the test suite).
+* `pytest`_ : A Python unit testing tool.
 * `poster`_ : poster provides a set of classes and functions to faciliate making HTTP POST (or PUT) requests using the standard multipart/form-data encoding.
 * `jsonpickle`_ : jsonpickle is a Python library for serialization and deserialization of complex Python objects to and from JSON.
 * `PyMC`_ : PyMC is a python module that implements Bayesian statistical models and fitting algorithms, including Markov chain Monte Carlo.

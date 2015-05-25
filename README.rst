@@ -49,7 +49,7 @@ PUQ requires the following Python modules:
 - h5py >= 1.3
 - jsonpickle
 - poster
-- nose
+- pytest
 
 
 Install
