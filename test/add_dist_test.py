@@ -6,12 +6,18 @@ Tests Smolyak, MonteCarlo, and LHS
 Usage: add_dist.py
 """
 from puq import *
-import h5py, math, os
+import h5py
+import math
+import os
 from numpy import allclose
 from puq.jpickle import unpickle
 
+
 options['verbose'] = False
 fname = 'add_dist.hdf5'
+
+dname = os.path.dirname(os.path.realpath(__file__))
+progname = os.path.join(dname, 'vel_add.py')
 
 # Two Normal distributions, Smolyak
 def run(progname):
@@ -42,8 +48,7 @@ def run_uniformMC(progname):
     return Sweep(uq, InteractiveHost(), progname)
 
 def test_add_norm_dist():
-    print os.getcwd()
-    sw = run('test/vel_add.py')
+    sw = run(progname)
     sw.run(fname, overwrite=True)
     sw.analyze()
 
@@ -61,12 +66,12 @@ def test_add_norm_dist():
     pdf = tv.pdf()
     assert(allclose(pdf.mean, 110., atol=.03))
     dev = math.sqrt(13)
-    assert(allclose(pdf.dev, dev, atol=.1))
+    assert(allclose(pdf.dev, dev, atol=.15))
     h5.close()
     os.remove(fname)
 
 def test_add_unif_dist():
-    sw = run_uniform('test/vel_add.py')
+    sw = run_uniform(progname)
     sw.run(fname, overwrite=True)
     sw.analyze()
 
@@ -91,7 +96,7 @@ def test_add_unif_dist():
     os.remove(fname)
 
 def test_add_norm_distMC():
-    sw = runMC('test/vel_add.py')
+    sw = runMC(progname)
     sw.run(fname, overwrite=True)
     sw.analyze()
 
@@ -103,7 +108,7 @@ def test_add_norm_distMC():
     os.remove(fname)
 
 def test_add_unif_distMC():
-    sw = run_uniformMC('test/vel_add.py')
+    sw = run_uniformMC(progname)
     sw.run(fname, overwrite=True)
     sw.analyze()
 

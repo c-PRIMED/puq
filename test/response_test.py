@@ -60,7 +60,7 @@ def test_rf_simp_4_params():
     z = UniformParameter('z', 'third variable', min=20, max=22)
 
     rf = ResponseFunc('1 + 2*x +y**2 + 7*x*z**2', params=[x,y,z])
-
+    pdf, samples = rf.pdf(return_samples=True)
     s = str(rf.simplify(1e-3))
     assert  s == 'y**2 + 7*x*z**2' or s == '7*x*z**2 + y**2' or s == '7.0*x*z**2 + 1.0*y**2'
     s = str(rf.simplify(1e-4))
@@ -281,3 +281,6 @@ def test_sf_eval1_P():
     assert np.allclose(sf.eval(np.array([0]), np.array([0,5,10])), [0.,3.2,0.], rtol=.1)
     assert np.allclose(sf.eval(np.array([3]), np.array([0,5,10])), [2.88,7.45,2.88], rtol=.1)
     assert np.allclose(sf.eval(np.array([7]), np.array([0,5,10])), [7.18,11.95,7.18], rtol=.1)
+
+if __name__ == "__main__":
+    test_rf_simp_4_params()

@@ -17,7 +17,7 @@ def compare_curves(x1, y1, x2, y2, **args):
     assert np.allclose(ay, y2, **args)
 
 n = NormalParameter('x','x',mean=10,dev=1)
-norm80 = n.pdf.ds(80)
+norm80 = n.pdf.lhs(80)
 
 # test mean and deviation
 def test_custom_pdf_meandev():
@@ -35,9 +35,9 @@ def test_custom_pdf_lhs():
 
     # test the lhs() function to see if the curve it generates is
     # close enough
-    data = c.pdf.ds(1000)
+    data = c.pdf.lhs(1000)
     dx,dy = _hisplot(data, 40)
-    compare_curves(c.pdf.x, c.pdf.y, dx, dy, atol=.004)
+    compare_curves(c.pdf.x, c.pdf.y, dx, dy, atol=.01)
 
 
 # test lhs1()
