@@ -35,13 +35,13 @@ class PBSHost(Host):
         if env:
             try:
                 fd = open(env, 'r')
+                fd.close()
             except IOError as e:
                 print
                 print "Trying to read environment script '%s'" % env
                 print "I/O error(%s): %s" % (e.errno, e.strerror)
                 print
                 sys.exit(1)
-        fd.close()
         self.env = env
         self.cpus = cpus
         self.cpus_per_node = cpus_per_node
