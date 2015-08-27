@@ -153,11 +153,12 @@ def test_sf_eval1():
     z = np.array([0,0,5,10,5,10,10])
     sf = SampledFunc(x,y,z, vars=(('x',(0,100)),('y',(0,100))))
     assert np.allclose(sf.eval(np.array([5]), np.array([5])), [10.], rtol=1e-6)
-    assert np.allclose(sf.eval(np.array([0,0,0]), np.array([0,5,10])), [0.,3.2,0.], rtol=.1)
+
+    assert np.allclose(sf.eval(np.array([0,5,0]), np.array([0,0,10])), [0.,5,0.], atol=.01)
     assert np.allclose(sf.eval(np.array([3,3,3]), np.array([0,5,10])), [2.88,7.45,2.88], rtol=.1)
     assert np.allclose(sf.eval(np.array([7,7,7]), np.array([0,5,10])), [7.18,11.95,7.18], rtol=.1)
     # same again, using broadcasting
-    assert np.allclose(sf.eval(np.array([0]), np.array([0,5,10])), [0.,3.2,0.], rtol=.1)
+    assert np.allclose(sf.eval(np.array([0]), np.array([0,10])), [0., 0.], atol=.1)
     assert np.allclose(sf.eval(np.array([3]), np.array([0,5,10])), [2.88,7.45,2.88], rtol=.1)
     assert np.allclose(sf.eval(np.array([7]), np.array([0,5,10])), [7.18,11.95,7.18], rtol=.1)
 
@@ -278,9 +279,10 @@ def test_sf_eval1_P():
     z = np.array([0,0,5,10,5,10,10])
     sf = SampledFunc(x,y,z, vars=(('x',(0,100)),('y',(0,100))))
     sf = unpickle(pickle(sf))
-    assert np.allclose(sf.eval(np.array([0]), np.array([0,5,10])), [0.,3.2,0.], rtol=.1)
+    assert np.allclose(sf.eval(np.array([0]), np.array([0,10])), [0.,0.], atol=.01)
     assert np.allclose(sf.eval(np.array([3]), np.array([0,5,10])), [2.88,7.45,2.88], rtol=.1)
     assert np.allclose(sf.eval(np.array([7]), np.array([0,5,10])), [7.18,11.95,7.18], rtol=.1)
 
 if __name__ == "__main__":
-    test_rf_simp_4_params()
+    test_sf_eval1()
+    test_sf_eval1_P()
