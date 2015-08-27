@@ -5,13 +5,14 @@ import time
 import re, os, sys, subprocess
 import numpy as np
 
+
 class PBSHost(Host):
     """
     Queues jobs using the PBS batch scheduler.
     Supports Torque and PBSPro.
 
     Args:
-      env(str): Bash environment script (.sh) to be sourced.
+      env(str): Bash environment script (.sh) to be sourced. Optional.
       cpus(int): Number of cpus each process uses. Required.
       cpus_per_node(int): How many cpus to use on each node.  Required.
       qname(str): The name of the queue to use.
@@ -22,7 +23,7 @@ class PBSHost(Host):
       qlimit(int): Max number of PBS jobs to submit at once. Default is 200.
     """
 
-    def __init__(self, env,  cpus=0, cpus_per_node=0,
+    def __init__(self, env='',  cpus=0, cpus_per_node=0,
                  qname='standby', walltime='1:00:00', modules='', pack=1, qlimit=200):
         Host.__init__(self)
         if cpus <= 0:
@@ -31,14 +32,15 @@ class PBSHost(Host):
         if cpus_per_node <= 0:
             print "You must specify cpus_per_node when creating a PBSHost object."
             raise ValueError
-        try:
-            fd = open(env, 'r')
-        except IOError as e:
-            print
-            print "Trying to read %s" % env
-            print "I/O error(%s): %s" % (e.errno, e.strerror)
-            print
-            sys.exit(1)
+        if env:
+            try:
+                fd = open(env, 'r')
+            except IOError as e:
+                print
+                print "Trying to read environment script '%s'" % env
+                print "I/O error(%s): %s" % (e.errno, e.strerror)
+                print
+                sys.exit(1)
         fd.close()
         self.env = env
         self.cpus = cpus
@@ -54,7 +56,7 @@ class PBSHost(Host):
         self.jnum = 0
         self.qlimit = qlimit
         # checkjob on Carter is frequently broken
-        #self.has_checkjob = (os.system("/bin/bash -c 'checkjob --version 2> /dev/null'") >> 8) == 0
+        # self.has_checkjob = (os.system("/bin/bash -c 'checkjob --version 2> /dev/null'") >> 8) == 0
         self.has_checkjob = False
         self.has_torque = os.path.isdir('/var/spool/torque')
 
@@ -199,7 +201,7 @@ class PBSHost(Host):
         else:
             f.write('#PBS -l select=%s:ncpus=%s:mpiprocs=%s\n' % (nodes, cpn, mcpu))
         f.write('#PBS -l walltime=%s\n' % walltime)
-        #f.write('#PBS -l place=excl:scatter\n')
+        # f.write('#PBS -l place=excl:scatter\n')
         f.write('#PBS -o %s.pbsout\n' % fname)
         f.write('#PBS -e %s.pbserr\n' % fname)
         if self.env:
@@ -223,11 +225,11 @@ class PBSHost(Host):
             j['job'] = job
             j['status'] = 'Q'
             d = {'jnum': self.jnum,
-              'joblist': joblist,
-              'job_state': 'Q',
-              'queue': self.qname,
-              'Submit_arguments': '%s.pbs' % fname,
-              'jobid': job}
+                 'joblist': joblist,
+                 'job_state': 'Q',
+                 'queue': self.qname,
+                 'Submit_arguments': '%s.pbs' % fname,
+                 'jobid': job}
         self.jnum += 1
         return d
 
