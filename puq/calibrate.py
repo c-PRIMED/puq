@@ -60,6 +60,7 @@ def calibrate(params, caldata, err, func, num_samples=100000):
     """
     import pymc
     print "Performing Bayesian Calibration..."
+    # print params, caldata, err, func
 
     v = {}
     means = {}

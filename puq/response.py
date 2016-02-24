@@ -249,7 +249,7 @@ class ResponseFunc(Function):
     def _reinit_(self):
         self.vnames = map(str, self.vnames)
         v = sympy.symbols(self.vnames)
-        self.eval = lambdify(v, self._eqn)
+        self.eval = lambdify(v, self._eqn, dummify=False)
 
     @property
     def eqn(self):
@@ -259,7 +259,7 @@ class ResponseFunc(Function):
     def eqn(self, value):
         self._eqn = value
         v = sympy.symbols(self.vnames)
-        self.eval = lambdify(v, self._eqn)
+        self.eval = lambdify(v, self._eqn, dummify=False)
 
     def _plot1(self, *args, **kwargs):
         p = Function._plot1(self, *args, **kwargs)
