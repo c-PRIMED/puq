@@ -205,8 +205,8 @@ def setup_package():
           entry_points={'console_scripts': CONSOLE_SCRIPTS},
           zip_safe=False,
           scripts=['bin/puq'],
-          data_files=[('puq', ['puq/spgrid_cache.hdf5'])],
-    )
+          package_data={'puq': ['spgrid_cache.hdf5']},
+          )
 
 if __name__ == "__main__":
     setup_package()
