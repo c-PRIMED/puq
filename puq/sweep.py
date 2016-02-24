@@ -270,6 +270,7 @@ class Sweep(object):
     def _calibrate(self, hf):
         ovar = get_output_names(hf)[0]
         rs = unpickle(hf["/smolyak/%s/response" % ovar].value)
+        # print "Calling calibrate from sweep"
         self.psweep.params = calibrate(self.psweep.params, self.caldata, self.err, rs.eval)
 
     def _dump_hdf5_cache(self, hf, d):

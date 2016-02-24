@@ -91,12 +91,17 @@ def process_data(hf, grpname, callback):
             vdesc = d.attrs['description']
         except:
             vdesc = var
+        try:
+            vlab = d.attrs['label']
+        except:
+            vlab = var
 
         # create HDF5 group for it
         if var in grp:
             del grp[var]
         vgrp = grp.require_group(var)
         vgrp.attrs['description'] = str(vdesc)
+        vgrp.attrs['label'] = str(vlab)
 
         vprint(1, "\nProcessing %s" % d)
         d = get_result(hf, var)

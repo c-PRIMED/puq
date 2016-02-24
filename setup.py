@@ -8,7 +8,7 @@ from distutils.cmd import Command
 import versioneer
 import setuptools
 from setuptools.command.test import test as TestCommand
-from setuptools import setup, Extension
+from setuptools import setup
 
 __location__ = os.path.join(os.getcwd(), os.path.dirname(
     inspect.getfile(inspect.currentframe())))
@@ -80,7 +80,6 @@ class PyTest(TestCommand):
         params = {"args": self.test_args}
         if self.cov:
             params["args"] += self.cov
-            params["plugins"] = ["cov"]
         if self.junitxml:
             params["args"] += self.junitxml
         errno = pytest.main(**params)
@@ -206,13 +205,7 @@ def setup_package():
           entry_points={'console_scripts': CONSOLE_SCRIPTS},
           zip_safe=False,
           scripts=['bin/puq'],
-          ext_modules=[
-          Extension("sparse_grid_cc",
-                    sources=["src/sg.cpp", "src/sparse_grid_cc.cpp"],
-                    include_dirs=incdirs,
-                    language="c++",
-                    libraries=["stdc++"]),
-          ],
+          data_files=[('puq', ['puq/spgrid_cache.hdf5'])],
     )
 
 if __name__ == "__main__":

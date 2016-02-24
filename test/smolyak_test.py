@@ -3,7 +3,7 @@ Everything below here is for testing. The values in 'values' are precomputed fro
 the smolyak sparse grid matlab code. They should match our c++ version or something
 is wrong.
 """
-import sparse_grid_cc
+from puq.sparse_grid import sgrid
 from numpy import array, asarray, zeros
 
 values = \
@@ -157,8 +157,8 @@ def find_match(x, a):
     assert False
 
 def _sscc_tst(d, l):
-    return sparse_grid_cc.sgrid(d,l)
-    
+    return sgrid(d,l)
+
 def test_sscc_1_1():
     expected = values[0]
     do_tst(1,1,expected)

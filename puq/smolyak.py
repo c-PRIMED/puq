@@ -6,15 +6,16 @@ Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
 
-import sparse_grid_cc
 import numpy as np
 from puq.smolyak_funcs import legendre_nd, jacobi_e2_nd, nelms, chaos_sequence
 from puq.util import process_data, vprint
 from puq.psweep import PSweep
 from puq.jpickle import pickle
+from puq.sparse_grid import sgrid
 from collections import defaultdict
 from logging import debug
 from response import ResponseFunc
+
 
 class Smolyak(PSweep):
     """
@@ -37,7 +38,7 @@ class Smolyak(PSweep):
 
     def _calculate_params(self):
         # self.grid is the original smolyak grid
-        self.grid = sparse_grid_cc.sgrid(len(self.params), self.level)
+        self.grid = sgrid(len(self.params), self.level)
 
         # pgrid is the scaled grid.
         # used for generating parameter values
