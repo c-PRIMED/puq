@@ -63,10 +63,10 @@ class Sweep(object):
         h5 = h5py.File(self.fname + '.hdf5')
 
         # write HDF5 header information, once only
-        if not 'version' in h5.attrs:
+        if 'version' not in h5.attrs:
             h5.attrs['MEMOSA_UQ'] = 'MEMOSA'
             h5.attrs['version'] = 201
-            #h5.attrs['id'] = self.id
+            # h5.attrs['id'] = self.id
             h5.attrs['date'] = time.strftime("%b %d %H:%M %Z %Y", time.localtime())
             h5.attrs['hostname'] = gethostname()
             h5.attrs['username'] = pwd.getpwuid(os.getuid()).pw_name
