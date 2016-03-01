@@ -1,4 +1,5 @@
 import numpy as np
+from puq.jpickle import pickle
 
 
 def dump_hdf5(name, v, desc=''):
