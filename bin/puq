@@ -63,6 +63,8 @@ def usage():
 
 # open a sweep file given filename
 def open_hdf5_file(fname, mode='r'):
+    if type(fname) is tuple and len(fname) > 0:
+        fname = fname[0]
     if fname:
         filename = os.path.splitext(fname)[0] + '.hdf5'
     else:
