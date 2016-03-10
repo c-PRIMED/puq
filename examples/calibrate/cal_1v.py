@@ -6,25 +6,32 @@ import pylab
 def model(x):
     return (x-4)**3
 
-# measurement error for data
-sigma = 0.1
-
+# our real value of x
 real_x = puq.NormalParameter('x', 'x', mean=5, dev=0.1)
 
+# We take 25 samples of x
 num_samples = 25
-x_data = real_x.pdf.ds(num_samples)
-x_data.sort()
-z_data = model(x_data)
-z_data_noisy = z_data + sigma * np.random.randn(len(z_data))
-#nplot(x_data, .001, z_data, sigma)
-real_x.pdf.plot(color='b')
+x_data = real_x.pdf.lhs(num_samples)
+x_data.sort()  # sort for easier plotting
 
-# prior for x
-x = puq.UniformParameter('x', 'x', min=1, max=10)
+# compute z using our x samples
+z_data = model(x_data)
+
+# add some 'measurement' noise
+sigma = 0.1
+z_data_noisy = z_data + sigma * np.random.randn(len(z_data))
+
+# prior for x. All we assume is x is between 2 and 25
+# caltype is 'S' because we want to calibrate
+# mean and deviation of x
+x = puq.UniformParameter('x', 'x', min=2, max=25, caltype='S')
 
 # do calibration
 calibrated = puq.calibrate([x], z_data_noisy, sigma, model)
 print calibrated[0]
+
+# plot actual and calibrated
+real_x.pdf.plot(color='b')
 calibrated[0].pdf.plot(color='r')
 pylab.show()
 
