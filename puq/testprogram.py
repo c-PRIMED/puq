@@ -3,7 +3,9 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
-import os, shutil
+import os
+import shutil
+
 
 class TestProgram(object):
     """
@@ -78,7 +80,7 @@ class TestProgram(object):
         if exe.find('%1') > 0:
             # old style - deprecated
             for i in range(len(args), 0, -1):
-                name, val  = args[i-1]
+                name, val = args[i-1]
                 mstr = '%%%d' % i
                 exe = exe.replace(mstr, str(val))
         else:
