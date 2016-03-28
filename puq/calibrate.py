@@ -54,7 +54,7 @@ class Calibrate(object):
     # model can be response surface, equation, python function
 
     def __init__(self, model, cvars, nvars, outvar):
-        print 'Calibration Init'
+
         out_var_name = outvar.keys()[0]
 
         if callable(model):
@@ -245,8 +245,8 @@ class Calibrate(object):
             num_burn = self.num_burn
             num_thin = self.num_thin
         else:
-            if type(x) == tuple:
-                if len(x) != 3:
+            if type(samples) == tuple:
+                if len(samples) != 3:
                     raise ValueError("Error: samples should be a number or tuple of length 3.")
                 num_samples, num_burn, num_thin = samples
             else:
@@ -344,7 +344,7 @@ def calibrate(params, caldata, err, func, num_samples=None):
                 print '\nWarning: caldata for %s should have two columns.' % p.name
                 print 'Column 1 is the data and column 2 is the error.'
                 print "Assuming error is zero and continuing.\n"
-                err = np.broadcast_to(err, p.caldata.shape)
+                err = np.broadcast_to(0, p.caldata.shape)
                 p.caldata = np.column_stack((p.caldata, err))
             nvars[p.name] = p.caldata
         else:
@@ -376,6 +376,7 @@ def calibrate(params, caldata, err, func, num_samples=None):
             newparams[i].values = copy.copy(p.values)
         except:
             pass
+        newparams[i].trace = vals
         newparams[i].original_parameter = p
 
     return newparams
