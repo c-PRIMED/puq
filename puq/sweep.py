@@ -16,6 +16,7 @@ from puq.jpickle import pickle, unpickle
 from socket import gethostname
 from puq.parameter import get_psamples
 from puq.calibrate import calibrate
+import string
 
 _vcache = {}
 _dcache = {}
@@ -269,7 +270,9 @@ class Sweep(object):
     # Bayesian Calibration
     def _calibrate(self, hf):
         ovar = get_output_names(hf)[0]
-        rs = unpickle(hf["/smolyak/%s/response" % ovar].value)
+        method = hf.attrs['UQtype']
+        rs = unpickle(hf["/%s/%s/response" % (method, ovar)].value)
+
         # print "Calling calibrate from sweep"
         self.psweep.params = calibrate(self.psweep.params, self.caldata, self.err, rs.eval)
 
