@@ -429,7 +429,9 @@ class SampledFunc(Function):
     rbf = property(get_rbf, set_rbf, None, None)
 
     # Evaluate a SampledFunc at certain points using Radial Basis Functions
-    def eval(self, *pts):
+    def eval(self, *pts, **kwargs):
+        if kwargs:
+            pts = [kwargs[x[0]] for x in self.vars]
         pts = np.broadcast_arrays(*pts)
         return self._interp_func(*pts)
 
