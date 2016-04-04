@@ -6,17 +6,19 @@ Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
 
-import sys, termios, tty, os, h5py
+import os
+import h5py
 import numpy as np
 from logging import info, debug, exception, warning, critical
 from puq.options import options
 from puq.hdf import get_result
-from puq.jpickle import pickle
+
 
 def dump_hdf5(name, v, desc=''):
     np.set_printoptions(threshold=np.nan)
     line = pickle({'name': name, 'desc': desc, 'value': v})
     print 'HDF5:%s:5FDH' % line
+
 
 def vprint(level, str):
     if options['verbose'] >= level:
@@ -34,7 +36,7 @@ def get_psamples_from_csv(sw, h5, sname):
         data[i-1] = map(float, line.split(','))
 
     for i, h in enumerate(header):
-        if not h in [p.name for p in sw.psweep.params]:
+        if h not in [p.name for p in sw.psweep.params]:
             print "Warning: CSV variable '%s' not a parameter for this model." % h
         else:
             samples[h] = data[:, i]
@@ -57,27 +59,6 @@ class Callback:
 
     def __call__(self):
         return self.callback(*self.args, **self.kwargs)
-
-
-class TimedOutExec(Exception):
-        pass
-
-
-def getachar(prompt, echo=True):
-    fd = sys.stdin.fileno()
-    old_mode = termios.tcgetattr(fd)
-    ch = ''
-    try:
-        tty.setraw(fd)
-        print prompt,
-        ch = sys.stdin.read(1)
-    except TimedOutExec:
-        ch = '\n'
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_mode)
-    if echo and ch:
-        print ch
-    return ch
 
 
 def process_data(hf, grpname, callback):
