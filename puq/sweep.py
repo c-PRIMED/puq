@@ -4,7 +4,7 @@ Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
 
-import time, os, re, pwd, h5py, sys
+import time, os, re, h5py, sys, string
 import numpy as np
 from puq.testprogram import TestProgram
 from numpy import ndarray
@@ -15,11 +15,15 @@ from puq.options import options
 from puq.jpickle import pickle, unpickle
 from socket import gethostname
 from puq.parameter import get_psamples
-from puq.calibrate import calibrate
-import string
+import getpass
+
+# Can't build pymc for Windows, so no calibration
+if not sys.platform.startswith("win"):
+    from puq.calibrate import calibrate
 
 _vcache = {}
 _dcache = {}
+
 
 class Sweep(object):
     """
@@ -70,7 +74,7 @@ class Sweep(object):
             # h5.attrs['id'] = self.id
             h5.attrs['date'] = time.strftime("%b %d %H:%M %Z %Y", time.localtime())
             h5.attrs['hostname'] = gethostname()
-            h5.attrs['username'] = pwd.getpwuid(os.getuid()).pw_name
+            h5.attrs['username'] = getpass.getuser()
             h5.attrs['UQtype'] = self.psweep.__class__.__name__.lower()
             h5.attrs['description'] = self.description
 
