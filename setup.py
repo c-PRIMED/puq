@@ -37,7 +37,7 @@ CLASSIFIERS = [
     ]
 
 # Add here console scripts like ['hello_world = foobar.module:function']
-CONSOLE_SCRIPTS = []
+CONSOLE_SCRIPTS = ['puq = puq.puq_cmd:main']
 
 # Versioneer configuration
 versioneer.VCS = 'git'
@@ -204,7 +204,6 @@ def setup_package():
           command_options=command_options,
           entry_points={'console_scripts': CONSOLE_SCRIPTS},
           zip_safe=False,
-          scripts=['bin/puq'],
           package_data={'puq': ['spgrid_cache.hdf5']},
           )
 
