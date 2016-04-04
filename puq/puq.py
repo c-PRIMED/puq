@@ -1,5 +1,29 @@
 #!/usr/bin/env python
-"""
+# encoding: utf-8
+
+import subprocess, os, sys, glob, shutil
+from optparse import OptionParser
+import puq
+import puq.dump, puq.read
+from puq.util import vprint
+from puq.jpickle import unpickle, NetObj
+from puq import options
+from puq.parameter import get_psamples
+from puq.util import get_psamples_from_csv
+
+import logging
+from logging import info, debug, exception, warning, critical
+logging.basicConfig(format='%(levelname)-10s %(module)s:%(funcName)s:%(lineno)s %(message)s')
+#logging.basicConfig(level=logging.WARNING, format='%(levelname)-10s %(funcName)s:%(lineno)s %(message)s')
+
+import numpy as np
+np.set_printoptions(precision=16)
+
+import h5py
+import matplotlib
+
+
+__USAGE__ = """
 This program does parameter sweeps for uncertainty
 quantification and optimization.
 
@@ -36,30 +60,11 @@ Options:
   dump                         Dumps output data in CSV format.
 """
 
-import subprocess, os, sys, glob, shutil
-from optparse import OptionParser
-import puq
-import puq.plot, puq.dump, puq.read
-from puq.util import vprint
-from puq.jpickle import unpickle, NetObj
-from puq import options
-from puq.parameter import get_psamples
-from puq.util import get_psamples_from_csv
-
-import logging
-from logging import info, debug, exception, warning, critical
-logging.basicConfig(format='%(levelname)-10s %(module)s:%(funcName)s:%(lineno)s %(message)s')
-#logging.basicConfig(level=logging.WARNING, format='%(levelname)-10s %(funcName)s:%(lineno)s %(message)s')
-
-import numpy as np
-np.set_printoptions(precision=16)
-
-import h5py
-import matplotlib
 
 def usage():
-    print __doc__
+    print __USAGE__
     sys.exit(-1)
+
 
 # open a sweep file given filename
 def open_hdf5_file(fname, mode='r'):
@@ -93,10 +98,11 @@ def open_hdf5_file(fname, mode='r'):
         sys.exit(-1)
 
     if int(h5.attrs['version']) < 200:
-        print  "File '%s' is too old to be read with this version of PUQ.\nPlease try an older version." % filename
+        print "File '%s' is too old to be read with this version of PUQ.\nPlease try an older version." % filename
         sys.exit(-1)
 
     return h5, filename
+
 
 def load_internal(name):
     debug(name)
@@ -122,6 +128,7 @@ def load_internal(name):
     if hasattr(sw.psweep, 'reinit'):
         sw.psweep.reinit()
     return sw
+
 
 def start(*args):
     usage = """Usage: puq start [-f file.hdf5] script.py [args].
@@ -159,6 +166,7 @@ def start(*args):
         sw.analyze()
     return res
 
+
 def status(*args):
     debug(args)
     if len(args) > 1:
@@ -168,6 +176,7 @@ def status(*args):
     sweep.host.status()
     return True
 
+
 def resume(*args):
     debug(args)
     if len(args) > 1:
@@ -176,6 +185,7 @@ def resume(*args):
     sweep = load_internal(args)
     sweep.resume()
     return True
+
 
 # post-process sweep
 # sweep analyze id  [foo[.py]]
@@ -226,12 +236,14 @@ def analyze(*args):
     puq.analyzer(sweep, errors)
     return True
 
+
 def dump(*args):
     debug(args)
     h5, fname = open_hdf5_file(args)
     puq.dump.dump(h5, fname)
     h5.close()
     return True
+
 
 def plot(*args):
     debug(args)
@@ -293,9 +305,9 @@ If multiple, put them in quotes and separate by spaces or commas.')
         sys.path = [os.getcwd()] + sys.path
         module = os.path.splitext(os.path.split(opt.using)[1])[0]
         _temp = __import__(module, globals(), locals(), [], 0)
-        for k,v in _temp.__dict__.iteritems():
+        for k, v in _temp.__dict__.iteritems():
             if isinstance(v, puq.Parameter):
-                for i,p in enumerate(sweep.psweep.params):
+                for i, p in enumerate(sweep.psweep.params):
                     if p.name == v.name:
                         params.append(v)
 
@@ -303,17 +315,18 @@ If multiple, put them in quotes and separate by spaces or commas.')
     if opt.f == 'i':
         try:
             plt.show()
-        except KeyboardInterrupt :
+        except KeyboardInterrupt:
             pass
 
     h5.close()
     return True
 
+
 def extend(*args):
     debug(args)
     usage = "Usage: sweep extend [--num num] hdf5_filename."
     parser = OptionParser(usage)
-    parser.add_option("--num", type='int', default = 0)
+    parser.add_option("--num", type='int', default=0)
     (opt, ar) = parser.parse_args(args=list(args))
     sweep = load_internal(ar)
     cname = sweep.psweep.__class__.__name__
@@ -328,6 +341,7 @@ def extend(*args):
         sweep.psweep.extend()
     return sweep.run()
 
+
 def strip(*args):
     debug(args)
     h5, fname = open_hdf5_file(args)
@@ -335,15 +349,19 @@ def strip(*args):
     puq.util.strip(fname)
     return True
 
-if __name__ == '__main__':
-    parser = OptionParser(__doc__)
+
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+
+    parser = OptionParser(__USAGE__)
     parser.disable_interspersed_args()
     parser.add_option("-d", action="store_true", help="Debug")
     parser.add_option("-q", action="store_true", help="Quiet")
     parser.add_option("-v", action="store_true", help="Verbose")
     parser.add_option("-V", "--version", action="store_true", help="Version", dest="V")
     parser.add_option("-k", action="store_true", help="Keep Directories")
-    (opt, args) = parser.parse_args()
+    (opt, args) = parser.parse_args(argv[1:])
 
     if opt.q:
         options['verbose'] -= 1
@@ -371,21 +389,22 @@ if __name__ == '__main__':
     }
     if opt.V:
         print puq.__version__
-        sys.exit(0)
+        return 0
 
     if len(args) == 0:
         usage()
-    elif funcs.has_key(args[0]):
+    elif args[0] in funcs:
         res = funcs[args[0]](*args[1:])
-        if res == True:
-            sys.exit(0)
+        if res is True:
+            return 0
         else:
-            sys.exit(-1)
+            return -1
     else:
         print "ERROR: unknown command '%s'" % args[0]
         usage()
+    return -1
 
-
-
-
+if __name__ == '__main__':
+    exit_status = main(sys.argv)
+    sys.exit(exit_status)
 
