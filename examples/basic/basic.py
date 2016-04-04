@@ -12,6 +12,6 @@ def run():
     uq = Smolyak([x,y], level=1)
 
     # Our test program
-    prog = TestProgram('./basic_prog.py', desc='Basic identity function')
+    prog = TestProgram('python basic_prog.py', desc='Basic identity function')
 
     return Sweep(uq, host, prog)

@@ -1,3 +1,6 @@
+from options import options
+from util import Callback, dump_hdf5, process_data
+from jpickle import pickle, unpickle, NetObj, LoadObj, write_json
 from hosts import InteractiveHost
 from submithost import SubmitHost
 from montecarlo import MonteCarlo
@@ -12,11 +15,17 @@ from psweep import PSweep
 from testprogram import TestProgram
 from pdf import PDF, ExperimentalPDF, NormalPDF, WeibullPDF, UniformPDF, HPDF, TrianglePDF, posterior, RayleighPDF, ExponPDF, NetPDF
 from pbshost import PBSHost
-from util import Callback, dump_hdf5
 from response import Function, ResponseFunc, SampledFunc
-from jpickle import pickle, unpickle, NetObj, LoadObj, write_json
+from plot import plot
+from read import read
 from analyzer import analyzer
-from calibrate import calibrate, Calibrate
+
+# Can't build pymc for Windows, so no calibration
+import sys
+if not sys.platform.startswith("win"):
+    from calibrate import calibrate, Calibrate
+
+from dump import dump
 from sparse_grid import sgrid
 from ._version import get_versions
 __version__ = get_versions()['version']

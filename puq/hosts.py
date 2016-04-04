@@ -1,6 +1,6 @@
 """
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
 
@@ -9,12 +9,19 @@ import os, re, signal, logging
 from logging import debug
 from monitor import TextMonitor
 from jobqueue import JobQueue
-from subprocess import Popen, PIPE
+from subprocess import PIPE
 import numpy as np
 from puq.options import options
 from shutil import rmtree
 
-# fixme: how about supporting Host(name) where name is looked up in a host database?
+# Need to handle some things differently on Windows
+import sys
+if sys.platform.startswith("win"):
+    windows = True
+    from psutil import Popen, wait_procs
+else:
+    windows = False
+    from subprocess import Popen
 
 
 class Host(object):
@@ -255,7 +262,8 @@ class InteractiveHost(Host):
                 self._cpus_free -= cpus
                 sout = open(j['outfile']+'.out', 'w')
                 serr = open(j['outfile']+'.err', 'w')
-                cmd = self.timestr + ' ' + cmd
+                if not windows:
+                    cmd = self.timestr + ' ' + cmd
                 if j['dir']:
                     cmd = 'cd %s;%s' % (j['dir'], cmd)
                 # We are going to wait for each process, so we must keep the Popen object
@@ -267,10 +275,9 @@ class InteractiveHost(Host):
                 self._monitor.start_job(j['cmd'], p.pid)
         self.wait(0)
 
-    def handle_error(self, stat, j):
-        stat = os.WEXITSTATUS(stat)
+    def handle_error(self, exitcode, j):
         print 40*'*'
-        print "ERROR: %s returned %s" % (j['cmd'], stat)
+        print "ERROR: %s returned %s" % (j['cmd'], exitcode)
         try:
             for line in open(j['outfile']+'.err', 'r'):
                 if not re.match("HDF5:{'name':'time','value':([0-9.]+)", line):
@@ -282,17 +289,34 @@ class InteractiveHost(Host):
 
     def wait(self, cpus):
         while len(self._running):
-            w = os.waitpid(-1, 0)
-            for p, j in self._running:
-                if p.pid == w[0]:
-                    self._running.remove((p, j))
-                    if os.WEXITSTATUS(w[1]):
-                        self.handle_error(w[1], j)
-                        j['status'] = 'X'
-                    else:
-                        j['status'] = 'F'
-                    self._cpus_free += j['cpu']
-                    break
+            if windows:
+                waitlist = [p for p, j in self._running]
+                gone, alive = wait_procs(waitlist, timeout=1)
+                for g in gone:
+                    for p, j in self._running:
+                        if p == g:
+                            self._running.remove((p, j))
+                            if g.returncode:
+                                self.handle_error(g.returncode, j)
+                                j['status'] = 'X'
+                            else:
+                                j['status'] = 'F'
+                            self._cpus_free += j['cpu']
+                            break
+            else:
+                w = os.waitpid(-1, 0)
+                for p, j in self._running:
+                    if p.pid == w[0]:
+                        self._running.remove((p, j))
+                        exitcode = os.WEXITSTATUS(w[1])
+                        if exitcode:
+                            self.handle_error(exitcode, j)
+                            j['status'] = 'X'
+                        else:
+                            j['status'] = 'F'
+                        self._cpus_free += j['cpu']
+                        break
+
             if cpus and self._cpus_free >= cpus:
                 return
         return

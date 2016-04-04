@@ -1,5 +1,6 @@
 from puq import *
 
+
 def run(level=2):
 
     # Declare our parameters here. Both are uniform on [-2, 2]
@@ -21,8 +22,7 @@ def run(level=2):
     uq = Smolyak([p1, p2], level=level)
 
     # Our test program
-    prog = TestProgram(exe='./rosen_prog.py --x=$x --y=$y',
+    prog = TestProgram(exe='python rosen_prog.py --x=$x --y=$y',
       desc='Rosenbrock Function')
 
     return Sweep(uq, host, prog)
-
