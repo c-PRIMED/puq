@@ -53,7 +53,7 @@ class Calibrate(object):
 
     # model can be response surface, equation, python function
 
-    def __init__(self, model, cvars, nvars, outvar):
+    def __init__(self, model, cvars, nvars, outvar, MAP='fmin_powell'):
 
         out_var_name = outvar.keys()[0]
 
@@ -178,14 +178,15 @@ class Calibrate(object):
         mcmc_model_out = pymc.Normal('model_out', mu=results, tau=1.0 / mdata_err ** 2, value=mdata, observed=True)
         self.mcmc_model = pymc.Model(var.values() + means.values() + devs.values() + [mcmc_model_out])
 
-        # compute MAP and use that as start for MCMC
-        map_ = pymc.MAP(self.mcmc_model)
-        map_.fit()
+        if MAP is not None:
+            # compute MAP and use that as start for MCMC
+            map_ = pymc.MAP(self.mcmc_model)
+            map_.fit(method=MAP)
 
-        # print
-        # for v in cvars.keys():
-        #    print 'MAP %s=%s' % (v, var[v].value)
-        # print
+            print '\nmaximum a posteriori (MAP) using', MAP
+            for v in cvars.keys():
+                print '%s=%s' % (v, var[v].value)
+            print
 
         # NOT calibration variables
         for v in nvars.keys():
@@ -283,18 +284,27 @@ class Calibrate(object):
         for cv in self.cvars.keys():
             if self.cvars[cv]['type'] == 'S':
                 data = np.column_stack((self.cvars[cv]['dtrace'], self.cvars[cv]['mtrace']))
-                self.cvars[cv]['jpdf'] = gaussian_kde(data.T)
+                try:
+                    self.cvars[cv]['jpdf'] = gaussian_kde(data.T)
+                except:
+                    self.cvars[cv]['jpdf'] = None
             # multidimensional traces get flattened and others
             # get repeated to match size.
             if self.cvars[cv]['ntraces'] == col_count:
                 n = 1
             else:
                 n = col_count
-            self.cvars[cv]['pdf'] = gaussian_kde(self.cvars[cv]['trace'].ravel())
+            try:
+                self.cvars[cv]['pdf'] = gaussian_kde(self.cvars[cv]['trace'].ravel())
+            except:
+                self.cvars[cv]['pdf'] = None
             self.cvars[cv]['trace'] = self.cvars[cv]['trace'].ravel().repeat(n)
 
         data = np.column_stack([self.cvars[v]['trace'] for v in sorted(self.cvars.keys())])
-        k = gaussian_kde(data.T)
+        try:
+            k = gaussian_kde(data.T)
+        except:
+            k = None
 
         return (self.cvars, k)
 
@@ -365,6 +375,7 @@ def calibrate(params, caldata, err, func, num_samples=None):
     for i, p in enumerate(newparams):
         if hasattr(p, 'caldata') and p.caldata is not None:
             continue
+
         vals = cvars[p.name]['trace']
         print "Calibrated %s to a PDF with mean=%s and dev=%s" % (p.name, np.mean(vals), np.std(vals))
         pdf = puq.ExperimentalPDF(vals, fit=True)
@@ -379,4 +390,4 @@ def calibrate(params, caldata, err, func, num_samples=None):
         newparams[i].trace = vals
         newparams[i].original_parameter = p
 
-    return newparams
+    return newparams, kpdf

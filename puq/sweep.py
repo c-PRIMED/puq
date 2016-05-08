@@ -102,6 +102,9 @@ class Sweep(object):
             h[p.name].attrs['description'] = p.description
             h[p.name].attrs['label'] = p.label
 
+        if hasattr(self.psweep, 'kde'):
+            hf['input/kde'] = pickle(self.psweep.kde)
+
         # input script
         if hasattr(self, 'input_script'):
             h5['input/scriptname'] = str(self.input_script)
@@ -278,7 +281,7 @@ class Sweep(object):
         rs = unpickle(hf["/%s/%s/response" % (method, ovar)].value)
 
         # print "Calling calibrate from sweep"
-        self.psweep.params = calibrate(self.psweep.params, self.caldata, self.err, rs.eval)
+        self.psweep.params, self.psweep.kde = calibrate(self.psweep.params, self.caldata, self.err, rs.eval)
 
     def _dump_hdf5_cache(self, hf, d):
         global _vcache, _dcache
