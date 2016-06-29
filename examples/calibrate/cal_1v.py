@@ -27,11 +27,11 @@ z_data_noisy = z_data + sigma * np.random.randn(len(z_data))
 x = puq.UniformParameter('x', 'x', min=2, max=25, caltype='S')
 
 # do calibration
-calibrated = puq.calibrate([x], z_data_noisy, sigma, model)
-print calibrated[0]
+[calibrated], kpdf = puq.calibrate([x], z_data_noisy, sigma, model)
+print calibrated
 
 # plot actual and calibrated
 real_x.pdf.plot(color='b')
-calibrated[0].pdf.plot(color='r')
+calibrated.pdf.plot(color='r')
 pylab.show()
 

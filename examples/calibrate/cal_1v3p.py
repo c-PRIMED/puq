@@ -21,6 +21,7 @@ x = puq.NormalParameter('x', 'x', mean=5, dev=0.2, caldata=exp_x)
 y = puq.NormalParameter('y', 'y', mean=3.4, dev=0.1, caldata=exp_y)
 z = puq.UniformParameter('z', 'z', min=5, max=20, caltype='S')
 
-x, y, calibrated_z = puq.calibrate([x, y, z], exp_data, sigma, model)
+[x, y, calibrated_z], kpdf = puq.calibrate([x, y, z], exp_data, sigma, model)
 
-print calibrated_z
+print "Calibrated z is", calibrated_z
+

@@ -34,6 +34,6 @@ x = puq.UniformParameter('x', 'x', min=0, max=10, caltype='D')
 # PDF and data for y
 y = puq.NormalParameter('y', 'y', mean=5, dev=0.1, caldata=y_caldata)
 
-calibrated_x, y = puq.calibrate([x, y], z_data_noisy, z_err, model)
+[calibrated_x, y], kpdf = puq.calibrate([x, y], z_data_noisy, z_err, model)
 
 print calibrated_x
