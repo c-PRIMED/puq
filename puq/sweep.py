@@ -103,7 +103,7 @@ class Sweep(object):
             h[p.name].attrs['label'] = p.label
 
         if hasattr(self.psweep, 'kde'):
-            hf['input/kde'] = pickle(self.psweep.kde)
+            h5['input/kde'] = pickle(self.psweep.kde)
 
         # input script
         if hasattr(self, 'input_script'):
