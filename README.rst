@@ -50,6 +50,7 @@ PUQ requires the following Python modules:
 - jsonpickle
 - poster
 - pytest
+- pymc
 
 
 Install

@@ -4,3 +4,4 @@ jsonpickle>=0.4
 matplotlib>=1.1
 sympy>=0.7.1
 poster>=0.8
+pymc>=2.3
