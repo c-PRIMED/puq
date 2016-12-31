@@ -4,9 +4,10 @@
 Visualize and modify Parameters, PDFs and Response Functions
 
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import matplotlib
 matplotlib.use('TkAgg', warn=False)
@@ -17,12 +18,24 @@ from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import matplotlib.pyplot as plt
-from Tkinter import *
-from tkFont import Font
-import ttk
-import ScrolledText
+try:
+    from Tkinter import *
+    from tkFont import Font
+    import ttk
+    import ScrolledText
+    from urlparse import urlparse, urlunsplit
+    import tkMessageBox as messagebox
+    from tkFileDialog import asksaveasfilename
+except ImportError:
+    from tkinter import *
+    from tkinter.font import Font
+    from tkinter import ttk
+    from tkinter.scrolledtext import ScrolledText
+    from urllib.parse import urlparse, urlunsplit
+    from tkinter import messagebox
+    from tkinter.filedialog import asksaveasfilename
+
 import sys, os, weakref, copy
-from urlparse import urlparse, urlunsplit
 import h5py
 from puq import Parameter, PDF, ExperimentalPDF, options, pickle, unpickle, NetObj, SampledFunc
 import math
@@ -30,8 +43,8 @@ import webbrowser, shutil, atexit, shelve
 import logging
 from logging import info, debug, exception, warning, critical
 from optparse import OptionParser
-from cnote import CNote, sq_colors, sq_image
-from tooltip import ToolTip
+from .cnote import CNote, sq_colors, sq_image
+from .tooltip import ToolTip
 from scipy.stats import gaussian_kde
 
 
@@ -144,7 +157,7 @@ class MB:
         self.exportmenu.add_cascade(label="Plot to", menu=self.exportplot)
         fig = plt.figure()
         sup = fig.canvas.get_supported_filetypes()
-        keys = sup.keys()
+        keys = list(sup.keys())
         keys.sort()
         for key in keys:
             lab = '%s : %s' % (key.upper(), sup[key])
@@ -157,11 +170,10 @@ class MB:
         parent.config(menu=menubar)
 
     def open_help(self):
-        webbrowser.open('http://memshub.org/site/memosa_docs/puq/index.html')
+        webbrowser.open('http://c-primed.github.io/puq/')
 
     def about(self):
-        from tkMessageBox import showinfo
-        showinfo(message=__doc__, title='ABOUT')
+        messagebox.showinfo(message=__doc__, title='ABOUT')
 
 class ResponseFrame:
     def __init__(self, parent):
@@ -178,7 +190,6 @@ class ResponseFrame:
             pass
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile='%s-response' % self.name,
                                      defaultextension='.%s' % ext,
@@ -234,7 +245,6 @@ class PlotFrame:
         return self.a
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         name = 'puq-plot'
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile=name,
@@ -261,7 +271,6 @@ def PdfFactory(frame, obj, plotframe, nb=None, color=None, desc=None):
         return PdfFrameComplex(frame, obj, plotframe, nb=nb, color=color, desc=desc)
     if state == 'PDF2':
         return PdfFrameSimple(frame, obj, plotframe, nb=nb, color=color, desc=desc)
-    print 'FACTORY RETURNING NONE'
     return None
 
 class PdfFrame:
@@ -280,7 +289,6 @@ class PdfFrame:
     def export_pdf(self, ext):
         # Dump pdf as csv, json, or python
         import csv
-        from tkFileDialog import asksaveasfilename
         if self.par:
             name = '%s-pdf' % self.par.name
         else:
@@ -295,7 +303,7 @@ class PdfFrame:
             return
 
         if ext == 'csv':
-            with open(filename, 'wb') as csvfile:
+            with open(filename, 'w') as csvfile:
                 spamwriter = csv.writer(csvfile)
                 for x, prob in np.column_stack((self.pdf.x, self.pdf.y)):
                     spamwriter.writerow([x, prob])
@@ -308,10 +316,10 @@ class PdfFrame:
             button.pack(side=BOTTOM)
             msg.pack(fill=BOTH, expand=1)
         elif ext == 'py':
-            with open(filename, 'wb') as pyfile:
+            with open(filename, 'w') as pyfile:
                 pyfile.write(repr(self.pdf))
         elif ext == 'json':
-            with open(filename, 'wb') as jfile:
+            with open(filename, 'w') as jfile:
                 jfile.write(pickle(self.pdf))
 
     def min_changed(self, newmin):
@@ -585,7 +593,6 @@ class PdfFrameComplex(PdfFrame):
         self.clab.config(image=sq_image(color))
 
     def popup(self, event):
-        print 'popup'
         self.menu.post(event.x_root, event.y_root)
 
 class ColorPop:
@@ -737,7 +744,6 @@ class TimeFrame:
             pass
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile='%s-response' % self.name,
                                      defaultextension='.%s' % ext,
@@ -981,17 +987,17 @@ def python_load(fname):
         _temp.run()
 
     if len(pdflist) == 0:
-        print 'Error: Found no PDFs or Parameters in %s' % fname
+        print('Error: Found no PDFs or Parameters in %s' % fname)
         sys.exit(1)
 
     if len(pdflist) == 1:
         return pdflist
 
     while 1:
-        print '\nList PDFs you want displayed, separated by commas.'
-        print '\nFound the following PDFs:'
+        print('\nList PDFs you want displayed, separated by commas.')
+        print('\nFound the following PDFs:')
         for i, p in enumerate(pdflist):
-            print "%d: %s" % (i, p[1])
+            print("%d: %s" % (i, p[1]))
         num = raw_input("Which one(s) to display? (* for all) ")
         try:
             if num == '*':
@@ -1001,7 +1007,7 @@ def python_load(fname):
                 numlist = [pdflist[x] for x in numlist]
             break
         except:
-            print 'Invalid number. Try again.\n'
+            print('Invalid number. Try again.\n')
 
     return numlist
 
@@ -1025,7 +1031,7 @@ def read_obj(loc):
             name, desc = get_name_desc(obj, loc)
             return [(obj, name, desc)]
         except:
-            print "Error accessing", loc
+            print("Error accessing", loc)
             return []
     else:
         extension = loc.split('.')[-1]
@@ -1037,7 +1043,7 @@ def read_obj(loc):
             return [(obj, name, desc)]
         elif extension == 'py':
             return python_load(loc)
-    print "Don't know how to open %s." % loc
+    print("Don't know how to open %s." % loc)
     return []
 
 def read(*args):

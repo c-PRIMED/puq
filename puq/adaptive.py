@@ -1,6 +1,7 @@
 """
 h-Adaptive Stochastic Collocation
 """
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 from puq.hdf import get_result, get_params, get_param_names
@@ -44,7 +45,7 @@ class AdapStocColl(APSweep):
 
 
     def reinit(self):
-        print "REINIT %s %s %s %s" % (self.params, self.level, self.tol, self.sel)
+        print("REINIT %s %s %s %s" % (self.params, self.level, self.tol, self.sel))
         APSweep.reinit(self)
         self._callback = None # FIXME
         self._uqsolver = uqsolver(self.params, self.level, self.tol, self.sel)
@@ -61,22 +62,22 @@ class AdapStocColl(APSweep):
         parser.add_option("--max_iter", type='int', default = self.max_iter)
         (opt, ar) = parser.parse_args(args=list(args))
         if opt.tol > self.tol:
-            print "Error: Previous tolerance was %s. You cannot" % self.tol
-            print "increase the tolerance."
+            print("Error: Previous tolerance was %s. You cannot" % self.tol)
+            print("increase the tolerance.")
             sys.exit(1)
         if opt.max_iter == self.max_iter and opt.tol == self.tol:
-            print "Error: Tolerance and Iterations are unchanged."
-            print "Nothing to do here."
+            print("Error: Tolerance and Iterations are unchanged.")
+            print("Nothing to do here.")
             sys.exit(0)
-        if opt.max_iter and  self.max_iter and opt.max_iter < self.max_iter \
-            and opt.tol == self.tol:
-            print "Error: Previous iterations was %s. You cannot" % self.iter_max
-            print "decrease the iterations."
+        if opt.max_iter and self.max_iter and opt.max_iter < self.max_iter \
+                and opt.tol == self.tol:
+            print("Error: Previous iterations was %s. You cannot" % self.iter_max)
+            print("decrease the iterations.")
             sys.exit(1)
         if opt.tol != self.tol:
-            print "Changing tol from %s to %s" % (self.tol, opt.tol)
+            print("Changing tol from %s to %s" % (self.tol, opt.tol))
         if opt.max_iter != self.max_iter:
-            print "Changing max_iter from  %s to %s" % (self.max_iter, opt.max_iter)
+            print("Changing max_iter from  %s to %s" % (self.max_iter, opt.max_iter))
         self.tol = opt.tol
         self.max_iter = opt.max_iter
         self._sweep._reinit = True
@@ -89,7 +90,6 @@ class AdapStocColl(APSweep):
 
         self._sweep.host.reinit()
 
-
     # Returns a list of name,value tuples
     # For example, [('t', 1.0), ('freq', 133862.0)]
     def get_args(self):
@@ -98,14 +98,13 @@ class AdapStocColl(APSweep):
         if plist == []:
             return
         for i, p in enumerate(self.params):
-            pcol = par[:,i]
+            pcol = par[:, i]
             try:
                 p.values.append(pcol)
             except AttributeError:
                 p.values = [pcol]
         for row in plist:
             yield zip([p.name for p in self.params], row)
-
 
     def analyze(self, hf):
         process_data(hf, 'AdapStocColl', self._do_pdf)
@@ -119,7 +118,7 @@ class AdapStocColl(APSweep):
         z = sw.get_result(iteration=iter)
 
         # fixme: z must be floats
-        m,v,e = self._uqsolver.doiadaptive(z)
+        m, v, e = self._uqsolver.doiadaptive(z)
 
         """
         put mean, var, std, err, pdf in /AdapStocColl
@@ -140,9 +139,9 @@ class AdapStocColl(APSweep):
         else:
             finished = False
             if iter == 0:
-                print "Iter        mean           var           dev        errind   points   cached"
-            print "%d:    %.4e    %.4e    %.4e    %.4e    %5d    %5d" \
-                % (iter, m, v, np.sqrt(v), e, self._num_jobs, self._num_jobs_cached)
+                print("Iter        mean           var           dev        errind   points   cached")
+            print("%d:    %.4e    %.4e    %.4e    %.4e    %5d    %5d"
+                  % (iter, m, v, np.sqrt(v), e, self._num_jobs, self._num_jobs_cached))
         hf.close()
         if self.max_iter and iter >= self.max_iter:
             finished = True
@@ -169,9 +168,9 @@ class AdapStocColl(APSweep):
             num_params = len(ivars)
 
         if num_params > 2:
-            print "Error: Cannot plot in more than three dimensions."
-            print "Use '-v' to select a subset of input parameters."
-            raise ValueError
+            print("Error: Cannot plot in more than three dimensions.")
+            print("Use '-v' to select a subset of input parameters.")
+            raise ValueError()
 
         if num_params > 1:
             self.scatter3(h5, ivars)
@@ -192,7 +191,7 @@ class AdapStocColl(APSweep):
         ndims = len(params)
         pts = np.empty((num, ndims + 1))
         for i, p in enumerate(params):
-            pts[:,i] = p.pdf.ds(num)
+            pts[:, i] = p.pdf.ds(num)
         self._uqsolver.interpolate(pts)
 
         rs = self.response_func()
@@ -203,7 +202,7 @@ class AdapStocColl(APSweep):
         std = hf['/AdapStocColl/std/%d' % last_iter].value
         error = hf['/AdapStocColl/error/%d' % last_iter].value
 
-        return [('sampled_pdf', pts[:,-1]),
+        return [('sampled_pdf', pts[:, -1]),
                 ('mean', mean),
                 ('dev', std),
                 ('var', var),
@@ -224,7 +223,7 @@ class AdapStocColl(APSweep):
             mindist = 1e309
             for v in sorted(x):
                 if v != last:
-                    if last != None:
+                    if last is not None:
                         mindist = min(mindist, v-last)
                     last = v
             debug("%s: %s %s grids" % (p.name, mindist,
@@ -235,10 +234,10 @@ class AdapStocColl(APSweep):
         pts = np.vstack(map(np.ndarray.flatten, xx)).T
 
         # add column for results
-        pts = np.append(pts, np.zeros((len(pts),1)), axis=1)
+        pts = np.append(pts, np.zeros((len(pts), 1)), axis=1)
 
         # interpolate function requires array in contiguous memory
-        if pts.flags['C_CONTIGUOUS'] == False:
+        if pts.flags['C_CONTIGUOUS'] is False:
             pts = np.ascontiguousarray(pts)
 
         self._uqsolver.interpolate(pts)

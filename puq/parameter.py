@@ -3,9 +3,11 @@ The parameter module implements the different parameter types and
 their PDFs.
 
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 '''
+from __future__ import absolute_import, division, print_function
+
 from puq.pdf import NormalPDF, UniformPDF, ExperimentalPDF, WeibullPDF, RayleighPDF, ExponPDF, PDF
 from logging import debug
 import sys
@@ -51,7 +53,7 @@ def get_psamples(params, psamples=None, num=None):
             else:
                 xseed = np.column_stack((xseed, p.pdf.data))
         elif psamples and p.name in psamples:
-            print 'Using CSV data for %s' % p.name
+            print('Using CSV data for %s' % p.name)
             if xseed is None:
                 xseed = psamples[p.name].reshape(-1, 1)
             else:

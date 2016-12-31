@@ -7,13 +7,15 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 from logging import debug
 from puq.psweep import PSweep
 from puq.util import process_data
 from puq.jpickle import pickle
-from response import SampledFunc
+from .response import SampledFunc
+
 
 class SimpleSweep(PSweep):
     def __init__(self, params, valarray=None, response=False, iteration_cb=None):
@@ -24,7 +26,7 @@ class SimpleSweep(PSweep):
         if valarray is None:
             ok = 0
             try:
-            # are all the value arrays the same length?
+                # are all the value arrays the same length?
                 ok = len(set([len(p.values) for p in params]))
             except:
                 pass
@@ -35,7 +37,7 @@ class SimpleSweep(PSweep):
             if type(valarray) == list:
                 valarray = np.array(valarray)
             if len(valarray.shape) == 1:
-                valarray = valarray.reshape(1,-1)
+                valarray = valarray.reshape(1, -1)
             if not isinstance(valarray, np.ndarray) or valarray.shape[0] != len(params):
                 raise ValueError('Valarray needs to be a 2D array with rows = number of params.')
             self.num = valarray.shape[1]
@@ -45,14 +47,14 @@ class SimpleSweep(PSweep):
     # Returns a list of name,value tuples
     # For example, [('t', 1.0), ('freq', 133862.0)]
     def get_args(self):
-        for i in xrange(self._start_at, self.num):
+        for i in range(self._start_at, self.num):
             yield [(p.name, p.values[i]) for p in self.params]
 
     def _do_pdf(self, hf, data):
         mean = np.mean(data)
         dev = np.std(data)
-        print "Mean   = %s" % mean
-        print "StdDev = %s" % dev
+        print("Mean   = %s" % mean)
+        print("StdDev = %s" % dev)
         if self.response:
             rsd = np.vstack(([p.values for p in self.params], data))
             try:

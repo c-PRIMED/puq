@@ -59,7 +59,7 @@ def test_chaos_sequence_3():
 
 
 def do_tst(f, args, res):
-    tmp = apply(f, args)
+    tmp = f(*args)
     #print tmp
     assert allclose(tmp, res)
 

@@ -3,10 +3,12 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 from logging import debug
-from hdf import get_output_names
+from .hdf import get_output_names
 import h5py
+
 
 class PSweep(object):
     def __init__(self, iteration_cb=None):
@@ -48,6 +50,7 @@ class PSweep(object):
             else:
                 return True
 
+
 class APSweep(object):
     """
     Adaptive Parameter Sweep
@@ -62,7 +65,7 @@ class APSweep(object):
 
     def reinit(self):
         self.iteration_num = 0
-        #self.run_num = 0
+        # self.run_num = 0
 
     def do_cache(self, sweep, plist_full, plist):
         debug("do_cache: iter=%s" % self.iteration_num)
@@ -85,7 +88,7 @@ class APSweep(object):
         if not self.outvarname:
             self.outvarname = get_output_names(hf)[0]
             self.outvardesc = hf['output/data/%s' % self.outvarname].attrs['description']
-        #hdf5_set_result(hf, self.outvarname, np.array(out), self.iteration_num, self.outvardesc)
+        # hdf5_set_result(hf, self.outvarname, np.array(out), self.iteration_num, self.outvardesc)
         hf.close()
 
     def run(self, sweep):
@@ -120,7 +123,7 @@ class APSweep(object):
         for args in self.get_args():
             args = tuple(args)
             plist_full.append(args)
-            if not args in self.cache:
+            if args not in self.cache:
                 plist.append(args)
                 output = '%s_%s' % (sweep.fname, self.run_num)
                 cmd = sweep.prog.cmd(args)

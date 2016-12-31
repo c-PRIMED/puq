@@ -2,7 +2,7 @@
 '''
 Testsuite for the CustomParameter class
 '''
-
+from __future__ import absolute_import, division, print_function
 import numpy as np
 from puq import *
 
@@ -13,7 +13,7 @@ def _hisplot(y, nbins):
 
 def compare_curves(x1, y1, x2, y2, **args):
     ay = np.interp(x2, x1, y1)
-    print "maximum difference is", np.max(np.abs(ay - y2))
+    print("maximum difference is", np.max(np.abs(ay - y2)))
     assert np.allclose(ay, y2, **args)
 
 n = NormalParameter('x','x',mean=10,dev=1)
@@ -29,14 +29,14 @@ def test_custom_pdf_meandev():
 def test_custom_pdf_lhs():
     a = np.array([2,2,3,3,3,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,8,8])
     c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a, fit=True))
-    print "LHS: mean=%s  dev=%s" % (c.pdf.mean, c.pdf.dev)
+    print("LHS: mean=%s  dev=%s" % (c.pdf.mean, c.pdf.dev))
     assert(np.allclose(c.pdf.mean, 5.04, atol=.1))
     assert(np.allclose(c.pdf.dev, 1.9, atol=.1))
 
     # test the lhs() function to see if the curve it generates is
     # close enough
     data = c.pdf.lhs(1000)
-    dx,dy = _hisplot(data, 40)
+    dx, dy = _hisplot(data, 40)
     compare_curves(c.pdf.x, c.pdf.y, dx, dy, atol=.01)
 
 
@@ -84,7 +84,7 @@ def test_custom_pdf_random():
 def test_custom_pdf_lhs_nofit():
     a = np.array([2,2,3,3,3,4,4,4,4,5,5,5,5,5,6,6,6,6,6,7,7,7,8,8])
     c = CustomParameter('x', 'unknown', pdf=ExperimentalPDF(a, nbins=40))
-    print "LHS: mean=%s  dev=%s" % (c.pdf.mean, c.pdf.dev)
+    print("LHS: mean=%s  dev=%s" % (c.pdf.mean, c.pdf.dev))
     assert(np.allclose(c.pdf.mean, 5.04, atol=.1))
     assert(np.allclose(c.pdf.dev, 1.7, atol=.1))
 

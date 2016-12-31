@@ -37,7 +37,11 @@ create_contents() : creates the contents of the tooltip window (by default a Tki
 '''
 # Ideas gleaned from PySol
 
-import Tkinter
+try:
+    import Tkinter as tkinter
+except ImportError:
+    import tkinter
+
 
 class ToolTip:
     def __init__(self, master, text='Your text here', delay=1500, **opts):
@@ -59,10 +63,10 @@ class ToolTip:
 
     def configure(self, **opts):
         for key in opts:
-            if self._opts.has_key(key):
+            if key in self._opts:
                 self._opts[key] = opts[key]
             else:
-                KeyError = 'KeyError: Unknown option: "%s"' %key
+                KeyError = 'KeyError: Unknown option: "%s"' % key
                 raise KeyError
 
     ##----these methods handle the callbacks on "<Enter>", "<Leave>" and "<Motion>"---------------##
@@ -99,7 +103,7 @@ class ToolTip:
             self._unschedule()
             return
         if not self._tipwindow:
-            self._tipwindow = tw = Tkinter.Toplevel(self.master)
+            self._tipwindow = tw = tkinter.Toplevel(self.master)
             # hide the window until we know the geometry
             tw.withdraw()
             tw.wm_overrideredirect(1)
@@ -152,18 +156,18 @@ class ToolTip:
         opts = self._opts.copy()
         for opt in ('delay', 'follow_mouse', 'state'):
             del opts[opt]
-        label = Tkinter.Label(self._tipwindow, **opts)
+        label = tkinter.Label(self._tipwindow, **opts)
         label.pack()
 
 ##---------demo code-----------------------------------##
 
 def demo():
-    root = Tkinter.Tk(className='ToolTip-demo')
-    l = Tkinter.Listbox(root)
+    root = tkinter.Tk(className='ToolTip-demo')
+    l = tkinter.Listbox(root)
     l.insert('end', "I'm a listbox")
     l.pack(side='top')
     t1 = ToolTip(l, follow_mouse=1, text="I'm a tooltip with follow_mouse set to 1, so I won't be placed outside my parent")
-    b = Tkinter.Button(root, text='Quit', command=root.quit)
+    b = tkinter.Button(root, text='Quit', command=root.quit)
     b.pack(side='bottom')
     t2 = ToolTip(b, text='Enough of this')
     root.mainloop()

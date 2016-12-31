@@ -36,4 +36,4 @@ y = puq.NormalParameter('y', 'y', mean=5, dev=0.1, caldata=y_caldata)
 
 [calibrated_x, y], kpdf = puq.calibrate([x, y], z_data_noisy, z_err, model)
 
-print calibrated_x
+print(calibrated_x)

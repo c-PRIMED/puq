@@ -1,5 +1,6 @@
 from numpy import *
 from scipy.special import jacobi, gamma, legendre
+from math import factorial
 
 """@package smolyak_funcs
 Functions for Smolyak UQ method
@@ -13,11 +14,8 @@ def memoize(f, cache={}):
         return cache[key]
     return g
 
-def factorial(k):
-    return reduce(int.__mul__, xrange(1, k + 1), 1)
-
 def nelms(n, m):
-    return factorial(n + m) / factorial(m) / factorial(n)
+    return int(factorial(n + m) / factorial(m) / factorial(n))
 
 def index_step1(m):
     rows, cols = m.shape

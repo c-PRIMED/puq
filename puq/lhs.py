@@ -5,15 +5,17 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import sys
 import numpy as np
 from puq.util import process_data
 from puq.psweep import PSweep
 from logging import debug
-from response import SampledFunc
+from .response import SampledFunc
 from puq.jpickle import pickle
 from puq.pdf import UniformPDF
+
 
 class LHS(PSweep):
     """
@@ -55,7 +57,7 @@ class LHS(PSweep):
     # Returns a list of name,value tuples
     # For example, [('t', 1.0), ('freq', 133862.0)]
     def get_args(self):
-        for i in xrange(self._start_at, self.num):
+        for i in range(self._start_at, self.num):
             yield [(p.name, p.values[i]) for p in self.params]
 
     def _do_pdf(self, hf, data):
@@ -69,16 +71,16 @@ class LHS(PSweep):
             mean = np.average(data, weights=weights)
             dev = np.sqrt(np.dot(weights, (data - mean)**2) / tweight)
 
-            print "Mean   = %s" % mean
-            print "StdDev = %s" % dev
+            print("Mean   = %s" % mean)
+            print("StdDev = %s" % dev)
 
             rsd = np.vstack(([p.values for p in self.params], data))
             rs = pickle(SampledFunc(*rsd, params=self.params))
             return [('response', rs), ('mean', mean), ('dev', dev)]
 
         else:
-            print "Mean   = %s" % np.mean(data)
-            print "StdDev = %s" % np.std(data)
+            print("Mean   = %s" % np.mean(data))
+            print("StdDev = %s" % np.std(data))
             return [('samples', data), ('mean', np.mean(data)), ('dev', np.std(data))]
 
     def analyze(self, hf):
@@ -93,10 +95,10 @@ class LHS(PSweep):
 
     def extend(self, num=None):
         if not hasattr(self, 'ds') or not self.ds:
-            print "You must use Descriptive Sampling to extend."
+            print("You must use Descriptive Sampling to extend.")
             sys.exit(1)
 
-        print "Extending Descriptive Sampling run to %s samples." % (self.num * 3)
+        print("Extending Descriptive Sampling run to %s samples." % (self.num * 3))
         for p in self.params:
             if self.response:
                 v = np.sort(UniformPDF(*p.pdf.range).ds(self.num * 3))

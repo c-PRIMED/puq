@@ -1,3 +1,4 @@
+from __future__ import absolute_import, division, print_function
 import numpy as np
 from puq import *
 
@@ -163,7 +164,7 @@ def test_sf_eval1():
     assert np.allclose(sf.eval(np.array([7]), np.array([0,5,10])), [7.18,11.95,7.18], rtol=.1)
 
 def test_rf_pdf0():
-    print "TEST_RF_PDF"
+    print("TEST_RF_PDF")
     x = UniformParameter('x', 'first variable', min=-20, max=10)
     y = UniformParameter('y', 'second variable', min=-15, max=5)
     z = UniformParameter('z', 'third variable', min=20, max=22)
@@ -181,7 +182,7 @@ def test_rf_pdf0():
     assert np.allclose(mean3, mean2, rtol=1e-2)
 
 def test_rf_pdf1():
-    print "TEST_RF_PDF1"
+    print("TEST_RF_PDF1")
     x = UniformParameter('x', 'first variable', min=-20, max=10)
     y = UniformParameter('y', 'second variable', min=-15, max=5)
     z = UniformParameter('z', 'third variable', min=20, max=22)
@@ -202,7 +203,7 @@ def test_rf_pdf1():
     assert np.allclose(mean3, mean2, rtol=1e-2)
 
 def test_rf_pdf2():
-    print "TEST_RF_PDF2"
+    print("TEST_RF_PDF2")
     x = UniformParameter('x', 'first variable', min=-20, max=10)
     y = UniformParameter('y', 'second variable', min=-15, max=5)
     z = UniformParameter('z', 'third variable', min=20, max=22)

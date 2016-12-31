@@ -3,12 +3,13 @@ This file is part of PUQ
 Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import socket
 import os, re, signal, logging
 from logging import debug
-from monitor import TextMonitor
-from jobqueue import JobQueue
+from .monitor import TextMonitor
+from .jobqueue import JobQueue
 from subprocess import PIPE
 import numpy as np
 from puq.options import options
@@ -33,7 +34,7 @@ class Host(object):
         tstr = 'gtime'
         try:
             ver = Popen("/usr/bin/time --version", shell=True, stderr=PIPE).stderr.read()
-            if ver.startswith("GNU"):
+            if ver.startswith(b"GNU"):
                 tstr = '/usr/bin/time'
         except:
             pass
@@ -146,9 +147,9 @@ class Host(object):
     @staticmethod
     def secs_to_walltime(secs):
         secs = int(secs)
-        hours = secs / 3600
+        hours = int(secs / 3600)
         secs -= (3600 * hours)
-        mins = secs / 60
+        mins = int(secs / 60)
         secs -= (60 * mins)
         return "%s:%02d:%02d" % (hours, mins, secs)
 
@@ -187,16 +188,16 @@ class Host(object):
                 for line in f:
                     if line.startswith('HDF5:'):
                         finished.append(num)
-                        print 'Marking job %s as Finished' % num
+                        print('Marking job %s as Finished' % num)
                         j['status'] = 'F'
                         break
                 f.close()
 
         if not quiet:
-            print "Finished %s out of %s jobs." % (len(finished), total)
+            print("Finished %s out of %s jobs." % (len(finished), total))
 
         if errors:
-            print "%s jobs had errors." % len(errors)
+            print("%s jobs had errors." % len(errors))
 
         return finished, len(finished) == total
 
@@ -235,8 +236,8 @@ class InteractiveHost(Host):
             self._run()
             return True
         except KeyboardInterrupt:
-            print '***INTERRUPT***\n'
-            print "If you wish to resume, use 'puq resume'\n"
+            print('***INTERRUPT***\n')
+            print("If you wish to resume, use 'puq resume'\n")
             for p, j in self._running:
                 os.kill(p.pid, signal.SIGKILL)
                 j['status'] = 0
@@ -251,7 +252,7 @@ class InteractiveHost(Host):
 
         errors = len([j for j in self.jobs if j['status'] == 'X'])
         if errors:
-            print "Previous run had %d errors. Retrying." % errors
+            print("Previous run had %d errors. Retrying." % errors)
 
         for j in self.jobs:
             if j['status'] == 0 or j['status'] == 'X':
@@ -276,16 +277,16 @@ class InteractiveHost(Host):
         self.wait(0)
 
     def handle_error(self, exitcode, j):
-        print 40*'*'
-        print "ERROR: %s returned %s" % (j['cmd'], exitcode)
+        print(40*'*')
+        print("ERROR: %s returned %s" % (j['cmd'], exitcode))
         try:
             for line in open(j['outfile']+'.err', 'r'):
                 if not re.match("HDF5:{'name':'time','value':([0-9.]+)", line):
-                    print line,
+                    print(line,)
         except:
             pass
-        print "Stdout is in %s.out and stderr is in %s.err." % (j['outfile'], j['outfile'])
-        print 40*'*'
+        print("Stdout is in %s.out and stderr is in %s.err." % (j['outfile'], j['outfile']))
+        print(40*'*')
 
     def wait(self, cpus):
         while len(self._running):

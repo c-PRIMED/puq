@@ -6,7 +6,7 @@ def callback(sw, hf):
     num = len(d)
     mean = np.mean(d)
     dev = np.std(d)
-    print "Mean,Dev   = %s, %s" % (mean, dev)
+    print("Mean,Dev   = %s, %s" % (mean, dev))
     if num >= 500:
         return True
     sw.psweep.extend(100)

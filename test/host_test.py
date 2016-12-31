@@ -1,16 +1,18 @@
+from __future__ import absolute_import, division, print_function
 from puq.hosts import Host
 from puq.jobqueue import JobQueue
 from logging import debug
+
 
 class TestHost(Host):
     def __init__(self, cpus=0, cpus_per_node=0, walltime='1:00:00', pack=1):
         Host.__init__(self)
         if cpus <= 0:
-            print "You must specify cpus when creating a PBSHost object."
-            raise ValueError
+            print("You must specify cpus when creating a PBSHost object.")
+            raise ValueError()
         if cpus_per_node <= 0:
-            print "You must specify cpus_per_node when creating a PBSHost object."
-            raise ValueError
+            print("You must specify cpus_per_node when creating a PBSHost object.")
+            raise ValueError()
         self.cpus = cpus
         self.cpus_per_node = cpus_per_node
         self.walltime = walltime
@@ -159,10 +161,10 @@ def test_HostMultiRun():
     th.add_job('foobar -3', '', 0, 'xxx')
     th.add_job('foobar -4', '', 0, 'xxx')
     th.run()
-    print '-'*80
+    print('-' * 80)
     th.add_job('foobar -5', '', 0, 'xxx')
     th.add_job('foobar -6', '', 0, 'xxx')
     th.add_job('foobar -7', '', 0, 'xxx')
     th.add_job('foobar -8', '', 0, 'xxx')
     th.run()
-    print output
+    print(output)

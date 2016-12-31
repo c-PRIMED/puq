@@ -1,6 +1,7 @@
 """
 Tests for HPDF function.  Creates PDFs from Histogram data.
 """
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 import scipy.stats
@@ -16,11 +17,13 @@ from puq import *
 global plot_all
 plot_all = False
 
+
 def test_hpdf():
     _test_hpdf(10,2)
     _test_hpdf(-10,2)
     _test_hpdf(0,1)
-    
+
+
 def _test_hpdf(mean, dev):
     global plot_all
     xrv = scipy.stats.norm(mean, dev)
@@ -35,13 +38,13 @@ def _test_hpdf(mean, dev):
 
     if plot_all:
         plt.figure()
-        plt.bar(x, xp, width=x[1]-x[0], alpha=0.4, align='center')        
+        plt.bar(x, xp, width=x[1]-x[0], alpha=0.4, align='center')
         h.plot(color='red')
         plt.plot(x2, x2p)
 
     rmse = np.sqrt(np.mean((h.y - x2p)**2))
     rmsep = 100.0 * rmse/(np.max(x2p) - np.min(x2p))
-    print "RMSE=%s%%" % rmsep    
+    print("RMSE=%s%%" % rmsep)
     assert rmsep < 3.0
 
 if __name__ == "__main__":

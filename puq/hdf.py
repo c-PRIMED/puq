@@ -1,16 +1,17 @@
 """
 Convenience functions that read or write to the HDF5 file
-"""
 
-"""
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+
+from __future__ import absolute_import, division, print_function
 
 import h5py
 from puq.jpickle import unpickle
 from functools import wraps
+
 
 def hdf5_wrap(func):
     @wraps(func)
@@ -24,6 +25,7 @@ def hdf5_wrap(func):
             hf.close()
         return res
     return wrapped
+
 
 @hdf5_wrap
 def get_output_names(hf):
@@ -40,6 +42,7 @@ def get_output_names(hf):
       A sorted list of the output variable names in the HDF5 file.
     """
     return sorted(map(str, hf['/output/data'].keys()))
+
 
 @hdf5_wrap
 def set_result(hf, var, data, desc=''):
@@ -87,17 +90,18 @@ def get_result(hf, var=None):
     if len(output_variables) == 0:
         return []
 
-    if var and not var in output_variables:
-        print "Variable %s not found in output data" % var
+    if var and var not in output_variables:
+        print("Variable %s not found in output data" % var)
         raise ValueError
     if not var:
         if len(output_variables) > 1:
-            print "Output data contains multiple variables."
-            print "You must indicate which you want."
+            print("Output data contains multiple variables.")
+            print("You must indicate which you want.")
             raise ValueError
         var = output_variables[0]
 
     return hf['/output/data/%s' % var].value
+
 
 @hdf5_wrap
 def get_param_names(hf):
@@ -112,6 +116,7 @@ def get_param_names(hf):
     parameters = get_params(hf)
     return [p.name for p in parameters]
 
+
 @hdf5_wrap
 def get_params(hf):
     """get_params(hf)
@@ -123,6 +128,7 @@ def get_params(hf):
         filename to use.
     """
     return [unpickle(hf['/input/params'][p].value) for p in hf['/input/params']]
+
 
 @hdf5_wrap
 def data_description(hf, var):
@@ -141,6 +147,7 @@ def data_description(hf, var):
         return desc
     return var
 
+
 @hdf5_wrap
 def param_description(hf, var):
     """param_description(hf, var)
@@ -157,6 +164,7 @@ def param_description(hf, var):
     if desc:
         return desc
     return var
+
 
 @hdf5_wrap
 def get_response(hf, var):

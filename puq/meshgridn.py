@@ -4,7 +4,7 @@ import numpy as np
 # n-dimensional version of numpy meshgrid
 def meshgridn(*arrs):
     arrs = tuple(reversed(arrs))
-    lens = map(len, arrs)
+    lens = list(map(len, arrs))
     dim = len(arrs)
     sz = np.prod(lens)
 

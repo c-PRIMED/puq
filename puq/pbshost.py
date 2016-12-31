@@ -1,6 +1,14 @@
+"""
+This file is part of PUQ
+Copyright (c) 2013-2016 PUQ Authors
+See LICENSE file for terms.
+"""
+
+from __future__ import absolute_import, division, print_function
+
 from logging import debug
-from hosts import Host
-from jobqueue import JobQueue
+from .hosts import Host
+from .jobqueue import JobQueue
 import time
 import re, os, sys, subprocess
 import numpy as np
@@ -27,20 +35,20 @@ class PBSHost(Host):
                  qname='standby', walltime='1:00:00', modules='', pack=1, qlimit=200):
         Host.__init__(self)
         if cpus <= 0:
-            print "You must specify cpus when creating a PBSHost object."
+            print("You must specify cpus when creating a PBSHost object.")
             raise ValueError
         if cpus_per_node <= 0:
-            print "You must specify cpus_per_node when creating a PBSHost object."
+            print("You must specify cpus_per_node when creating a PBSHost object.")
             raise ValueError
         if env:
             try:
                 fd = open(env, 'r')
                 fd.close()
             except IOError as e:
-                print
-                print "Trying to read environment script '%s'" % env
-                print "I/O error(%s): %s" % (e.errno, e.strerror)
-                print
+                print()
+                print("Trying to read environment script '%s'" % env)
+                print("I/O error(%s): %s" % (e.errno, e.strerror))
+                print()
                 sys.exit(1)
         self.env = env
         self.cpus = cpus
@@ -69,7 +77,7 @@ class PBSHost(Host):
         quiet = False
 
         cmd = "checkjob -A %s" % d['jobid']
-        print 'cmd=%s' % cmd
+        print('cmd=%s' % cmd)
         so = file('/dev/null')
         st = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=so).stdout
         so.close()
@@ -86,7 +94,7 @@ class PBSHost(Host):
                 etime = int(time.time()) - int(etime)
             etime = Host.secs_to_walltime(etime)
             wtime = Host.secs_to_walltime(d['WCLIMIT'])
-            print "%s %8s %10s %10s %10s" % (d['NAME'], d['RCLASS'], d['STATE'], wtime, etime)
+            print("%s %8s %10s %10s %10s" % (d['NAME'], d['RCLASS'], d['STATE'], wtime, etime))
 
         # Idle, Started, Running, Completed, or Removed
         _state = d['STATE']
@@ -105,7 +113,7 @@ class PBSHost(Host):
     def pbs_stat(d):
         # Updates a dictionary of pbs job status information
         cmd = "qstat -f %s" % d['jobid']
-        print 'cmd=', cmd
+        print('cmd=', cmd)
         st = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         errline = st.stderr.read()
@@ -218,8 +226,8 @@ class PBSHost(Host):
                 job = int(res.split('.')[0])
                 break
             except:
-                print 'WARNING: Bad response from qsub: %s' % res
-                print 'Retrying...'
+                print('WARNING: Bad response from qsub: %s' % res)
+                print('Retrying...')
                 continue
         for j in joblist:
             j['job'] = job

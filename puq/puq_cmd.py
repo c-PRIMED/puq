@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from __future__ import absolute_import, division, print_function
 
 import subprocess, os, sys, glob, shutil
 from optparse import OptionParser
@@ -12,14 +13,13 @@ from puq.options import options
 
 import logging
 from logging import info, debug, exception, warning, critical
-logging.basicConfig(format='%(levelname)-10s %(module)s:%(funcName)s:%(lineno)s %(message)s')
-#logging.basicConfig(level=logging.WARNING, format='%(levelname)-10s %(funcName)s:%(lineno)s %(message)s')
 
 import numpy as np
-np.set_printoptions(precision=16)
-
 import h5py
 import matplotlib
+
+np.set_printoptions(precision=16)
+logging.basicConfig(format='%(levelname)-10s %(module)s:%(funcName)s:%(lineno)s %(message)s')
 
 
 __USAGE__ = """
@@ -27,6 +27,10 @@ This program does parameter sweeps for uncertainty
 quantification and optimization.
 
 Usage: puq [-q|-v|-k] [start|stop|status|resume|analyze|plot]
+
+You can get help for any subcommand by adding "--help" after the subcommand.  For example,
+"puq start --help"
+
 Options:
   -q                           Quiet.  Useful for scripts.
 
@@ -61,7 +65,7 @@ Options:
 
 
 def usage():
-    print __USAGE__
+    print(__USAGE__)
     sys.exit(-1)
 
 
@@ -74,30 +78,30 @@ def open_hdf5_file(fname, mode='r'):
     else:
         hdf5_files = glob.glob('*.hdf5')
         if len(hdf5_files) == 0:
-            print "ERROR: No hdf5 files in current directory."
+            print("ERROR: No hdf5 files in current directory.")
             usage()
         elif len(hdf5_files) != 1:
-            print "ERROR: Multiple hdf5 files in current directory."
+            print("ERROR: Multiple hdf5 files in current directory.")
             os.system("ls -lt *.hdf5")
-            print "Which one do you want to use?\n"
+            print("Which one do you want to use?\n")
             sys.exit(-1)
         filename = hdf5_files[0]
     try:
         h5 = h5py.File(filename, mode)
     except IOError:
-        print "Unknown file: %s" % filename
+        print("Unknown file: %s" % filename)
         sys.exit(-1)
 
     try:
-        if h5.attrs['MEMOSA_UQ'] != 'MEMOSA':
-            print "File '%s' is not a MEMOSA UQ file." % filename
+        if h5.attrs['MEMOSA_UQ'] != b'MEMOSA':
+            print("File '%s' is not a PUQ file." % filename)
             sys.exit(-1)
     except:
-        print "File '%s' is not a MEMOSA UQ file." % filename
+        print("File '%s' is not a PUQ file." % filename)
         sys.exit(-1)
 
     if int(h5.attrs['version']) < 200:
-        print "File '%s' is too old to be read with this version of PUQ.\nPlease try an older version." % filename
+        print("File '%s' is too old to be read with this version of PUQ.\nPlease try an older version." % filename)
         sys.exit(-1)
 
     return h5, filename
@@ -113,11 +117,15 @@ def load_internal(name):
 
     h5, fname = open_hdf5_file(name)
 
-    # in 201, switched to private/sweep
     if 'private' in h5:
-        sw = unpickle(h5['private/sweep'].value)
+        val = h5['private/sweep'].value
     else:
-        sw = unpickle(h5['input/sweep'].value)
+        # backwards compatibility
+        val = h5['input/sweep'].value
+
+    if type(val) != str:
+        val = val.decode('UTF-8')
+    sw = unpickle(val)
 
     sw.fname = os.path.splitext(fname)[0]
     h5.close()
@@ -332,8 +340,8 @@ def extend(*args):
     vprint(1, "Extending %s.hdf5 using %s" % (sweep.fname, cname))
     if cname == 'MonteCarlo':
         if opt.num <= 0:
-            print "Monte Carlo extend requires a valid num argument."
-            print usage
+            print("Monte Carlo extend requires a valid num argument.")
+            print(usage)
             return
         sweep.psweep.extend(opt.num)
     else:
@@ -387,7 +395,7 @@ def main(argv=None):
              "monitor": resume,
     }
     if opt.V:
-        print puq.__version__
+        print(puq.__version__)
         return 0
 
     if len(args) == 0:
@@ -399,7 +407,7 @@ def main(argv=None):
         else:
             return -1
     else:
-        print "ERROR: unknown command '%s'" % args[0]
+        print("ERROR: unknown command '%s'" % args[0])
         usage()
     return -1
 

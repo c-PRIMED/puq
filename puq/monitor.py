@@ -1,4 +1,4 @@
-from util import vprint
+from .util import vprint
 from logging import info, debug, exception, warning, critical
 
 

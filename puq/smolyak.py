@@ -5,6 +5,7 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 from puq.smolyak_funcs import legendre_nd, jacobi_e2_nd, nelms, chaos_sequence
@@ -14,7 +15,7 @@ from puq.jpickle import pickle
 from puq.sparse_grid import sgrid
 from collections import defaultdict
 from logging import debug
-from response import ResponseFunc
+from .response import ResponseFunc
 
 
 class Smolyak(PSweep):
@@ -83,9 +84,8 @@ class Smolyak(PSweep):
 
         chaos = chaos_sequence(dim, self.level)
         chaos = np.int_(chaos)
-
         for d in range(0, dim):
-            poly = np.array(map(lambda x: sympy.legendre(x, var[d]), chaos[:, d]))
+            poly = np.array(list(map(lambda x: sympy.legendre(int(x), var[d]), chaos[:, d])))
             if d == 0:
                 s = poly
             else:
@@ -158,7 +158,7 @@ class Smolyak(PSweep):
             rowlist = defaultdict(list)
             for n, row in enumerate(newgrid):
                 rowlist[tuple(row)].append(n)
-            for r in rowlist.keys():
+            for r in list(rowlist.keys()):
                 if len(rowlist[r]) < 2:
                     del rowlist[r]
 
@@ -188,7 +188,7 @@ class Smolyak(PSweep):
             sens[p.name] = {'std': std, 'ustar': ustar}
             #p.sensitivity_ustar = ustar
             #p.sensitivity_dev = std
-        sorted_list = sorted(sens.items(), lambda x, y: cmp(y[1]['ustar'], x[1]['ustar']))
+        sorted_list = sorted(list(sens.items()), key=lambda a: a[1]['ustar'], reverse=True)
 
         vprint(1, "Var%s     u*            dev" % (' '*(max_name_len)))
         vprint(1, '-'*(28+max_name_len))

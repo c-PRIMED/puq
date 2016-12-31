@@ -5,6 +5,7 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 from puq.jpickle import unpickle, pickle
 import sys, string, matplotlib
@@ -17,7 +18,8 @@ import matplotlib.pyplot as plt
 #from matplotlib import rc
 #rc('text', usetex=True)
 import numpy as np
-from pdf import ExperimentalPDF
+from .pdf import ExperimentalPDF
+
 
 def plot_customize(opt, p, fname):
     try:
@@ -46,6 +48,7 @@ def plot_customize(opt, p, fname):
     if opt.f != 'i':
         plt.savefig('%s.%s' % (fname, opt.f))
 
+
 def plot(sweep, h5, opt, params=[]):
 
     if opt.v:
@@ -58,7 +61,7 @@ def plot(sweep, h5, opt, params=[]):
     if opt.r:
         for vname in h5[method]:
             if not opt.v or vname in opt.v:
-                print "Plotting Response Surface for %s" % vname
+                print("Plotting Response Surface for %s" % vname)
                 desc = h5[method][vname].attrs['description']
                 rsv = h5[method][vname]['response'].value
                 rs = unpickle(rsv)
@@ -76,7 +79,7 @@ def plot(sweep, h5, opt, params=[]):
 
         for vname in h5[method]:
             if not opt.v or vname in opt.v:
-                print "plotting PDF for %s" % vname
+                print("plotting PDF for %s" % vname)
                 desc = h5[method][vname].attrs['description']
                 if 'samples' in h5[method][vname]:
                     # response surface already sampled.  Just calculate pdf.
@@ -100,7 +103,7 @@ def plot(sweep, h5, opt, params=[]):
                             p = pdf.plot()
 
                     h5[method][vname]['samples'] = data
-                    if not 'pdf' in h5[method][vname]:
+                    if 'pdf' not in h5[method][vname]:
                         h5[method][vname]['pdf'] = pickle(pdf)
                 plt.xlabel(vname)
                 if desc and desc != vname:
@@ -108,5 +111,3 @@ def plot(sweep, h5, opt, params=[]):
                 else:
                     plt.title("PDF for %s" % vname)
                 plot_customize(opt, p, 'pdf-%s' % vname)
-
-

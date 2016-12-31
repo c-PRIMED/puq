@@ -2,6 +2,7 @@
 '''
 Testsuite for the NormalPDF class
 '''
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 from puq import *
@@ -18,8 +19,8 @@ def _hisplot(y, nbins):
 def compare_curves(x1, y1, x2, y2, **args):
     ay = np.interp(x2, x1, y1)
     rmse = np.sqrt(np.sum((ay - y2)**2))
-    print "maximum difference is", np.max(np.abs(ay - y2))
-    print "RMSE=%s" % rmse
+    print("maximum difference is", np.max(np.abs(ay - y2)))
+    print("RMSE=%s" % rmse)
     assert rmse < .02
     #assert np.allclose(ay, y2, **args)
 
@@ -29,14 +30,14 @@ def _test_npdf(mean, dev, nsamples):
     c = NormalPDF(mean=mean, dev=dev)
     assert isinstance(c, PDF)
 
-    print "Normal(%s, %s)" % (mean, dev)
+    print("Normal(%s, %s)" % (mean, dev))
 
     sfunc = stats.norm(mean, dev)
     x = c.x
     y = sfunc.pdf(x)
     rmse = 100.0 * np.sqrt(np.mean((c.y - y)**2)) / (np.max(c.y) - np.min(c.y))
-    print "PDF for %d points:" % len(x)
-    print "\tRMSE (%d points)=%s %%" % (len(x), rmse)
+    print("PDF for %d points:" % len(x))
+    print("\tRMSE (%d points)=%s %%" % (len(x), rmse))
     assert rmse < .01
 
     # for Normal distributions, range is truncated
@@ -51,7 +52,7 @@ def _test_npdf(mean, dev, nsamples):
     y = sfunc.pdf(x)
     interp_y = c.pdf(x)
     rmse = 100.0 * np.sqrt(np.mean((interp_y - y)**2))/ (np.max(y) - np.min(y))
-    print "\tRMSE (%d points)=%s %%" % (ref_num_points,rmse)
+    print("\tRMSE (%d points)=%s %%" % (ref_num_points,rmse))
     assert rmse < .05
 
     """
@@ -63,7 +64,7 @@ def _test_npdf(mean, dev, nsamples):
 
 
 def _test_npdf_trunc(mean, dev, min, max):
-    print "Normal(%s, %s, min=%s, max=%s)" % (mean, dev, min, max)
+    print("Normal(%s, %s, min=%s, max=%s)" % (mean, dev, min, max))
     options['pdf']['samples'] = 1000
     c = NormalPDF(mean=mean, dev=dev, min=min, max=max)
     if min != None:
@@ -78,8 +79,8 @@ def _test_npdf_trunc(mean, dev, min, max):
     x = c.x
     y = sfunc.pdf(x)
     rmse = 100.0 * np.sqrt(np.mean((c.y - y)**2)) / (np.max(c.y) - np.min(c.y))
-    print "PDF for %d points:" % len(x)
-    print "\tRMSE (%d points)=%s %%" % (len(x), rmse)
+    print("PDF for %d points:" % len(x))
+    print("\tRMSE (%d points)=%s %%" % (len(x), rmse))
     assert rmse < .01
 
     # now compare linear interpolated pdf versus reference
@@ -89,7 +90,7 @@ def _test_npdf_trunc(mean, dev, min, max):
     y = sfunc.pdf(x)
     interp_y = c.pdf(x)
     rmse = 100.0 * np.sqrt(np.mean((interp_y - y)**2))/ (np.max(y) - np.min(y))
-    print "\tRMSE (%d points)=%s %%" % (ref_num_points,rmse)
+    print("\tRMSE (%d points)=%s %%" % (ref_num_points,rmse))
     assert rmse < .05
 
     """
@@ -100,7 +101,7 @@ def _test_npdf_trunc(mean, dev, min, max):
     """
 
 def _test_ncdf_trunc(mean, dev, min, max):
-    print "CDF Normal(%s, %s, min=%s, max=%s)" % (mean, dev, min, max)
+    print("CDF Normal(%s, %s, min=%s, max=%s)" % (mean, dev, min, max))
     options['pdf']['samples'] = 1000
     c = NormalPDF(mean=mean, dev=dev, min=min, max=max)
     if min is not None:
@@ -115,8 +116,8 @@ def _test_ncdf_trunc(mean, dev, min, max):
     x = c.x
     y = sfunc.cdf(x)
     rmse = 100.0 * np.sqrt(np.mean((c.cdfy - y)**2)) / (np.max(c.cdfy) - np.min(c.cdfy))
-    print "PDF for %d points:" % len(x)
-    print "\tRMSE (%d points)=%s %%" % (len(x), rmse)
+    print("PDF for %d points:" % len(x))
+    print("\tRMSE (%d points)=%s %%" % (len(x), rmse))
     assert rmse < .01
 
     # now compare linear interpolated pdf versus reference
@@ -126,7 +127,7 @@ def _test_ncdf_trunc(mean, dev, min, max):
     y = sfunc.cdf(x)
     interp_y = c.cdf(x)
     rmse = 100.0 * np.sqrt(np.mean((interp_y - y)**2)) / (np.max(y) - np.min(y))
-    print "\tRMSE (%d points)=%s %%" % (ref_num_points, rmse)
+    print("\tRMSE (%d points)=%s %%" % (ref_num_points, rmse))
     assert rmse < .05
 
     """
@@ -137,7 +138,7 @@ def _test_ncdf_trunc(mean, dev, min, max):
     """
 
 def _test_ncdf(mean, dev, nsamples):
-    print "CDF Normal(%s, %s)" % (mean, dev)
+    print("CDF Normal(%s, %s)" % (mean, dev))
     options['pdf']['samples'] = nsamples
 
     c = NormalPDF(mean=mean, dev=dev)
@@ -146,8 +147,8 @@ def _test_ncdf(mean, dev, nsamples):
     cdfy = sfunc.cdf(c.x)
     rmse = np.sqrt(np.sum((c.cdfy - cdfy)**2))
     rmse = 100.0 * np.sqrt(np.mean((c.cdfy - cdfy)**2)) / (np.max(c.cdfy) - np.min(c.cdfy))
-    print "CDF for %d points:" % len(c.x)
-    print "\tRMSE (%d points)=%s %%" % (len(c.x), rmse)
+    print("CDF for %d points:" % len(c.x))
+    print("\tRMSE (%d points)=%s %%" % (len(c.x), rmse))
     assert rmse < .01
 
     # now compare linear interpolated cdf versus reference
@@ -156,7 +157,7 @@ def _test_ncdf(mean, dev, nsamples):
     y = sfunc.cdf(x)
     interp_y = c.cdf(x)
     rmse = 100.0 * np.sqrt(np.mean((interp_y - y)**2)) / (np.max(y) - np.min(y))
-    print "\tRMSE (%d points)=%s %%" % (ref_num_points, rmse)
+    print("\tRMSE (%d points)=%s %%" % (ref_num_points, rmse))
     assert rmse < .05
 
     """
@@ -169,9 +170,9 @@ def _test_ncdf(mean, dev, nsamples):
 def _test_normal_meandev(m, d):
     c = NormalPDF(mean=m, dev=d)
 
-    print "m=%s c.mean=%s" % (m, c.mean)
+    print("m=%s c.mean=%s" % (m, c.mean))
     assert np.allclose(c.mean, m, rtol=.001)
-    print "d=%s c.dev=%s" % (d, c.dev)
+    print("d=%s c.dev=%s" % (d, c.dev))
     assert np.allclose(c.dev, d, rtol=.001)
 
 
@@ -191,8 +192,8 @@ def _test_normal_ds(m, d):
     compare_curves(x, y, dx, dy, atol=.001)
 
     # check mean and std deviation
-    print "MEAN=",m, np.mean(data)
-    print "DEV=",d, np.std(data)
+    print("MEAN=",m, np.mean(data))
+    print("DEV=",d, np.std(data))
     assert np.allclose(m, np.mean(data), rtol=.01)
     assert np.allclose(d, np.std(data), rtol=.02), 'Dev = %s' % np.std(data)
 
@@ -248,8 +249,8 @@ def _test_normal_ds1(m, d):
     y = stats.norm(m, d).pdf(x)
     compare_curves(x, y, dx, dy, atol=.003)
 
-    print "MEAN=", m, np.mean(data)
-    print "DEV=", d, np.std(data)
+    print("MEAN=", m, np.mean(data))
+    print("DEV=", d, np.std(data))
     assert np.allclose(m, np.mean(data), rtol=.01)
     assert np.allclose(d, np.std(data), rtol=.02)
 
@@ -280,8 +281,8 @@ def _test_normal_lhs1(m, d):
     y = stats.norm(m, d).pdf(x)
     compare_curves(x, y, dx, dy, atol=.003)
 
-    print "MEAN=", np.mean(data)
-    print "DEV=", np.std(data)
+    print("MEAN=", np.mean(data))
+    print("DEV=", np.std(data))
     assert np.allclose(m, np.mean(data), rtol=.01)
     assert np.allclose(d, np.std(data), rtol=.01)
 
@@ -303,8 +304,8 @@ def _test_normal_random(m, d):
     y = stats.norm(m, d).pdf(x)
     compare_curves(x, y, dx, dy, atol=.005)
 
-    print "MEAN=", np.mean(data)
-    print "DEV=", np.std(data)
+    print("MEAN=", np.mean(data))
+    print("DEV=", np.std(data))
     assert np.allclose(m, np.mean(data), rtol=.01)
     assert np.allclose(d, np.std(data), rtol=.01)
 

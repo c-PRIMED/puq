@@ -2,9 +2,10 @@
 Utility functions for UQ
 
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import os
 import h5py
@@ -17,12 +18,12 @@ from puq.hdf import get_result
 def dump_hdf5(name, v, desc=''):
     np.set_printoptions(threshold=np.nan)
     line = pickle({'name': name, 'desc': desc, 'value': v})
-    print 'HDF5:%s:5FDH' % line
+    print('HDF5:%s:5FDH' % line)
 
 
 def vprint(level, str):
     if options['verbose'] >= level:
-        print str
+        print(str)
 
 
 # read psamples from a csv file and return a dictionary
@@ -37,13 +38,13 @@ def get_psamples_from_csv(sw, h5, sname):
 
     for i, h in enumerate(header):
         if h not in [p.name for p in sw.psweep.params]:
-            print "Warning: CSV variable '%s' not a parameter for this model." % h
+            print("Warning: CSV variable '%s' not a parameter for this model." % h)
         else:
             samples[h] = data[:, i]
 
     if samples == {}:
-        print "Warning: No valid variable names found in CSV header."
-        print "Header is '%s'" % header
+        print("Warning: No valid variable names found in CSV header.")
+        print("Header is '%s'" % header)
         return None
     return samples
 
@@ -120,5 +121,5 @@ def strip(fname):
     if os.WEXITSTATUS(ret) == 0:
         os.unlink(tmpname)
     else:
-        print 'h5repack failed.'
+        print('h5repack failed.')
         os.rename(tmpname, fname)

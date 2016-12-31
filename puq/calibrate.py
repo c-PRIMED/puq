@@ -3,6 +3,8 @@ This file is part of PUQ
 Copyright (c) 2013-2106 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
+
 import sys
 import puq
 import numpy as np
@@ -55,7 +57,7 @@ class Calibrate(object):
 
     def __init__(self, model, cvars, nvars, outvar, MAP='fmin_powell'):
 
-        out_var_name = outvar.keys()[0]
+        out_var_name = list(outvar.keys())[0]
 
         if callable(model):
             # model is a python function
@@ -77,7 +79,7 @@ class Calibrate(object):
                 raise ValueError(err)
 
             # find our variable names
-            val_names = map(str, model.free_symbols)
+            val_names = list(map(str, model.free_symbols))
 
             # all variables in the model must be defined
             if set(val_names) != set(nvars.keys()).union(set(cvars.keys())):
@@ -156,7 +158,7 @@ class Calibrate(object):
                                              parents={},
                                              value=start_val)
                 else:
-                    print 'Unknown probability distribution: %s' % d[0]
+                    print('Unknown probability distribution: %s' % d[0])
                     return None
         for v in nvars.keys():
             var[v] = nvars[v][:, 0]
@@ -176,17 +178,17 @@ class Calibrate(object):
         mdata_err = out_var[:, 1]
 
         mcmc_model_out = pymc.Normal('model_out', mu=results, tau=1.0 / mdata_err ** 2, value=mdata, observed=True)
-        self.mcmc_model = pymc.Model(var.values() + means.values() + devs.values() + [mcmc_model_out])
+        self.mcmc_model = pymc.Model(list(var.values()) + list(means.values()) + list(devs.values()) + [mcmc_model_out])
 
         if MAP is not None:
             # compute MAP and use that as start for MCMC
             map_ = pymc.MAP(self.mcmc_model)
             map_.fit(method=MAP)
 
-            print '\nmaximum a posteriori (MAP) using', MAP
+            print('\nmaximum a posteriori (MAP) using', MAP)
             for v in cvars.keys():
-                print '%s=%s' % (v, var[v].value)
-            print
+                print('%s=%s' % (v, var[v].value))
+            print()
 
         # NOT calibration variables
         for v in nvars.keys():
@@ -211,7 +213,7 @@ class Calibrate(object):
             plot=False,
             cache_depth=2)
 
-        self.mcmc_model = pymc.Model(var.values() + means.values() + devs.values() + [mcmc_model_out])
+        self.mcmc_model = pymc.Model(list(var.values()) + list(means.values()) + list(devs.values()) + [mcmc_model_out])
         self.cvars = cvars
         self.var = var
         self.dlen = dlen
@@ -336,7 +338,7 @@ def calibrate(params, caldata, err, func, num_samples=None):
     Returns:
       A copy of **params** modified with the calibrated variables.
     """
-    print "Performing Bayesian Calibration..."
+    print("Performing Bayesian Calibration...")
 
     cvars = {}
     nvars = {}
@@ -351,9 +353,9 @@ def calibrate(params, caldata, err, func, num_samples=None):
         if hasattr(p, 'caldata') and p.caldata is not None:
             # noncalibration parameter with measurements and errors
             if len(p.caldata.shape) != 2:
-                print '\nWarning: caldata for %s should have two columns.' % p.name
-                print 'Column 1 is the data and column 2 is the error.'
-                print "Assuming error is zero and continuing.\n"
+                print('\nWarning: caldata for %s should have two columns.' % p.name)
+                print('Column 1 is the data and column 2 is the error.')
+                print("Assuming error is zero and continuing.\n")
                 err = np.broadcast_to(0, p.caldata.shape)
                 p.caldata = np.column_stack((p.caldata, err))
             nvars[p.name] = p.caldata
@@ -363,8 +365,8 @@ def calibrate(params, caldata, err, func, num_samples=None):
             elif isinstance(p, puq.UniformParameter):
                 prior = 'Uniform(%s,%s)' % (p.pdf.range[0], p.pdf.range[1])
             else:
-                print '\nWARNING: Only Normal and Uniform priors are currently supported.'
-                print '\tContinuing using Uniform\n'
+                print('\nWARNING: Only Normal and Uniform priors are currently supported.')
+                print('\tContinuing using Uniform\n')
                 prior = 'Uniform(%s,%s)' % (p.pdf.range[0], p.pdf.range[1])
             cvars[p.name] = {'prior': prior, 'type': p.caltype}
 
@@ -377,7 +379,7 @@ def calibrate(params, caldata, err, func, num_samples=None):
             continue
 
         vals = cvars[p.name]['trace']
-        print "Calibrated %s to a PDF with mean=%s and dev=%s" % (p.name, np.mean(vals), np.std(vals))
+        print("Calibrated %s to a PDF with mean=%s and dev=%s" % (p.name, np.mean(vals), np.std(vals)))
         pdf = puq.ExperimentalPDF(vals, fit=True)
         newparams[i] = puq.CustomParameter(newparams[i].name,
                                            newparams[i].description,

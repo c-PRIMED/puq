@@ -1,8 +1,9 @@
 """
 This file is part of PUQ
-Copyright (c) 2013-2015 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import sys
 import numpy as np
@@ -48,7 +49,7 @@ class Function(object):
             d.append(np.linspace(*v[1], num=steps))
 
         xx = meshgridn(*d)
-        pts = np.vstack(map(np.ndarray.flatten, xx)).T
+        pts = np.vstack(list(map(np.ndarray.flatten, xx))).T
         res = self.evala(pts)
         if type(res) is not np.ndarray:
             return res, res
@@ -80,7 +81,7 @@ class Function(object):
         if b.pdf.range[0] < b.pdf.range[0] or b.pdf.range[1] > a.pdf.range[1]:
             try:
                 if sys.stdin.isatty() and sys.stdout.isatty():
-                    print 'New PDF has a range outside the original PDF.'
+                    print('New PDF has a range outside the original PDF.')
                     loop = True
                     x = 'N'
                     while loop:
@@ -104,7 +105,7 @@ class Function(object):
             for newp in params:
                 for i, p in enumerate(self.params):
                     if p.name == newp.name:
-                        print "REPLACING\n\t%s\nWITH\n\t%s\n" % (p, newp)
+                        print("REPLACING\n\t%s\nWITH\n\t%s\n" % (p, newp))
                         if not force:
                             self.check_pdf_range(p, newp)
                         self.params[i] = newp
@@ -149,7 +150,7 @@ class Function(object):
     def plot(self, *args, **kwargs):
         dims = len(self.vars)
         if dims > 2:
-            print "Warning: Cannot plot in more than 3 dimensions!"
+            print("Warning: Cannot plot in more than 3 dimensions!")
             return
         if dims == 1:
             return self._plot1(*args, **kwargs)
@@ -161,7 +162,7 @@ class Function(object):
         x = np.linspace(*self.vars[0][1], num=steps+1)
         y = np.linspace(*self.vars[1][1], num=steps+1)
         xx = meshgridn(x, y)
-        pts = np.vstack(map(np.ndarray.flatten, xx)).T
+        pts = np.vstack(list(map(np.ndarray.flatten, xx))).T
         pts = np.array(self.evala(pts))
 
         fig = kwargs.get('fig')
@@ -247,7 +248,7 @@ class ResponseFunc(Function):
         self._reinit_()
 
     def _reinit_(self):
-        self.vnames = map(str, self.vnames)
+        self.vnames = list(map(str, self.vnames))
         v = sympy.symbols(self.vnames)
         self.eval = lambdify(v, self._eqn, dummify=False)
 
@@ -305,7 +306,7 @@ class ResponseFunc(Function):
                 if res > mabs:
                     mabs = res
             if debug:
-                print "%s\t has maximum of %s" % (term, mabs)
+                print("%s\t has maximum of %s" % (term, mabs))
             terms.append((term, mabs))
         maxval = max([val for _t, val in terms])
         eqn = sympy.Add(*[t for t, val in terms if val/maxval > sig])
@@ -329,8 +330,8 @@ class ResponseFunc(Function):
         """
         if not isinstance(self._eqn, sympy.Add):
             return self._eqn
-        print [t.as_coeff_Mul() for t in self._eqn.args]
-        print [(t.as_coeff_Mul()[0].evalf(digits), t.as_coeff_Mul()[1]) for t in self._eqn.args]
+        print([t.as_coeff_Mul() for t in self._eqn.args])
+        print([(t.as_coeff_Mul()[0].evalf(digits), t.as_coeff_Mul()[1]) for t in self._eqn.args])
         return sympy.Add(*[sympy.Mul(t.as_coeff_Mul()[0].evalf(digits), t.as_coeff_Mul()[1]) for t in self._eqn.args])
 
     def rmse(self):

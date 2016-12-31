@@ -3,17 +3,19 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import os, time, sys
-from monitor import TextMonitor
+from .monitor import TextMonitor
 from subprocess import Popen, PIPE
 import numpy as np
 from logging import debug
-from hosts import Host
+from .hosts import Host
 from shutil import rmtree
 from stat import S_ISDIR
 from glob import glob
 from threading import Thread, Event
+
 
 class SubmitHost(Host):
     """
@@ -39,13 +41,13 @@ class SubmitHost(Host):
             os.mkdir(fname)
         except:
             pass
-        f = open(os.path.join(fname,'input.csv'), 'w')
+        f = open(os.path.join(fname, 'input.csv'), 'w')
         for a in args:
             if first:
                 first = False
-                print >>f, ', '.join(['@@'+b[0] for b in a])
+                print(', '.join(['@@'+b[0] for b in a]), file=f)
                 cmds = [(x[0], '@@'+x[0]) for x in a]
-            print >>f, ','.join([str(b[1]) for b in a])
+            print(','.join([str(b[1]) for b in a]), file=f)
         f.close()
         scmd = "submit --runName=puq -d input.csv %s" % self.prog.cmd(cmds)
         self.add_job(shlex.split(scmd), '', 0, '')
@@ -102,7 +104,7 @@ class SubmitHost(Host):
             except:
                 d = done
             if d > done:
-                print '=RAPPTURE-PROGRESS=>%d Running' % (int(d))
+                print('=RAPPTURE-PROGRESS=>%d Running' % (int(d)))
                 sys.stdout.flush()
                 done = d
             if int(d) >= 100:
@@ -112,13 +114,13 @@ class SubmitHost(Host):
 
     def _run(self):
         j = self.jobs[0]
-        print '=RAPPTURE-PROGRESS=>0 Starting'
+        print('=RAPPTURE-PROGRESS=>0 Starting')
         sys.stdout.flush()
 
         try:
             myprocess = Popen(j['cmd'], bufsize=0)
-        except Exception, e:
-            print 'Command %s failed: %s' % (' '.join(j['cmd']), e)
+        except Exception as e:
+            print('Command %s failed: %s' % (' '.join(j['cmd']), e))
             sys.stdout.flush()
 
         self.stop = Event()
@@ -132,16 +134,16 @@ class SubmitHost(Host):
             ret = myprocess.wait()
             if ret:
                 err = False
-                print 'Submit failed with error %s' % ret
+                print('Submit failed with error %s' % ret)
                 whocares = os.listdir(os.getcwd())
                 if os.path.exists('puq'):
                     fn = glob('puq/*.stderr')
                     if fn:
                         with open(fn[0]) as f:
-                            print f.read()
+                            print(f.read())
                 sys.stdout.flush()
         except KeyboardInterrupt:
-            print '\nPUQ interrupted. Cleaning up. Please wait...\n'
+            print('\nPUQ interrupted. Cleaning up. Please wait...\n')
             err = False
             myprocess.kill()
 
@@ -196,7 +198,7 @@ class SubmitHost(Host):
             times[jobnum] =  job[j][2]
             finished_jobs.append(jobnum)
             if not S_ISDIR(os.stat(j).st_mode):
-                print "ERROR: job %s directory not found" % j
+                print("ERROR: job %s directory not found" % j)
                 continue
             os.chdir(j)
             grp = jobs_grp.require_group(str(jobnum))
@@ -208,7 +210,7 @@ class SubmitHost(Host):
                     grp.create_dataset('std%s' % ext, data=fdata)
                     if job[j][3] != 0:
                         # error code was set
-                        print "ERROR: Job %s failed: %s" % (j, fdata)
+                        print("ERROR: Job %s failed: %s" % (j, fdata))
                     f.close()
             for fn in self.prog.outfiles:
                 try:

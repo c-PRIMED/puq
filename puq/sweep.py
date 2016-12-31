@@ -3,6 +3,7 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import time, os, re, h5py, sys, string
 import numpy as np
@@ -16,6 +17,13 @@ from puq.jpickle import pickle, unpickle
 from socket import gethostname
 from puq.parameter import get_psamples
 import getpass
+
+# for python3
+if sys.version[0] == "3":
+    raw_input = input
+    py3 = True
+else:
+    py3 = False
 
 # Can't build pymc for Windows, so no calibration
 if not sys.platform.startswith("win"):
@@ -69,7 +77,7 @@ class Sweep(object):
 
         # write HDF5 header information, once only
         if 'version' not in h5.attrs:
-            h5.attrs['MEMOSA_UQ'] = 'MEMOSA'
+            h5.attrs['MEMOSA_UQ'] = b'MEMOSA'
             h5.attrs['version'] = 201
             # h5.attrs['id'] = self.id
             h5.attrs['date'] = time.strftime("%b %d %H:%M %Z %Y", time.localtime())
@@ -92,8 +100,13 @@ class Sweep(object):
 
         # basic parameter table for non-python reading of the hdf5 file
         h['param_array'] = np.column_stack([p.values for p in self.psweep.params])
-        h['param_array'].attrs['name'] = [str(p.name) for p in self.psweep.params]
-        h['param_array'].attrs['description'] = [str(p.description) for p in self.psweep.params]
+        if py3:
+            h['param_array'].attrs['name'] = [bytes(p.name, 'UTF-8') for p in self.psweep.params]
+            h['param_array'].attrs['description'] = [bytes(p.description, 'UTF-8') for p in self.psweep.params]
+
+        else:
+            h['param_array'].attrs['name'] = [str(p.name) for p in self.psweep.params]
+            h['param_array'].attrs['description'] = [str(p.description) for p in self.psweep.params]
 
         # json-pickled parameters
         h = h.require_group('params')
@@ -154,7 +167,7 @@ class Sweep(object):
                                 break
                         except:
                             pass
-                        print "Please answer with 'Y' or 'N'\n"
+                        print("Please answer with 'Y' or 'N'\n")
                     if done:
                         sys.exit(-1)
                 os.remove(fn)
@@ -187,8 +200,8 @@ class Sweep(object):
             hf.close()
 
         if not has_data and not self._reinit:
-            print "WARNING: There is no data in the output section!"
-            print "Check that your runs completed successfully."
+            print("WARNING: There is no data in the output section!")
+            print("Check that your runs completed successfully.")
             return False
         return params, data
 
@@ -200,12 +213,12 @@ class Sweep(object):
             err = hf['output/jobs/%s/stderr' % job].value
             res = p.findall(err)
             if res:
-                print "Job %s: %s" % (job, res[0])
+                print("Job %s: %s" % (job, res[0]))
                 for line in err.split('\n'):
                     if line != res[0] and not line.startswith('HDF5:{'):
-                        print line
+                        print(line)
             elif len(err) == 0:
-                print "Job %s never completed. Walltime exceeded?" % job
+                print("Job %s never completed. Walltime exceeded?" % job)
 
             results = False
             out = hf['output/jobs/%s/stdout' % job].value
@@ -214,7 +227,7 @@ class Sweep(object):
                     results = True
                     break
             if not results:
-                print "ERROR: Job %s has no output data in stdout." % job
+                print("ERROR: Job %s has no output data in stdout." % job)
 
     def analyze(self, verbose=False):
         """
@@ -225,8 +238,8 @@ class Sweep(object):
         debug('')
         hf = h5py.File(self.fname + '.hdf5')
         if not self.host.status(quiet=1)[1]:
-            print "Cannot collect data or perform analysis until all jobs are completed."
-            print "You should do 'puq resume' to resume jobs."
+            print("Cannot collect data or perform analysis until all jobs are completed.")
+            print("You should do 'puq resume' to resume jobs.")
             sys.exit(-1)
 
         # collect the data if it has not already been collected.
@@ -236,7 +249,7 @@ class Sweep(object):
             try:
                 self.psweep.analyze(hf)
             except:
-                print 'Warning: analysis failed.'
+                print('Warning: analysis failed.')
                 errors = 1
 
         # quick error check
@@ -255,7 +268,7 @@ class Sweep(object):
                         num_jobs -= 1
                     if tlen != num_jobs:
                         errors += 1
-                        print "Expected %s data points for variable %s, but got %s." % (num_jobs, var, tlen)
+                        print("Expected %s data points for variable %s, but got %s." % (num_jobs, var, tlen))
                         self.analyze_errors(hf)
                         return errors
 
@@ -361,7 +374,7 @@ class Sweep(object):
                             cont = True
                             cline = line
                     elif ext == 'err':
-                        print 'STDERR[job %d]: %s' % (j, line)
+                        print('STDERR[job %d]: %s' % (j, line))
             self._dump_hdf5_cache(hf, ext == 'out')
 
     def resume(self):
@@ -370,4 +383,4 @@ class Sweep(object):
             self._save_hdf5()
             self.analyze()
         else:
-            print "All jobs finished."
+            print("All jobs finished.")

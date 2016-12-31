@@ -1,12 +1,14 @@
 """
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 import csv
 import os.path
+
 
 def dump(h5, fname):
     """
@@ -28,12 +30,12 @@ def dump(h5, fname):
     for var in outvars:
         d = h5['/output/data/%s' % var].value
         if len(d.shape) != 1:
-            print "ERROR: Cannot dump multidimensional data to CSV file."
-            print "Output data '%s' has dimensions %s" % (var, d.shape)
+            print("ERROR: Cannot dump multidimensional data to CSV file.")
+            print("Output data '%s' has dimensions %s" % (var, d.shape))
             return
         data = np.column_stack((data, d))
     fname = os.path.splitext(fname)[0] + '.csv'
-    print 'Dumping CSV data to %s' % fname
+    print('Dumping CSV data to %s' % fname)
     w = csv.writer(open(fname, 'wb'))
     w.writerow([p for p in pnames] + outvars)
     w.writerow([40*'-'])

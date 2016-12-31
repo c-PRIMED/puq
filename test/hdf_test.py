@@ -1,3 +1,4 @@
+from __future__ import absolute_import, division, print_function
 import puq.hdf
 import os
 import h5py
@@ -20,7 +21,7 @@ def test2():
 
     got_except = False
     try:
-        print puq.hdf.get_result(hf)
+        print(puq.hdf.get_result(hf))
     except:
         got_except = True
     assert got_except, 'hdf5_get_result (no args)'

@@ -8,9 +8,10 @@ This file is part of PUQ
 Copyright (c) 2013 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
-import math, __builtin__
+import math
 from scipy import trapz, interpolate
 import scipy.stats
 from puq.options import options
@@ -22,6 +23,12 @@ if sys.platform == 'darwin':
 else:
     matplotlib.use('tkagg', warn=False)
 import matplotlib.pyplot as plt
+
+# Python 3
+if sys.version[0] == "3":
+    import builtins
+else:
+    import __builtin__ as builtins
 
 """
 Class implementing a PDF (Probability Density Function).
@@ -279,7 +286,10 @@ class PDF(object):
     def __add__(self, b):
         "Add two PDFs, returning a new one."
         # print "__add__ %s %s" % (self,b)
-        if isinstance(b, int) or isinstance(b, float) or isinstance(b, long):
+        if isinstance(b, int) or isinstance(b, float):
+            return self._nadd(b)
+
+        if sys.version[0] == "2" and isinstance(b, long):
             return self._nadd(b)
 
         a = self
@@ -316,7 +326,10 @@ class PDF(object):
 
     def __mul__(self, b):
         "Multiply two PDFs, returning a new PDF"
-        if isinstance(b, int) or isinstance(b, float) or isinstance(b, long):
+        if isinstance(b, int) or isinstance(b, float):
+            return self._nmul(b)
+
+        if sys.version[0] == "2" and isinstance(b, long):
             return self._nmul(b)
 
         a = self
@@ -355,10 +368,17 @@ class PDF(object):
     def __truediv__(self, b):
         return self.__div__(b)
 
+    def __rtruediv__(self, b):
+        return self.__rdiv__(b)
+
     def __div__(self, b):
         "Divide two PDFs, returning a new PDF"
-        if isinstance(b, int) or isinstance(b, float) or isinstance(b, long):
+        if isinstance(b, int) or isinstance(b, float):
             return self._ndiv(b)
+
+        if sys.version[0] == "2" and isinstance(b, long):
+            return self._ndiv(b)
+
         if b.x[0]*b.x[-1] <= 0:
             raise ValueError("Cannot divide by PDFs that include 0")
         a = self
@@ -441,12 +461,12 @@ def _get_range(sfunc, min, max):
         mmax = sfunc.ppf(range[1])
 
     if min is not None:
-        min = __builtin__.max(min, mmin)
+        min = builtins.max(min, mmin)
     else:
         min = mmin
 
     if max is not None:
-        max = __builtin__.min(max, mmax)
+        max = builtins.min(max, mmax)
     else:
         max = mmax
 
@@ -763,9 +783,9 @@ def HPDF(data, min=None, max=None):
     mmin = x[0] - dx
     mmax = x[-1] + dx
     if min is not None:
-        mmin = __builtin__.max(min, mmin)
+        mmin = builtins.max(min, mmin)
     if max is not None:
-        mmax = __builtin__.min(max, mmax)
+        mmax = builtins.min(max, mmax)
     x = np.linspace(mmin, mmax, options['pdf']['numpart'])
     y = interpolate.splev(x, sp)
     y[y < 0] = 0     # if the extrapolation goes negative...

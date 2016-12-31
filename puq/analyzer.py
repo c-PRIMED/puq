@@ -7,9 +7,10 @@ Martin Hunt
 Purdue University
 
 This file is part of PUQ
-Copyright (c) 2013 PUQ Authors
+Copyright (c) 2013-2016 PUQ Authors
 See LICENSE file for terms.
 """
+from __future__ import absolute_import, division, print_function
 
 import matplotlib
 matplotlib.use('TkAgg', warn=False)
@@ -20,11 +21,25 @@ from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import matplotlib.pyplot as plt
-from Tkinter import *
-import ttk
-import ScrolledText
+
+try:
+    from Tkinter import *
+    from tkFont import Font
+    import ttk
+    from ScrolledText import ScrolledText
+    from urlparse import urlparse, urlunsplit
+    import tkMessageBox as messagebox
+    from tkFileDialog import asksaveasfilename
+except ImportError:
+    from tkinter import *
+    from tkinter.font import Font
+    from tkinter import ttk
+    from tkinter.scrolledtext import ScrolledText
+    from urllib.parse import urlparse, urlunsplit
+    from tkinter import messagebox
+    from tkinter.filedialog import asksaveasfilename
+
 import os, weakref, re
-from urlparse import urlparse
 import h5py
 from puq import Parameter, PDF, ExperimentalPDF, pickle, unpickle, SampledFunc
 import math
@@ -38,6 +53,7 @@ PUQPREFS = "~/.puq"
 
 
 def upload_file(filename, rename=''):
+    """
     from poster.encode import multipart_encode
     from poster.streaminghttp import register_openers
     import urllib2
@@ -53,6 +69,7 @@ def upload_file(filename, rename=''):
 
     # Actually do the request, and get the response
     return urllib2.urlopen(request).read()
+    """
 
 
 class Dialog(Toplevel):
@@ -205,7 +222,6 @@ def preferences():
 
 
 def ask_upload():
-    from tkMessageBox import askyesno, showinfo, WARNING
     global h5, modified, filename, DBADDR
     MyApp.cleanup()
 
@@ -213,7 +229,7 @@ def ask_upload():
     # exit on success.  Dialog on error.
     host = urlparse(DBADDR).netloc
 
-    if not askyesno("Upload", "Upload data from this file to %s" % host):
+    if not messagebox.askyesno("Upload", "Upload data from this file to %s" % host):
         return
     fname = filename
 
@@ -227,11 +243,11 @@ def ask_upload():
     dir = '/' + psweep
     for d in h5[dir]:
         if not 'pdf' in h5['%s/%s' % (dir, d)]:
-            showinfo("PDFs Needed", "All PDFs must be generated before uploading!", icon=WARNING)
+            messagebox.showinfo("PDFs Needed", "All PDFs must be generated before uploading!", icon=messagebox.WARNING)
             return
 
     if not 'description' in h5.attrs or len(h5.attrs['description']) < 10:
-        showinfo("No Description", "You must supply a detailed description before uploading this data file.", icon=WARNING)
+        showinfo("No Description", "You must supply a detailed description before uploading this data file.", icon=messagebox.WARNING)
         MyApp.state_changed('D_INITIAL')
         return
 
@@ -244,9 +260,9 @@ def ask_upload():
 
     if res != 'OK':
         if res == 'EXISTS':
-            showinfo("FAILED", "The upload failed because that file is already in the database.", icon=WARNING)
+            messagebox.showinfo("FAILED", "The upload failed because that file is already in the database.", icon=messagebox.WARNING)
         else:
-            showinfo("FAILED", "The upload failed for an unknown reason.", icon=WARNING)
+            messagebox.showinfo("FAILED", "The upload failed for an unknown reason.", icon=messagebox.WARNING)
     root.quit()
 
 
@@ -256,7 +272,7 @@ def cleanup_and_exit(save):
         h5.close()
         h5 = None
         if save and modified:
-            print "Saving Changes"
+            print("Saving Changes")
             os.remove(fname_orig)
         else:
             os.remove(filename)
@@ -268,11 +284,10 @@ def cleanup_and_exit(save):
 
 def ask_quit():
     global modified
-    from tkMessageBox import askyesno, WARNING
     #print 'ASK_QUIT'
     MyApp.cleanup()
     if modified:
-        if askyesno("Save Changes", "You have made changes. Save them to the HDF5 file?", icon=WARNING):
+        if messagebox.askyesno("Save Changes", "You have made changes. Save them to the HDF5 file?", icon=messagebox.WARNING):
             cleanup_and_exit(True)
     cleanup_and_exit(False)
 
@@ -399,7 +414,7 @@ class MB:
         self.exportmenu.add_cascade(label="Plot to", menu=self.exportplot)
         fig = plt.figure()
         sup = fig.canvas.get_supported_filetypes()
-        keys = sup.keys()
+        keys = list(sup.keys())
         keys.sort()
         for key in keys:
             lab = '%s : %s' % (key.upper(), sup[key])
@@ -435,11 +450,10 @@ class MB:
             ParameterFrame.me.plot(ext)
 
     def open_help(self):
-        webbrowser.open('http://memshub.org/site/memosa_docs/puq/index.html')
+        webbrowser.open('http://c-primed.github.io/puq/')
 
     def about(self):
-        from tkMessageBox import showinfo
-        showinfo(message=__doc__, title='ABOUT')
+        messagebox.showinfo(message=__doc__, title='ABOUT')
 
     def state(self, st, val, path):
         # print "MB state %s" % st
@@ -478,7 +492,7 @@ class InitFrame:
         self.paneframe = PanedWindow(parent, orient=VERTICAL)
 
         dframe = LabelFrame(self.paneframe, text="Description")
-        self.desc = ScrolledText.ScrolledText(dframe, height=5)
+        self.desc = ScrolledText(dframe, height=5)
         if 'description' in h5.attrs:
             self.olddesc = h5.attrs['description']
         else:
@@ -493,7 +507,7 @@ class InitFrame:
         except:
             scriptpath = 'N/A'
         sframe = LabelFrame(self.paneframe, text=scriptpath)
-        script = ScrolledText.ScrolledText(sframe)
+        script = ScrolledText(sframe)
         try:
             script.insert(1.0, h5['/input/script'].value)
         except:
@@ -523,7 +537,7 @@ class InitFrame:
 
 class BasicFrame:
     def __init__(self, parent):
-        self.txt = ScrolledText.ScrolledText(parent)
+        self.txt = ScrolledText(parent)
 
     def state(self, st, val, path):
         if st == 'DEV' or st == 'MEAN':
@@ -536,7 +550,7 @@ class BasicFrame:
 
 class DataFrame:
     def __init__(self, parent):
-        self.txt = ScrolledText.ScrolledText(parent)
+        self.txt = ScrolledText(parent)
 
     def state(self, st, val, path):
         if st == 'D_DATA':
@@ -550,7 +564,7 @@ class DataFrame:
 
 class StdoutFrame:
     def __init__(self, parent):
-        self.txt = ScrolledText.ScrolledText(parent)
+        self.txt = ScrolledText(parent)
 
     def state(self, st, val, path):
         if st == 'D_STDOUT':
@@ -624,7 +638,7 @@ class TextFrame:
         if not tval:
             return
 
-        self.stext = ScrolledText.ScrolledText(self.parent)
+        self.stext = ScrolledText(self.parent)
         self.stext.insert(END, tval)
         self.stext.config(state=DISABLED)
         self.stext.pack(fill=BOTH, side=TOP, expand=True)
@@ -638,7 +652,7 @@ class ProgressFrame:
     def state(self, st, val, path):
         if st == 'PROGRESS':
             str = "Generating PDF for %s\n\nPlease Wait." % (val)
-            self.txt = ScrolledText.ScrolledText(self.parent)
+            self.txt = ScrolledText(self.parent)
             self.txt.insert(END, str)
             self.txt.pack(fill=BOTH, side=LEFT, expand=True)
         else:
@@ -670,7 +684,6 @@ class PdfFrame:
     def export_pdf(self, ext):
         # Dump pdf as csv, json, or python
         import csv
-        from tkFileDialog import asksaveasfilename
         if hasattr(self, 'par') and self.par:
             name = '%s-pdf' % self.par.name
         else:
@@ -685,7 +698,7 @@ class PdfFrame:
             return
 
         if ext == 'csv':
-            with open(filename, 'wb') as csvfile:
+            with open(filename, 'w') as csvfile:
                 spamwriter = csv.writer(csvfile)
                 for x, prob in np.column_stack((self.pdf.x, self.pdf.y)):
                     spamwriter.writerow([x, prob])
@@ -698,10 +711,10 @@ class PdfFrame:
             button.pack(side=BOTTOM)
             msg.pack(fill=BOTH, expand=1)
         elif ext == 'py':
-            with open(filename, 'wb') as pyfile:
+            with open(filename, 'w') as pyfile:
                 pyfile.write(repr(self.pdf))
         elif ext == 'json':
-            with open(filename, 'wb') as jfile:
+            with open(filename, 'w') as jfile:
                 jfile.write(pickle(self.pdf))
 
     def state(self, st, pdf, path):
@@ -906,7 +919,6 @@ class PdfFrame:
         h5[self.path].attrs['nbins'] = self.nbins
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile='%s-pdf' % self.name,
                                      defaultextension='.%s' % ext,
@@ -984,7 +996,6 @@ class ParameterFrame:
     def export_pdf(self):
         # Dump pdf data as csv
         import csv
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Save PDF to CSV file...",
                                      initialfile='%s-pdf' % self.par.name,
                                      defaultextension='.csv',
@@ -1006,7 +1017,6 @@ class ParameterFrame:
         msg.pack(fill=BOTH, expand=1)
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile='%s-pdf' % self.par.name,
                                      defaultextension='.%s' % ext,
@@ -1075,7 +1085,7 @@ class ParameterFrame:
         self.bframe.pack(side=TOP, fill=BOTH, expand=0)
 
     def changed(self, fit=None, min=None, max=None):
-        print 'Parameter Changed %s %s %s' % (fit, min, max)
+        print('Parameter Changed %s %s %s' % (fit, min, max))
         # FIXME
 
     def fit_changed(self, val):
@@ -1111,7 +1121,6 @@ class TimeFrame:
             pass
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile='%s-response' % self.name,
                                      defaultextension='.%s' % ext,
@@ -1153,7 +1162,6 @@ class ResponseFrame:
             pass
 
     def plot(self, ext):
-        from tkFileDialog import asksaveasfilename
         filename = asksaveasfilename(title="Plot to file...",
                                      initialfile='%s-response' % self.name,
                                      defaultextension='.%s' % ext,
@@ -1167,7 +1175,6 @@ class ResponseFrame:
         root.clipboard_append(pickle(self.val))
 
     def export_response(self):
-        from tkFileDialog import asksaveasfilename
         name = '%s-response' % self.name
         filename = asksaveasfilename(title="Save Response to JSON file...",
                                      initialfile=name,
@@ -1176,7 +1183,7 @@ class ResponseFrame:
         if not filename:
             return
 
-        with open(filename, 'wb') as jfile:
+        with open(filename, 'w') as jfile:
             jfile.write(pickle(self.val))
 
     def state(self, st, val, path):
@@ -1267,7 +1274,7 @@ class ParFrame2:
         self.parframe = Frame(self.parent)
         self.parframe.pack(side=LEFT, fill=BOTH, expand=1)
 
-        params = map(str, h5['/input/params'].keys())
+        params = list(map(str, h5['/input/params'].keys()))
 
         # Parameters Table with scrollbar
         scrollbar = Scrollbar(self.parframe)
@@ -1281,7 +1288,10 @@ class ParFrame2:
         t.heading("#1", text='Description')
         t.heading("#2", text='PDF')
         for pname in params:
-            p = unpickle(h5['/input/params/' + pname].value)
+            p = h5['/input/params/' + pname].value
+            if type(p) == bytes and type(p) != str:
+                p = p.decode('UTF-8')
+            p = unpickle(p)
             cname = p.__class__.__name__[:-9]
             pdf_str = '%s [%s - %s] mean=%s dev=%s mode=%s' % (cname, p.pdf.range[0], p.pdf.range[1], p.pdf.mean, p.pdf.dev, p.pdf.mode)
             t.insert("", "end", text=p.name, values=[p.description, pdf_str])
@@ -1355,7 +1365,7 @@ class SurFrame:
             self.surframe = LabelFrame(self.parent, text="Surface")
 
             # Surface Pane
-            self.eqn = ScrolledText.ScrolledText(self.surframe, height=2, )
+            self.eqn = ScrolledText(self.surframe, height=2, )
             self.eqn.insert(END, val.eqn)
             self.eqn.pack(side=TOP, expand=YES, fill=BOTH, padx=5, pady=5)
 
@@ -1592,6 +1602,8 @@ class MyApp:
 
         # psweep results
         psweep = h5.attrs['UQtype']
+        if type(psweep) != str:
+            psweep = psweep.decode('UTF-8)')
         dir = '/' + psweep
         psweep_id = t.insert("", "end", iid='psweep', text=psweep, values=[dir, 'D_PSWEEP'])
 
@@ -1616,12 +1628,12 @@ class MyApp:
     def tree_select(self, event):
         global modified
         sel = event.widget.selection()
-        #print sel
+        # print("SEL=",sel)
         val, st = event.widget.item(sel)['values']
         tags = event.widget.item(sel)['tags']
 
         path = val
-        #print 'path=%s  st=%s' % (val, st)
+        # print('path=%s(%s)  st=%s(%s)' % (val, type(val), st, type(st)))
 
         if st.startswith("D_"):
             if st == 'D_STDOUT' and val == '':
@@ -1630,9 +1642,13 @@ class MyApp:
                 val = None
         else:
             if 'generate' in tags:
-                #print 'generate val=%s, path=%s' % (val, path)
+                # print('generate val=%s, path=%s' % (val, path))
                 dir = os.path.split(path)[0]
-                rs = unpickle(self.h5["%s/response" % dir].value)
+                rs = self.h5["%s/response" % dir].value
+                if type(rs) != str:
+                    rs = rs.decode('UTF-8)')
+                rs = unpickle(rs)
+
                 MyApp.state_changed('PROGRESS', val)
                 root.update()
                 if 'psamples' in self.h5:
@@ -1649,6 +1665,9 @@ class MyApp:
                 event.widget.item(sel, tags=[])
             else:
                 val = self.h5[val].value
+                if type(val) == bytes and type(val) != str:
+                    val = val.decode('UTF-8')
+
                 try:
                     val = unpickle(val)
                 except:

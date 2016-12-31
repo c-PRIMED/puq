@@ -10,6 +10,7 @@ See LICENSE file for terms.
 #
 # Note: classes must inherit from object to be pickled!!
 #
+from __future__ import absolute_import, division, print_function
 
 import os
 import jsonpickle
@@ -145,8 +146,8 @@ def NetObj(addr):
     try:
         response = urlopen(addr)
         val = response.read()
-    except URLError, e:
-        print e.reason
+    except URLError as e:
+        print(e.reason)
         raise URLError
 
     return unpickle(val)
