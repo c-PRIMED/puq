@@ -17,6 +17,7 @@ from puq.jpickle import pickle, unpickle
 from socket import gethostname
 from puq.parameter import get_psamples
 import getpass
+from puq.calibrate import calibrate
 
 # for python3
 if sys.version[0] == "3":
@@ -24,10 +25,6 @@ if sys.version[0] == "3":
     py3 = True
 else:
     py3 = False
-
-# Can't build pymc for Windows, so no calibration
-if not sys.platform.startswith("win"):
-    from puq.calibrate import calibrate
 
 _vcache = {}
 _dcache = {}

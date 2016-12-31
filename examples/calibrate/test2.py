@@ -20,7 +20,7 @@ def run():
     # set up host, uq and prog normally
     host = puq.InteractiveHost()
     uq = puq.Smolyak([x,y,z], level=2)
-    prog = puq.TestProgram('./model_1.py', desc='model_1 calibration')
+    prog = puq.TestProgram('python model_1.py', desc='model_1 calibration')
 
     # pass experimental results to Sweep
     return puq.Sweep(uq, host, prog, caldata=exp_data, calerr=sigma)

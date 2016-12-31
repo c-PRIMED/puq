@@ -18,11 +18,7 @@ from .response import Function, ResponseFunc, SampledFunc
 from .plot import plot
 from .read import read
 from .analyzer import analyzer
-
-# Can't build pymc for Windows, so no calibration
-import sys
-if not sys.platform.startswith("win"):
-    from .calibrate import calibrate, Calibrate
+from .calibrate import calibrate, Calibrate
 
 from .dump import dump
 from .sparse_grid import sgrid

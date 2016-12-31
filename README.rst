@@ -2,7 +2,7 @@
 Introduction
 ************
 
-:Version: 2.2.9
+:Version: 2.6
 :Authors: Martin Hunt
 :Web site: https://github.com/c-PRIMED/puq
 :Documentation: http://c-primed.github.io/puq/
@@ -37,9 +37,8 @@ Features
 Dependencies
 ============
 
-PUQ is tested to work under Python 2.6+. Python 3 is not yet supported.
+PUQ is tested to work under Python 2.7+. 
 
-To build, you will need a working C/C++ compiler.
 PUQ requires the following Python modules:
 
 - numpy >= 1.6
@@ -50,7 +49,7 @@ PUQ requires the following Python modules:
 - jsonpickle
 - poster
 - pytest
-
+- pymc
 
 Install
 =======
@@ -70,5 +69,4 @@ History
 =======
 
 PUQ is based upon work supported by the Department of Energy [National Nuclear Security Administration]
-under Award Number DE-FC52-08NA28617.”
-
+under Award Number DE-FC52-08NA28617.

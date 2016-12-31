@@ -27,7 +27,7 @@ def run():
     # set up host, uq and prog normally
     host = InteractiveHost()
     uq = Smolyak([x,y,z], level=2)
-    prog = TestProgram('./model_1.py', desc='model_1 calibration')
+    prog = TestProgram('python model_1.py', desc='model_1 calibration')
 
     # pass experimental results to Sweep
     return Sweep(uq, host, prog, caldata=f_data_noisy, calerr=sigma)

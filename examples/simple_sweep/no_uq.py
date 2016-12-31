@@ -19,5 +19,5 @@ def run():
     v2 = DParameter('y', 'y description', [-1,0,1])
     uq = SimpleSweep([v1,v2])
 
-    prog = TestProgram('rosen', exe='./rosen_prog.py --x=$x --y=$y')
+    prog = TestProgram('rosen', exe='python rosen_prog.py --x=$x --y=$y')
     return Sweep(uq, host, prog)

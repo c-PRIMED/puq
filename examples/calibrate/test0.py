@@ -23,7 +23,7 @@ def run():
 
     # set up host, uq and prog normally
     host = InteractiveHost()
-    prog = TestProgram('./model_0.py', desc='model_0 calibration')
+    prog = TestProgram('python model_0.py', desc='model_0 calibration')
     uq = Smolyak([x, y], level=2)
 
     # pass experimental results to Sweep

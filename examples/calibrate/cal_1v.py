@@ -28,7 +28,7 @@ x = puq.UniformParameter('x', 'x', min=2, max=25, caltype='S')
 
 # do calibration
 [calibrated], kpdf = puq.calibrate([x], z_data_noisy, sigma, model)
-print calibrated
+print(calibrated)
 
 # plot actual and calibrated
 real_x.pdf.plot(color='b')

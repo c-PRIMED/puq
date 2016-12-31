@@ -1,8 +1,8 @@
 INSTALLATION
 ============
 
-PUQ works on Linux systems.  It has also been run successfully on MacOSX using the
-`Enthought Python Distribution`_.
+PUQ works on Linux systems.  It has also been run successfully on MacOSX and Windows using
+`anaconda`_.  It has been tested with Python 2.7 and 3.5.
 
 To install, you should first install the dependencies listed below.  Then change to the
 **puq** directory and ::
@@ -16,7 +16,7 @@ Dependencies
 Before installation, the following must be installed.  You may want to install the
 other dependencies using the normal package installation process on your system.
 
-* `Python`_ : Version 2.6 or later.  3.x is not yet supported.
+* `Python`_ : Version 2.7 or later.
 * `NumPy`_ : The fundamental package for scientific computing with Python.
 * `HDF5`_ (1.8.0 or newer): A data model, library, and file format for storing and managing data.
 
@@ -55,7 +55,7 @@ To build the documentation, cd to the **doc** directory and type:
 * make html - to build HTML docs
 * make latexpdf - to build a PDF
 
-.. _`Enthought Python Distribution`: https://www.enthought.com/products/epd/
+.. _`anaconda`: https://www.continuum.io/downloads
 
 .. _`Python`: http://www.python.org/
 

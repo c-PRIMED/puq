@@ -15,5 +15,5 @@ def run():
 
     uq = SimpleSweep([x], valarray)
 
-    prog = TestProgram('./poly_prog.py')
+    prog = TestProgram('python poly_prog.py')
     return Sweep(uq, host, prog)

@@ -17,5 +17,5 @@ def run():
 
     uq = SimpleSweep([x,y], valarray)
 
-    prog = TestProgram('./rosen_prog.py')
+    prog = TestProgram('python rosen_prog.py')
     return Sweep(uq, host, prog)

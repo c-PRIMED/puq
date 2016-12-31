@@ -3,3 +3,4 @@ h5py>1.3
 jsonpickle>=0.4
 matplotlib>=1.1
 sympy>=0.7.1
+pymc>=2.3

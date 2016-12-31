@@ -12,7 +12,7 @@ def run(num=20):
     uq = MonteCarlo([p1, p2], num=num)
 
     # Our test program
-    prog = TestProgram(exe='./rosen_prog.py --x=$x --y=$y',
+    prog = TestProgram(exe='python rosen_prog.py --x=$x --y=$y',
         desc='Rosenbrock Function')
 
     return Sweep(uq, host, prog)
