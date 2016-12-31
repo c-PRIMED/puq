@@ -28,6 +28,9 @@ def test2():
 
 
 def test3():
+    print(puq.hdf.get_param_names(hf))
+    print(puq.hdf.data_description(hf, 'energy'))
+    print(puq.hdf.param_description(hf, 'm'))
     assert puq.hdf.get_param_names(hf) == ['m', 'v'], 'get_param_names'
     assert puq.hdf.data_description(hf, 'energy') == 'A random energy equation.', 'data_description'
     assert puq.hdf.param_description(hf, 'm') == 'mass', 'param_description'

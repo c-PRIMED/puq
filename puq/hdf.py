@@ -83,7 +83,7 @@ def get_result(hf, var=None):
       ValueError: if **var** is not found or **var** is None and there
         are multiple output variables.
     """
-    if not '/output/data' in hf:
+    if '/output/data' not in hf:
         return []
 
     output_variables = get_output_names(hf)
@@ -127,7 +127,13 @@ def get_params(hf):
       hf: An open HDF5 filehandle or a string containing the HDF5
         filename to use.
     """
-    return [unpickle(hf['/input/params'][p].value) for p in hf['/input/params']]
+    plist = []
+    for p in hf['/input/params']:
+        val = hf['/input/params'][p].value
+        if type(val) != str:
+            val = val.decode('UTF-8')
+        plist.append(unpickle(val))
+    return plist
 
 
 @hdf5_wrap
@@ -143,6 +149,9 @@ def data_description(hf, var):
       var: Output variable name.
     """
     desc = hf['/output/data/%s' % var].attrs['description']
+    if type(desc) != str:
+        desc = desc.decode('UTF-8')
+
     if desc:
         return desc
     return var
@@ -160,7 +169,12 @@ def param_description(hf, var):
         filename to use.
       var: Input parameter name.
     """
-    desc = unpickle(hf['/input/params/%s' % var].value).description
+    val = hf['/input/params/%s' % var].value
+    if type(val) != str:
+        val = val.decode('UTF-8')
+    val = unpickle(val)
+    desc = val.description
+
     if desc:
         return desc
     return var
