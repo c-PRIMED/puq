@@ -17,7 +17,7 @@ options['verbose'] = False
 fname = 'add_dist.hdf5'
 
 dname = os.path.dirname(os.path.realpath(__file__))
-progname = os.path.join(dname, 'vel_add.py')
+progname = 'python ' + os.path.join(dname, 'vel_add.py')
 
 # Two Normal distributions, Smolyak
 def run(progname):
@@ -118,6 +118,7 @@ def test_add_unif_distMC():
     # 5.88784057755
     dev = math.sqrt((20*20 + 4*4) / 12.0)
     assert(allclose(h5['/montecarlo/total_velocity/dev'].value, dev, atol=1))
+    h5.close()
     os.remove(fname)
 
 if __name__ == "__main__":
