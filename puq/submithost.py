@@ -49,7 +49,15 @@ class SubmitHost(Host):
                 cmds = [(x[0], '@@'+x[0]) for x in a]
             print(','.join([str(b[1]) for b in a]), file=f)
         f.close()
-        scmd = "submit --runName=puq -d input.csv %s" % self.prog.cmd(cmds)
+        
+        venue == ''
+        if self.hostname is not None:
+            if self.hostname == 'local':
+                venue = '--local'
+            else:
+                venue = '--venue %s' % self.hostname
+        scmd = "submit %s --runName=puq -d input.csv %s" % (venue, self.prog.cmd(cmds))
+        
         self.add_job(shlex.split(scmd), '', 0, '')
 
     # run, monitor and status return
