@@ -8,7 +8,7 @@ See LICENSE file for terms.
 from __future__ import absolute_import, division, print_function
 
 from puq.jpickle import unpickle, pickle
-import sys, string, matplotlib
+import sys, matplotlib
 if sys.platform == 'darwin':
     matplotlib.use('macosx', warn=False)
 else:
@@ -57,7 +57,7 @@ def plot(sweep, h5, opt, params=[]):
     if not opt.l:
         opt.k = True
 
-    method = string.lower(sweep.psweep.__class__.__name__)
+    method = sweep.psweep.__class__.__name__.lower()
     if opt.r:
         for vname in h5[method]:
             if not opt.v or vname in opt.v:
